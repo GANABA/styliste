@@ -1,0 +1,47 @@
+
+> temp-svelte@0.0.1 build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding ssr environment for production...[36m[39m
+transforming...
+02:16:24 [vite-plugin-svelte] src/routes/(app)/+layout.svelte:115:3 Buttons and links should either contain text or have an `aria-label`, `aria-labelledby` or `title` attribute
+https://svelte.dev/e/a11y_consider_explicit_label
+113:     <div class="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3">
+114:       <h1 class="text-lg font-bold text-gray-900">Styliste.com</h1>
+115:       <button
+                  ^
+116:         type="button"
+117:         onclick={() => mobileMenuOpen = !mobileMenuOpen}
+02:16:24 [vite-plugin-svelte] src/routes/(app)/+layout.svelte:128:3 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+126:     <!-- Mobile menu -->
+127:     {#if mobileMenuOpen}
+128:       <div class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75" onclick={() => mobileMenuOpen = false}></div>
+                                                                                                                  ^
+129:       <div class="fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-xl">
+130:         <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+02:16:24 [vite-plugin-svelte] src/routes/(app)/+layout.svelte:128:3 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+126:     <!-- Mobile menu -->
+127:     {#if mobileMenuOpen}
+128:       <div class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75" onclick={() => mobileMenuOpen = false}></div>
+                                                                                                                  ^
+129:       <div class="fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-xl">
+130:         <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+02:16:24 [vite-plugin-svelte] src/routes/(app)/+layout.svelte:132:5 Buttons and links should either contain text or have an `aria-label`, `aria-labelledby` or `title` attribute
+https://svelte.dev/e/a11y_consider_explicit_label
+130:         <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+131:           <h2 class="text-lg font-semibold text-gray-900">Menu</h2>
+132:           <button
+                      ^
+133:             type="button"
+134:             onclick={() => mobileMenuOpen = false}
+[32m✓[39m 234 modules transformed.
+[31m✗[39m Build failed in 6.87s
+[31merror during build:
+[31m[vite:terser] terser not found. Since Vite v3, terser has become an optional dependency. You need to install it.[31m
+    at loadTerserPath (file:///C:/D/Claude-CodeProjects/styliste/node_modules/vite/dist/node/chunks/config.js:32974:8)
+    at Object.renderChunk (file:///C:/D/Claude-CodeProjects/styliste/node_modules/vite/dist/node/chunks/config.js:33003:39)
+    at Object.handler (file:///C:/D/Claude-CodeProjects/styliste/node_modules/vite/dist/node/chunks/config.js:33743:13)
+    at file:///C:/D/Claude-CodeProjects/styliste/node_modules/rollup/dist/es/shared/node-entry.js:22545:40
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
