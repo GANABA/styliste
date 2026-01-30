@@ -1,9 +1,12 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import MeasurementHistory from '$lib/components/measurements/MeasurementHistory.svelte';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
 
   $: clientId = $page.params.id;
-  $: clientName = $page.url.searchParams.get('name') || 'Client';
+  $: clientName = data.client.name;
 
   let historyComponent: MeasurementHistory;
 

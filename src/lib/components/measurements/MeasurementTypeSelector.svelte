@@ -6,11 +6,13 @@
   export let required: boolean = false;
 
   let showDropdown = false;
-  let searchQuery = '';
+  let searchQuery = value;
   let filteredTypes: readonly string[] = STANDARD_MEASUREMENT_TYPES;
 
-  // Synchroniser la valeur avec searchQuery
-  $: searchQuery = value;
+  // Synchroniser searchQuery avec value lors des changements externes
+  $: if (value !== searchQuery) {
+    searchQuery = value;
+  }
 
   // Filtrer les types selon la recherche
   $: {
@@ -26,9 +28,12 @@
   }
 
   function selectType(type: string) {
+    // Mettre à jour à la fois value et searchQuery
     value = type;
     searchQuery = type;
     showDropdown = false;
+
+    // Appeler le callback
     if (onSelect) {
       onSelect(type);
     }
@@ -36,8 +41,9 @@
 
   function handleInput(event: Event) {
     const target = event.target as HTMLInputElement;
-    value = target.value;
-    searchQuery = target.value;
+    const newValue = target.value;
+    searchQuery = newValue;
+    value = newValue;
     showDropdown = true;
   }
 
@@ -49,7 +55,7 @@
     // Délai pour permettre le clic sur une option
     setTimeout(() => {
       showDropdown = false;
-    }, 200);
+    }, 300);
   }
 </script>
 

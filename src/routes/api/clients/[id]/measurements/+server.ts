@@ -4,20 +4,27 @@ import { db } from '$lib/db';
 import { measurements, stylistes } from '$lib/db/schema';
 import { createMeasurementSchema, getMeasurementsSchema } from '$lib/validations/measurements';
 import { eq, and, desc } from 'drizzle-orm';
+import { supabase } from '$lib/supabase';
 
 // POST /api/clients/[id]/measurements - Créer une nouvelle mesure pour un client
-export const POST: RequestHandler = async ({ request, params, locals }) => {
-  const session = await locals.safeGetSession();
-  if (!session) {
+export const POST: RequestHandler = async ({ request, params, cookies }) => {
+  const accessToken = cookies.get('sb-access-token');
+  if (!accessToken) {
     return error(401, 'Non authentifié');
   }
 
   try {
+    // Vérifier l'utilisateur
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    if (authError || !user) {
+      return error(401, 'Session invalide');
+    }
+
     // Récupérer le profil styliste de l'utilisateur connecté
     const [styliste] = await db
       .select()
       .from(stylistes)
-      .where(eq(stylistes.userId, session.user.id))
+      .where(eq(stylistes.userId, user.id))
       .limit(1);
 
     if (!styliste) {
@@ -60,18 +67,24 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
 };
 
 // GET /api/clients/[id]/measurements - Récupérer les mesures d'un client
-export const GET: RequestHandler = async ({ url, params, locals }) => {
-  const session = await locals.safeGetSession();
-  if (!session) {
+export const GET: RequestHandler = async ({ url, params, cookies }) => {
+  const accessToken = cookies.get('sb-access-token');
+  if (!accessToken) {
     return error(401, 'Non authentifié');
   }
 
   try {
+    // Vérifier l'utilisateur
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    if (authError || !user) {
+      return error(401, 'Session invalide');
+    }
+
     // Récupérer le profil styliste de l'utilisateur connecté
     const [styliste] = await db
       .select()
       .from(stylistes)
-      .where(eq(stylistes.userId, session.user.id))
+      .where(eq(stylistes.userId, user.id))
       .limit(1);
 
     if (!styliste) {

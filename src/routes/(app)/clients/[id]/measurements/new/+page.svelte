@@ -2,9 +2,12 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import MeasurementForm from '$lib/components/measurements/MeasurementForm.svelte';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
 
   $: clientId = $page.params.id;
-  $: clientName = $page.url.searchParams.get('name') || 'Client';
+  $: clientName = data.client.name;
 
   function handleSuccess() {
     goto(`/clients/${clientId}/measurements`);

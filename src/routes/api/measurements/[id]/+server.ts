@@ -4,20 +4,27 @@ import { db } from '$lib/db';
 import { measurements, stylistes } from '$lib/db/schema';
 import { updateMeasurementSchema } from '$lib/validations/measurements';
 import { eq, and } from 'drizzle-orm';
+import { supabase } from '$lib/supabase';
 
 // PATCH /api/measurements/[id] - Modifier une mesure existante
-export const PATCH: RequestHandler = async ({ request, params, locals }) => {
-  const session = await locals.safeGetSession();
-  if (!session) {
+export const PATCH: RequestHandler = async ({ request, params, cookies }) => {
+  const accessToken = cookies.get('sb-access-token');
+  if (!accessToken) {
     return error(401, 'Non authentifié');
   }
 
   try {
+    // Vérifier l'utilisateur
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    if (authError || !user) {
+      return error(401, 'Session invalide');
+    }
+
     // Récupérer le profil styliste de l'utilisateur connecté
     const [styliste] = await db
       .select()
       .from(stylistes)
-      .where(eq(stylistes.userId, session.user.id))
+      .where(eq(stylistes.userId, user.id))
       .limit(1);
 
     if (!styliste) {

@@ -3,49 +3,59 @@ import type { RequestHandler } from './$types';
 import { db } from '$lib/db';
 import { measurements, stylistes } from '$lib/db/schema';
 import { eq, and, desc, sql } from 'drizzle-orm';
+import { supabase } from '$lib/supabase';
 
 // GET /api/clients/[id]/measurements/latest - Récupérer les dernières mesures d'un client (une par type)
-export const GET: RequestHandler = async ({ params, locals }) => {
-  const session = await locals.safeGetSession();
-  if (!session) {
+export const GET: RequestHandler = async ({ params, cookies }) => {
+  const accessToken = cookies.get('sb-access-token');
+  if (!accessToken) {
     return error(401, 'Non authentifié');
   }
 
   try {
+    // Vérifier l'utilisateur
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    if (authError || !user) {
+      return error(401, 'Session invalide');
+    }
+
     // Récupérer le profil styliste de l'utilisateur connecté
     const [styliste] = await db
       .select()
       .from(stylistes)
-      .where(eq(stylistes.userId, session.user.id))
+      .where(eq(stylistes.userId, user.id))
       .limit(1);
 
     if (!styliste) {
       return error(403, 'Profil styliste non trouvé');
     }
 
-    // Récupérer les dernières mesures de chaque type pour ce client
-    // On utilise DISTINCT ON pour obtenir la mesure la plus récente par type
-    const latestMeasurements = await db.execute(sql`
-      SELECT DISTINCT ON (measurement_type)
-        id,
-        client_id,
-        styliste_id,
-        measurement_type,
-        value,
-        unit,
-        notes,
-        taken_at,
-        created_at,
-        updated_at
-      FROM measurements
-      WHERE client_id = ${params.id}
-        AND styliste_id = ${styliste.id}
-      ORDER BY measurement_type, taken_at DESC
-    `);
+    // Récupérer toutes les mesures du client puis filtrer côté application
+    // pour obtenir la dernière de chaque type
+    const allMeasurements = await db
+      .select()
+      .from(measurements)
+      .where(
+        and(
+          eq(measurements.clientId, params.id),
+          eq(measurements.stylisteId, styliste.id)
+        )
+      )
+      .orderBy(desc(measurements.takenAt));
+
+    // Grouper par type et ne garder que la plus récente de chaque
+    const latestByType = new Map();
+    for (const measurement of allMeasurements) {
+      if (!latestByType.has(measurement.measurementType)) {
+        latestByType.set(measurement.measurementType, measurement);
+      }
+    }
+
+    const latestMeasurements = Array.from(latestByType.values());
 
     return json({
-      measurements: latestMeasurements.rows,
-      count: latestMeasurements.rows.length,
+      measurements: latestMeasurements,
+      count: latestMeasurements.length,
     });
   } catch (err: any) {
     console.error('Erreur lors de la récupération des dernières mesures:', err);
