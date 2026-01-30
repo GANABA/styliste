@@ -3,10 +3,15 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { Button, Card, Spinner, Modal } from '$lib/components/ui';
+	import MeasurementCard from '$lib/components/measurements/MeasurementCard.svelte';
 
 	let client = $state<any>(null);
 	let loading = $state(true);
 	let error = $state<string | null>(null);
+
+	// Mesures
+	let latestMeasurements = $state<any[]>([]);
+	let measurementsLoading = $state(false);
 
 	// Modal de suppression
 	let deleteModalOpen = $state(false);
@@ -16,6 +21,7 @@
 
 	onMount(async () => {
 		await loadClient();
+		await loadLatestMeasurements();
 	});
 
 	async function loadClient() {
@@ -37,6 +43,23 @@
 			error = 'Erreur réseau. Veuillez réessayer.';
 		} finally {
 			loading = false;
+		}
+	}
+
+	async function loadLatestMeasurements() {
+		measurementsLoading = true;
+
+		try {
+			const response = await fetch(`/api/clients/${clientId}/measurements/latest`);
+			const result = await response.json();
+
+			if (response.ok) {
+				latestMeasurements = result.measurements || [];
+			}
+		} catch (err) {
+			console.error('Erreur lors du chargement des mesures:', err);
+		} finally {
+			measurementsLoading = false;
 		}
 	}
 
@@ -164,16 +187,65 @@
 				</div>
 			</Card>
 
-			<!-- Sections futures (Mesures, Commandes, Historique) -->
-			<div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-				<Card padding="md">
-					<div class="text-center">
-						<p class="text-sm text-gray-600">Mesures</p>
-						<p class="text-2xl font-bold text-gray-900 mt-2">-</p>
-						<p class="text-xs text-gray-500 mt-1">À venir</p>
+			<!-- Section Mesures -->
+			<Card title="Mesures" padding="lg" class="mt-6">
+				{#if measurementsLoading}
+					<div class="py-6">
+						<Spinner size="md" text="Chargement des mesures..." />
 					</div>
-				</Card>
+				{:else if latestMeasurements.length === 0}
+					<div class="text-center py-8">
+						<svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+						</svg>
+						<h3 class="mt-2 text-sm font-medium text-gray-900">Aucune mesure enregistrée</h3>
+						<p class="mt-1 text-sm text-gray-500">Commencez par prendre les mesures de ce client.</p>
+						<div class="mt-4">
+							<Button onclick={() => goto(`/clients/${clientId}/measurements/new?name=${encodeURIComponent(client.name)}`)}>
+								Prendre mesures
+							</Button>
+						</div>
+					</div>
+				{:else}
+					<div class="space-y-4">
+						<!-- Compteur et actions -->
+						<div class="flex items-center justify-between pb-4 border-b border-gray-200">
+							<p class="text-sm text-gray-600">
+								{latestMeasurements.length} {latestMeasurements.length > 1 ? 'types de mesures enregistrés' : 'type de mesure enregistré'}
+							</p>
+							<div class="flex gap-2">
+								<Button size="sm" onclick={() => goto(`/clients/${clientId}/measurements?name=${encodeURIComponent(client.name)}`)}>
+									Voir historique
+								</Button>
+								<Button size="sm" onclick={() => goto(`/clients/${clientId}/measurements/new?name=${encodeURIComponent(client.name)}`)}>
+									+ Prendre mesures
+								</Button>
+							</div>
+						</div>
 
+						<!-- Liste des dernières mesures -->
+						<div class="space-y-2">
+							{#each latestMeasurements.slice(0, 5) as measurement}
+								<MeasurementCard {measurement} compact={true} />
+							{/each}
+						</div>
+
+						{#if latestMeasurements.length > 5}
+							<div class="pt-4 text-center">
+								<a
+									href="/clients/{clientId}/measurements?name={encodeURIComponent(client.name)}"
+									class="text-sm text-blue-600 hover:text-blue-700 font-medium"
+								>
+									Voir toutes les mesures ({latestMeasurements.length})
+								</a>
+							</div>
+						{/if}
+					</div>
+				{/if}
+			</Card>
+
+			<!-- Sections futures (Commandes, Rendez-vous) -->
+			<div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 				<Card padding="md">
 					<div class="text-center">
 						<p class="text-sm text-gray-600">Commandes</p>

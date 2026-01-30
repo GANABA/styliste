@@ -33,6 +33,7 @@
 	"dependencies": {
 		"@supabase/supabase-js": "^2.93.2",
 		"@tailwindcss/postcss": "^4.1.18",
+		"date-fns": "^4.1.0",
 		"drizzle-orm": "^0.45.1",
 		"html-escaper": "^3.0.3",
 		"postgres": "^3.4.8",
