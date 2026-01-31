@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { Button, Card, Spinner, Modal } from '$lib/components/ui';
 	import MeasurementCard from '$lib/components/measurements/MeasurementCard.svelte';
+	import ClientOrders from '$lib/components/clients/ClientOrders.svelte';
 
 	let client = $state<any>(null);
 	let loading = $state(true);
@@ -13,6 +14,10 @@
 	let latestMeasurements = $state<any[]>([]);
 	let measurementsLoading = $state(false);
 
+	// Commandes
+	let orders = $state<any[]>([]);
+	let ordersLoading = $state(false);
+
 	// Modal de suppression
 	let deleteModalOpen = $state(false);
 	let deleting = $state(false);
@@ -21,7 +26,11 @@
 
 	onMount(async () => {
 		await loadClient();
-		await loadLatestMeasurements();
+		// Charger en parallèle après que le client soit chargé
+		await Promise.all([
+			loadLatestMeasurements(),
+			loadOrders()
+		]);
 	});
 
 	async function loadClient() {
@@ -60,6 +69,25 @@
 			console.error('Erreur lors du chargement des mesures:', err);
 		} finally {
 			measurementsLoading = false;
+		}
+	}
+
+	async function loadOrders() {
+		ordersLoading = true;
+
+		try {
+			const response = await fetch(`/api/orders?clientId=${clientId}`);
+			const result = await response.json();
+
+			if (response.ok) {
+				orders = result
+					.map((item: any) => item.order)
+					.slice(0, 5); // Limiter à 5 commandes récentes
+			}
+		} catch (err) {
+			console.error('Erreur lors du chargement des commandes:', err);
+		} finally {
+			ordersLoading = false;
 		}
 	}
 
@@ -244,23 +272,15 @@
 				{/if}
 			</Card>
 
-			<!-- Sections futures (Commandes, Rendez-vous) -->
-			<div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-				<Card padding="md">
-					<div class="text-center">
-						<p class="text-sm text-gray-600">Commandes</p>
-						<p class="text-2xl font-bold text-gray-900 mt-2">-</p>
-						<p class="text-xs text-gray-500 mt-1">À venir</p>
+			<!-- Section Commandes -->
+			<div class="mt-6">
+				{#if ordersLoading}
+					<div class="py-6">
+						<Spinner size="md" text="Chargement des commandes..." />
 					</div>
-				</Card>
-
-				<Card padding="md">
-					<div class="text-center">
-						<p class="text-sm text-gray-600">Rendez-vous</p>
-						<p class="text-2xl font-bold text-gray-900 mt-2">-</p>
-						<p class="text-xs text-gray-500 mt-1">À venir</p>
-					</div>
-				</Card>
+				{:else}
+					<ClientOrders clientId={clientId} clientName={client.name} {orders} />
+				{/if}
 			</div>
 		{/if}
 	</div>

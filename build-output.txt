@@ -4,44 +4,210 @@
 
 [36mvite v7.3.1 [32mbuilding ssr environment for production...[36m[39m
 transforming...
-02:16:24 [vite-plugin-svelte] src/routes/(app)/+layout.svelte:115:3 Buttons and links should either contain text or have an `aria-label`, `aria-labelledby` or `title` attribute
+00:41:01 [vite-plugin-svelte] src/routes/(app)/clients/[id]/measurements/+page.svelte:43:10 Buttons and links should either contain text or have an `aria-label`, `aria-labelledby` or `title` attribute
 https://svelte.dev/e/a11y_consider_explicit_label
-113:     <div class="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3">
-114:       <h1 class="text-lg font-bold text-gray-900">Styliste.com</h1>
-115:       <button
-                  ^
-116:         type="button"
-117:         onclick={() => mobileMenuOpen = !mobileMenuOpen}
-02:16:24 [vite-plugin-svelte] src/routes/(app)/+layout.svelte:128:3 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
-https://svelte.dev/e/a11y_click_events_have_key_events
-126:     <!-- Mobile menu -->
-127:     {#if mobileMenuOpen}
-128:       <div class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75" onclick={() => mobileMenuOpen = false}></div>
-                                                                                                                  ^
-129:       <div class="fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-xl">
-130:         <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-02:16:24 [vite-plugin-svelte] src/routes/(app)/+layout.svelte:128:3 `<div>` with a click handler must have an ARIA role
-https://svelte.dev/e/a11y_no_static_element_interactions
-126:     <!-- Mobile menu -->
-127:     {#if mobileMenuOpen}
-128:       <div class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75" onclick={() => mobileMenuOpen = false}></div>
-                                                                                                                  ^
-129:       <div class="fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-xl">
-130:         <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-02:16:24 [vite-plugin-svelte] src/routes/(app)/+layout.svelte:132:5 Buttons and links should either contain text or have an `aria-label`, `aria-labelledby` or `title` attribute
+41: 
+42:         <div class="flex gap-3">
+43:           <button
+                     ^
+44:             on:click={refreshHistory}
+45:             class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+00:41:03 [vite-plugin-svelte] src/lib/components/measurements/MeasurementForm.svelte:135:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+133:       Notes (optionnel)
+134:     </label>
+135:     <textarea
+           ^
+136:       id="notes"
+137:       bind:value={notes}
+00:41:03 [vite-plugin-svelte] src/lib/components/orders/OrderForm.svelte:32:6 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+30:   {#if clientName}
+31:     <div>
+32:       <label class="block text-sm font-medium text-gray-700 mb-1"> Client </label>
+                                                                                      ^
+33:       <input
+34:         type="text"
+00:41:03 [vite-plugin-svelte] src/lib/components/orders/OrderForm.svelte:54:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+52:       Description
+53:     </label>
+54:     <textarea
+          ^
+55:       id="description"
+56:       bind:value={description}
+00:41:03 [vite-plugin-svelte] src/lib/components/orders/OrderForm.svelte:108:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+106:   <div>
+107:     <label for="notes" class="block text-sm font-medium text-gray-700 mb-1"> Notes </label>
+108:     <textarea
+           ^
+109:       id="notes"
+110:       bind:value={notes}
+00:41:03 [vite-plugin-svelte] src/lib/components/orders/OrderForm.svelte:5:13 Component has unused export property 'clientId'. If it is for external reference only, please consider using `export const clientId`
+https://svelte.dev/e/export_let_unused
+3:   import GarmentTypeSelector from './GarmentTypeSelector.svelte';
+4: 
+5:   export let clientId: string = '';
+                                ^
+6:   export let clientName: string = '';
+7:   export let garmentType: string = '';
+[33m"endOfWeek" and "startOfWeek" are imported from external module "date-fns" but never used in "src/routes/api/orders/stats/+server.ts".[39m
+[32m✓[39m 264 modules transformed.
+rendering chunks...
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+00:41:24 [vite-plugin-svelte] src/routes/(app)/clients/[id]/measurements/+page.svelte:43:10 Buttons and links should either contain text or have an `aria-label`, `aria-labelledby` or `title` attribute
 https://svelte.dev/e/a11y_consider_explicit_label
-130:         <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-131:           <h2 class="text-lg font-semibold text-gray-900">Menu</h2>
-132:           <button
-                      ^
-133:             type="button"
-134:             onclick={() => mobileMenuOpen = false}
-[32m✓[39m 234 modules transformed.
-[31m✗[39m Build failed in 6.87s
-[31merror during build:
-[31m[vite:terser] terser not found. Since Vite v3, terser has become an optional dependency. You need to install it.[31m
-    at loadTerserPath (file:///C:/D/Claude-CodeProjects/styliste/node_modules/vite/dist/node/chunks/config.js:32974:8)
-    at Object.renderChunk (file:///C:/D/Claude-CodeProjects/styliste/node_modules/vite/dist/node/chunks/config.js:33003:39)
-    at Object.handler (file:///C:/D/Claude-CodeProjects/styliste/node_modules/vite/dist/node/chunks/config.js:33743:13)
-    at file:///C:/D/Claude-CodeProjects/styliste/node_modules/rollup/dist/es/shared/node-entry.js:22545:40
-    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+41: 
+42:         <div class="flex gap-3">
+43:           <button
+                     ^
+44:             on:click={refreshHistory}
+45:             class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+00:41:25 [vite-plugin-svelte] src/lib/components/measurements/MeasurementForm.svelte:135:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+133:       Notes (optionnel)
+134:     </label>
+135:     <textarea
+           ^
+136:       id="notes"
+137:       bind:value={notes}
+00:41:25 [vite-plugin-svelte] src/lib/components/orders/OrderForm.svelte:32:6 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+30:   {#if clientName}
+31:     <div>
+32:       <label class="block text-sm font-medium text-gray-700 mb-1"> Client </label>
+                                                                                      ^
+33:       <input
+34:         type="text"
+00:41:25 [vite-plugin-svelte] src/lib/components/orders/OrderForm.svelte:54:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+52:       Description
+53:     </label>
+54:     <textarea
+          ^
+55:       id="description"
+56:       bind:value={description}
+00:41:25 [vite-plugin-svelte] src/lib/components/orders/OrderForm.svelte:108:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+106:   <div>
+107:     <label for="notes" class="block text-sm font-medium text-gray-700 mb-1"> Notes </label>
+108:     <textarea
+           ^
+109:       id="notes"
+110:       bind:value={notes}
+00:41:25 [vite-plugin-svelte] src/lib/components/orders/OrderForm.svelte:5:13 Component has unused export property 'clientId'. If it is for external reference only, please consider using `export const clientId`
+https://svelte.dev/e/export_let_unused
+3:   import GarmentTypeSelector from './GarmentTypeSelector.svelte';
+4: 
+5:   export let clientId: string = '';
+                                ^
+6:   export let clientName: string = '';
+7:   export let garmentType: string = '';
+[32m✓[39m 1216 modules transformed.
+rendering chunks...
+[33m[plugin vite:reporter] 
+(!) C:/D/Claude-CodeProjects/styliste/src/lib/db/schema.ts is dynamically imported by C:/D/Claude-CodeProjects/styliste/src/lib/helpers/orders.ts but also statically imported by C:/D/Claude-CodeProjects/styliste/src/lib/helpers/orders.ts, dynamic import will not move module into another chunk.
+[39m
+computing gzip size...
+[2m.svelte-kit/output/client/[22m[32m_app/version.json                       [39m[1m[2m  0.03 kB[22m[1m[22m[2m │ gzip:  0.05 kB[22m
+[2m.svelte-kit/output/client/[22m[32m.vite/manifest.json                     [39m[1m[2m  9.34 kB[22m[1m[22m[2m │ gzip:  1.02 kB[22m
+[2m.svelte-kit/output/client/[22m[35m_app/immutable/assets/0.CYEPmq7j.css    [39m[1m[2m 26.96 kB[22m[1m[22m[2m │ gzip:  5.53 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/1.BGaDYLp-.js      [39m[1m[2m  0.07 kB[22m[1m[22m[2m │ gzip:  0.08 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/entry/start.B2osmdVd.js  [39m[1m[2m  0.09 kB[22m[1m[22m[2m │ gzip:  0.09 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/3.DvuMwp0A.js      [39m[1m[2m  0.41 kB[22m[1m[22m[2m │ gzip:  0.31 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/BKZulIwQ.js       [39m[1m[2m  1.18 kB[22m[1m[22m[2m │ gzip:  0.61 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/BgqWqBWi.js       [39m[1m[2m  2.14 kB[22m[1m[22m[2m │ gzip:  0.82 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/B9zfaIXg.js       [39m[1m[2m  2.15 kB[22m[1m[22m[2m │ gzip:  0.99 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/0.DvsgiEZk.js      [39m[1m[2m  2.55 kB[22m[1m[22m[2m │ gzip:  1.10 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/BM89NeSW.js       [39m[1m[2m  2.76 kB[22m[1m[22m[2m │ gzip:  1.25 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/DqpY3O5f.js       [39m[1m[2m  2.99 kB[22m[1m[22m[2m │ gzip:  1.13 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/5.C-W4IYkc.js      [39m[1m[2m  3.66 kB[22m[1m[22m[2m │ gzip:  1.77 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/14.DWg5iyfZ.js     [39m[1m[2m  3.96 kB[22m[1m[22m[2m │ gzip:  1.91 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/12.BjtPYuzV.js     [39m[1m[2m  4.30 kB[22m[1m[22m[2m │ gzip:  2.05 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/16.9jKBz53i.js     [39m[1m[2m  5.05 kB[22m[1m[22m[2m │ gzip:  2.24 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/7.C1Qjud6c.js      [39m[1m[2m  5.64 kB[22m[1m[22m[2m │ gzip:  2.36 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/8.MQucq_6p.js      [39m[1m[2m  6.10 kB[22m[1m[22m[2m │ gzip:  2.71 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/10.opFU1OEe.js     [39m[1m[2m  6.12 kB[22m[1m[22m[2m │ gzip:  2.44 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/18.CdJYG-8W.js     [39m[1m[2m  6.45 kB[22m[1m[22m[2m │ gzip:  2.33 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/DdP6Etja.js       [39m[1m[2m  6.63 kB[22m[1m[22m[2m │ gzip:  2.38 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/17.BwsrAqSy.js     [39m[1m[2m  6.70 kB[22m[1m[22m[2m │ gzip:  2.38 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/11.DSonzeL6.js     [39m[1m[2m  7.67 kB[22m[1m[22m[2m │ gzip:  3.22 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/entry/app.BGbirX-m.js    [39m[1m[2m  7.75 kB[22m[1m[22m[2m │ gzip:  2.70 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/2.Md-1m5nr.js      [39m[1m[2m  8.36 kB[22m[1m[22m[2m │ gzip:  2.69 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/4.Bw_-OLvf.js      [39m[1m[2m  8.43 kB[22m[1m[22m[2m │ gzip:  3.39 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/15.Cfr6ln1N.js     [39m[1m[2m  8.59 kB[22m[1m[22m[2m │ gzip:  3.11 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/9.Cg80haII.js      [39m[1m[2m  9.42 kB[22m[1m[22m[2m │ gzip:  4.00 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/BlJGQZSI.js       [39m[1m[2m  9.89 kB[22m[1m[22m[2m │ gzip:  3.80 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/13.BYhZelmz.js     [39m[1m[2m 10.79 kB[22m[1m[22m[2m │ gzip:  4.01 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/nodes/6.Cnj6Tx90.js      [39m[1m[2m 14.33 kB[22m[1m[22m[2m │ gzip:  4.79 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/-JJW3Y-H.js       [39m[1m[2m 30.71 kB[22m[1m[22m[2m │ gzip:  7.27 kB[22m
+[2m.svelte-kit/output/client/[22m[36m_app/immutable/chunks/7tx-N3Ww.js       [39m[1m[2m177.19 kB[22m[1m[22m[2m │ gzip: 55.90 kB[22m
+[32m✓ built in 20.41s[39m
+[2m.svelte-kit/output/server/[22m[32m.vite/manifest.json                                                   [39m[1m[2m 16.45 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[35m_app/immutable/assets/_layout.CjUbJ9zE.css                            [39m[1m[2m 26.91 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mindex.js                                                              [39m[1m[2m  0.06 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/fallbacks/error.svelte.js                                     [39m[1m[2m  0.08 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/api.js                                                         [39m[1m[2m  0.08 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mremote-entry.js                                                       [39m[1m[2m  0.12 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/index.js                                                       [39m[1m[2m  0.26 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36minternal.js                                                           [39m[1m[2m  0.28 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/rate-limit.js                                                  [39m[1m[2m  0.30 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/supabase.js                                                    [39m[1m[2m  0.33 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/client.js                                                      [39m[1m[2m  0.42 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/auth/signout/_server.ts.js                      [39m[1m[2m  0.50 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/_layout.server.ts.js                              [39m[1m[2m  0.56 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/_page.svelte.js                                         [39m[1m[2m  0.61 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/auth.js                                                        [39m[1m[2m  0.65 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/OrderStatusBadge.js                                            [39m[1m[2m  0.73 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/clients/_id_/measurements/_page.server.ts.js      [39m[1m[2m  0.81 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/clients/_id_/measurements/new/_page.server.ts.js  [39m[1m[2m  0.82 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/auth/signup/email/_server.ts.js                 [39m[1m[2m  0.87 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/hooks.server.js                                               [39m[1m[2m  0.96 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/auth/signin/_server.ts.js                       [39m[1m[2m  0.97 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/clients/_id_/measurements/latest/_server.ts.js  [39m[1m[2m  0.97 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/auth/signup/_server.ts.js                       [39m[1m[2m  0.99 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/orders2.js                                                     [39m[1m[2m  1.13 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/orders/_id_/edit/_page.svelte.js                  [39m[1m[2m  1.13 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/measurements/_id_/_server.ts.js                 [39m[1m[2m  1.17 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/auth/signin/email/_server.ts.js                 [39m[1m[2m  1.18 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/auth/verify-otp/_server.ts.js                   [39m[1m[2m  1.18 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/orders/_id_/_page.svelte.js                       [39m[1m[2m  1.21 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/orders.js                                                      [39m[1m[2m  1.27 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/orders/_id_/status/_server.ts.js                [39m[1m[2m  1.35 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/profile/_page.svelte.js                           [39m[1m[2m  1.46 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/orders/stats/_server.ts.js                      [39m[1m[2m  1.72 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/clients/_id_/edit/_page.svelte.js                 [39m[1m[2m  1.76 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/clients/_id_/measurements/_server.ts.js         [39m[1m[2m  2.07 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/measurements.js                                                [39m[1m[2m  2.22 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/schema.js                                                      [39m[1m[2m  2.23 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/orders/new/_page.svelte.js                        [39m[1m[2m  2.25 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/clients/_id_/_page.svelte.js                      [39m[1m[2m  2.27 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/Spinner.js                                                     [39m[1m[2m  2.31 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/clients/_server.ts.js                           [39m[1m[2m  2.37 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/dashboard/_page.svelte.js                         [39m[1m[2m  2.41 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/orders/_server.ts.js                            [39m[1m[2m  2.47 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/_layout.svelte.js                                       [39m[1m[2m  2.61 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/orders/_id_/_server.ts.js                       [39m[1m[2m  2.65 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/MeasurementCard.js                                             [39m[1m[2m  2.77 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/clients/_id_/_server.ts.js                      [39m[1m[2m  2.86 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/clients/new/_page.svelte.js                       [39m[1m[2m  3.44 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/endpoints/api/styliste/profile/_server.ts.js                  [39m[1m[2m  4.01 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(auth)/signup/_page.svelte.js                           [39m[1m[2m  4.59 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/profile/create/_page.svelte.js                    [39m[1m[2m  4.61 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(auth)/signin/_page.svelte.js                           [39m[1m[2m  4.68 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/_layout.svelte.js                                 [39m[1m[2m  5.58 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/clients/_id_/measurements/_page.svelte.js         [39m[1m[2m  6.13 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/OrderForm.js                                                   [39m[1m[2m  6.37 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/orders/_page.svelte.js                            [39m[1m[2m  7.41 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/clients/_id_/measurements/new/_page.svelte.js     [39m[1m[2m  7.75 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mentries/pages/(app)/clients/_page.svelte.js                           [39m[1m[2m  7.90 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/Toast.svelte_svelte_type_style_lang.js                         [39m[1m[2m  9.45 kB[22m[1m[22m
+[2m.svelte-kit/output/server/[22m[36mchunks/vendor.js                                                      [39m[1m[2m127.30 kB[22m[1m[22m
+[32m✓ built in 47.29s[39m
+
+Run npm run preview to preview your production build locally.
+
+> Using @sveltejs/adapter-cloudflare
+  ✔ done
