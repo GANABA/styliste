@@ -220,7 +220,7 @@ Le système doit proposer des types de vêtements pré-définis pour faciliter l
 
 #### Scenario: Display garment type options
 - **WHEN** le styliste crée ou modifie une commande
-- **THEN** le système affiche une liste déroulante avec les types : Robe, Costume, Boubou, Chemise, Pantalon, Jupe, Veste, Autre
+- **THEN** le système affiche une liste déroulante avec les types : Robe, Costume, Boubou, Chemise, Pantalon, Jupe, Veste, Caftan, Autre
 
 #### Scenario: Allow custom garment type
 - **WHEN** le styliste sélectionne "Autre" et saisit un type personnalisé
