@@ -4,7 +4,7 @@ import { db } from '$lib/db';
 import { orders, stylistes, clients } from '$lib/db/schema';
 import { supabase } from '$lib/supabase';
 import { eq, and, isNull, gte, lte, sql } from 'drizzle-orm';
-import { startOfMonth, endOfWeek, addDays, startOfWeek } from 'date-fns';
+import { startOfMonth, addDays } from 'date-fns';
 
 // GET /api/orders/stats - Récupérer les statistiques des commandes
 export const GET: RequestHandler = async ({ cookies }) => {
