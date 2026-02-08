@@ -46,7 +46,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Chiffre d'affaires</CardDescription>
+            <CardDescription>Chiffre d&apos;affaires</CardDescription>
             <CardTitle className="text-3xl">0 FCFA</CardTitle>
           </CardHeader>
           <CardContent>

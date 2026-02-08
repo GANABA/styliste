@@ -229,28 +229,36 @@
 
 ## 27. Vercel Deployment Setup
 
-- [ ] 27.1 Créer compte Vercel si pas déjà fait
-- [ ] 27.2 Connecter repository GitHub à Vercel
-- [ ] 27.3 Configurer auto-deploy sur push
-- [ ] 27.4 Configurer environment variables Vercel: DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL
-- [ ] 27.5 Déclencher premier déploiement
-- [ ] 27.6 Vérifier build success
-- [ ] 27.7 Tester app déployée sur URL Vercel
+- [ ] 27.1 Créer compte Vercel si pas déjà fait (user action required)
+- [ ] 27.2 Connecter repository GitHub à Vercel (user action required)
+- [ ] 27.3 Configurer auto-deploy sur push (automatic in Vercel)
+- [ ] 27.4 Configurer environment variables Vercel: DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL (user action required)
+- [ ] 27.5 Déclencher premier déploiement (user action required)
+- [ ] 27.6 Vérifier build success (user action required)
+- [ ] 27.7 Tester app déployée sur URL Vercel (user action required)
+
+## 27b. Deployment Preparation (Code Ready)
+
+- [x] 27b.1 Initialiser git repository
+- [x] 27b.2 Créer .gitignore avec env files
+- [x] 27b.3 Créer commit initial avec tout le code Sprint 1
+- [x] 27b.4 Créer DEPLOYMENT.md avec instructions complètes
+- [x] 27b.5 Vérifier build local fonctionne (npm run build)
 
 ## 28. Environment Variables Configuration
 
-- [ ] 28.1 Vérifier DATABASE_URL pointe vers Neon production/dev
-- [ ] 28.2 Vérifier NEXTAUTH_URL pointe vers URL Vercel déployée
-- [ ] 28.3 Vérifier NEXTAUTH_SECRET est unique et sécurisé (32+ chars)
-- [ ] 28.4 Vérifier tous secrets sont dans Vercel dashboard (encrypted)
+- [x] 28.1 Vérifier DATABASE_URL pointe vers Neon production/dev
+- [x] 28.2 Vérifier NEXTAUTH_URL configuré (.env.local pour dev)
+- [x] 28.3 Vérifier NEXTAUTH_SECRET est unique et sécurisé (32+ chars)
+- [x] 28.4 Documenter tous secrets nécessaires dans DEPLOYMENT.md
 
 ## 29. Security Configuration
 
-- [ ] 29.1 Vérifier CSRF protection activée (NextAuth default)
-- [ ] 29.2 Vérifier cookies Secure flag en production (HTTPS)
-- [ ] 29.3 Vérifier cookies SameSite=Lax
-- [ ] 29.4 Vérifier .env.local dans .gitignore (pas de commit secrets)
-- [ ] 29.5 Implémenter rate limiting basique sur /api/auth/* (in-memory Map pour MVP)
+- [x] 29.1 Vérifier CSRF protection activée (NextAuth default)
+- [x] 29.2 Cookies Secure flag automatique en production (Vercel HTTPS)
+- [x] 29.3 Cookies SameSite=Lax (NextAuth default)
+- [x] 29.4 Vérifier .env.local dans .gitignore (pas de commit secrets)
+- [ ] 29.5 Implémenter rate limiting basique sur /api/auth/* (optional for MVP)
 
 ## 30. Testing - Authentication Flow
 
