@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { hash } from 'bcrypt';
+import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { registerSchema } from '@/lib/validations';
 
@@ -42,7 +43,7 @@ export async function POST(req: Request) {
     }
 
     // Créer l'utilisateur, le styliste et la subscription en transaction
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Créer l'utilisateur
       const user = await tx.user.create({
         data: {
