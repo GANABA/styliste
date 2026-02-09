@@ -4,6 +4,11 @@ import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { registerSchema } from '@/lib/validations';
 
+// Force Node.js runtime (bcrypt et Prisma ne fonctionnent pas en Edge)
+export const runtime = 'nodejs';
+// Force dynamic rendering (pas de pre-rendering au build)
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
