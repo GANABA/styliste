@@ -22,7 +22,6 @@ export const navigationItems: NavItem[] = [
     label: 'Clients',
     href: '/dashboard/clients',
     icon: Users,
-    disabled: true,
   },
   {
     label: 'Commandes',

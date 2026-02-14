@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       data: {
         clientId: validatedData.clientId,
         templateId: validatedData.templateId,
-        measurements: validatedData.measurements,
+        measurements: validatedData.measurements as any,
         measuredAt: new Date(),
       },
       include: {

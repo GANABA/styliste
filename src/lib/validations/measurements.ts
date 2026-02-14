@@ -15,7 +15,7 @@ export const templateCreateSchema = z.object({
 export const measurementCreateSchema = z.object({
   clientId: z.string().uuid("Client ID invalide"),
   templateId: z.string().uuid("Template ID invalide"),
-  measurements: z.record(z.number().positive("Les mesures doivent être positives")),
+  measurements: z.record(z.string(), z.number().positive("Les mesures doivent être positives")),
 });
 
 export type TemplateField = z.infer<typeof templateFieldSchema>;
