@@ -58,8 +58,10 @@ model Stylist {
   deletedAt    DateTime? @map("deleted_at")
 
   // Relations
-  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  subscriptions Subscription[]
+  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptions        Subscription[]
+  clients              Client[]
+  measurementTemplates MeasurementTemplate[]
 
   @@map("stylists")
 }
@@ -142,4 +144,65 @@ model Account {
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
+}
+
+// Sprint 2: Client Management Models
+model Client {
+  id        String    @id @default(uuid())
+  stylistId String    @map("stylist_id")
+  name      String
+  phone     String
+  email     String?
+  address   String?
+  city      String?
+  notes     String?   @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Relations
+  stylist      Stylist            @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+  measurements ClientMeasurement[]
+
+  @@index([stylistId])
+  @@index([name])
+  @@index([phone])
+  @@index([stylistId, deletedAt])
+  @@map("clients")
+}
+
+model MeasurementTemplate {
+  id        String    @id @default(uuid())
+  stylistId String    @map("stylist_id")
+  name      String
+  fields    Json // Structure: { fields: [{ name, label, unit, required }] }
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Relations
+  stylist      Stylist            @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+  measurements ClientMeasurement[]
+
+  @@index([stylistId])
+  @@map("measurement_templates")
+}
+
+model ClientMeasurement {
+  id           String   @id @default(uuid())
+  clientId     String   @map("client_id")
+  templateId   String   @map("template_id")
+  measurements Json // Structure: { field_name: value }
+  measuredAt   DateTime @map("measured_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  client   Client              @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  template MeasurementTemplate @relation(fields: [templateId], references: [id], onDelete: Restrict)
+
+  @@index([clientId])
+  @@index([templateId])
+  @@index([clientId, measuredAt(sort: Desc)])
+  @@map("client_measurements")
 }
