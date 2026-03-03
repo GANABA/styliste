@@ -1,7 +1,10 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { Users, ShoppingBag, Banknote, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -22,32 +25,51 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Stats placeholder - Sprint 4 */}
+      {/* Quick access cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Clients</CardDescription>
-            <CardTitle className="text-3xl">0</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">Disponible Sprint 2</p>
-          </CardContent>
-        </Card>
+        <Link href="/dashboard/clients">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer border-blue-100 hover:border-blue-300">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardDescription>Clients</CardDescription>
+                <Users className="h-5 w-5 text-blue-500" />
+              </div>
+              <CardTitle className="text-3xl">—</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center text-sm text-blue-600 font-medium">
+                Gérer les clients
+                <ArrowRight className="h-4 w-4 ml-1" />
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Commandes actives</CardDescription>
-            <CardTitle className="text-3xl">0</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">Disponible Sprint 3</p>
-          </CardContent>
-        </Card>
+        <Link href="/dashboard/orders">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer border-green-100 hover:border-green-300">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardDescription>Commandes actives</CardDescription>
+                <ShoppingBag className="h-5 w-5 text-green-500" />
+              </div>
+              <CardTitle className="text-3xl">—</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center text-sm text-green-600 font-medium">
+                Gérer les commandes
+                <ArrowRight className="h-4 w-4 ml-1" />
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card>
+        <Card className="border-gray-100 opacity-60">
           <CardHeader className="pb-3">
-            <CardDescription>Chiffre d&apos;affaires</CardDescription>
-            <CardTitle className="text-3xl">0 FCFA</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardDescription>Chiffre d&apos;affaires</CardDescription>
+              <Banknote className="h-5 w-5 text-gray-400" />
+            </div>
+            <CardTitle className="text-3xl text-gray-400">— FCFA</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-xs text-muted-foreground">Disponible Sprint 4</p>
@@ -55,64 +77,75 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Account info */}
+      {/* Quick links + Roadmap */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Informations du compte</CardTitle>
-            <CardDescription>Vos informations personnelles</CardDescription>
+            <CardTitle>Accès rapide</CardTitle>
+            <CardDescription>Les sections disponibles</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-sm font-medium text-gray-500">Email:</span>
-              <span className="text-sm text-gray-900">{session?.user?.email}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm font-medium text-gray-500">Rôle:</span>
-              <span className="text-sm text-gray-900">{session?.user?.role}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm font-medium text-gray-500">Stylist ID:</span>
-              <span className="text-sm text-gray-900 font-mono text-xs">
-                {session?.user?.stylistId || 'N/A'}
-              </span>
-            </div>
+            <Link href="/dashboard/clients">
+              <Button variant="outline" className="w-full justify-between">
+                <span className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-blue-500" />
+                  Gestion des clients
+                </span>
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/dashboard/measurements/templates">
+              <Button variant="outline" className="w-full justify-between">
+                <span className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-purple-500" />
+                  Templates de mesures
+                </span>
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/dashboard/orders">
+              <Button variant="outline" className="w-full justify-between">
+                <span className="flex items-center gap-2">
+                  <ShoppingBag className="h-4 w-4 text-green-500" />
+                  Gestion des commandes
+                </span>
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Prochaines fonctionnalités</CardTitle>
-            <CardDescription>
-              Ces fonctionnalités seront disponibles dans les prochains sprints
-            </CardDescription>
+            <CardTitle>Roadmap</CardTitle>
+            <CardDescription>Fonctionnalités en cours et à venir</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-blue-500" />
-                <span className="text-gray-700">Gestion des clients et mesures</span>
-                <span className="ml-auto text-xs text-gray-500">Sprint 2</span>
+                <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
+                <span className="text-gray-700">Authentification & Compte</span>
+                <span className="ml-auto text-xs text-green-600 font-medium">✓ Sprint 1</span>
               </li>
               <li className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-blue-400" />
-                <span className="text-gray-700">Gestion des commandes</span>
-                <span className="ml-auto text-xs text-gray-500">Sprint 3</span>
+                <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
+                <span className="text-gray-700">Clients & Mesures</span>
+                <span className="ml-auto text-xs text-green-600 font-medium">✓ Sprint 2</span>
               </li>
               <li className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-blue-300" />
-                <span className="text-gray-700">Paiements et planning</span>
-                <span className="ml-auto text-xs text-gray-500">Sprint 4</span>
+                <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
+                <span className="text-gray-700">Commandes & Photos</span>
+                <span className="ml-auto text-xs text-green-600 font-medium">✓ Sprint 3</span>
               </li>
               <li className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-blue-200" />
-                <span className="text-gray-700">Portfolio et notifications</span>
-                <span className="ml-auto text-xs text-gray-500">Sprint 5</span>
+                <Clock className="h-4 w-4 text-gray-400 shrink-0" />
+                <span className="text-gray-500">Paiements & Planning</span>
+                <span className="ml-auto text-xs text-gray-400">Sprint 4</span>
               </li>
               <li className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-blue-100" />
-                <span className="text-gray-700">Dashboard admin</span>
-                <span className="ml-auto text-xs text-gray-500">Sprint 6</span>
+                <Clock className="h-4 w-4 text-gray-400 shrink-0" />
+                <span className="text-gray-500">Portfolio & Notifications</span>
+                <span className="ml-auto text-xs text-gray-400">Sprint 5</span>
               </li>
             </ul>
           </CardContent>

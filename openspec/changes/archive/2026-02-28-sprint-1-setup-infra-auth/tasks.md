@@ -262,46 +262,46 @@
 
 ## 30. Testing - Authentication Flow
 
-- [ ] 30.1 Tester inscription nouveau user (happy path)
-- [ ] 30.2 Tester inscription avec email existant (erreur)
-- [ ] 30.3 Tester login avec credentials valides (redirect dashboard)
-- [ ] 30.4 Tester login avec email invalide (erreur)
-- [ ] 30.5 Tester login avec password incorrect (erreur)
-- [ ] 30.6 Tester logout (redirect login)
-- [ ] 30.7 Tester session persistence (refresh page reste connecté)
+- [x] 30.1 Tester inscription nouveau user (happy path)
+- [x] 30.2 Tester inscription avec email existant (erreur)
+- [x] 30.3 Tester login avec credentials valides (redirect dashboard)
+- [x] 30.4 Tester login avec email invalide (erreur)
+- [x] 30.5 Tester login avec password incorrect (erreur)
+- [x] 30.6 Tester logout (redirect login)
+- [x] 30.7 Tester session persistence (refresh page reste connecté)
 - [ ] 30.8 Tester session expiration après 7 jours
 
 ## 31. Testing - Route Protection
 
-- [ ] 31.1 Tester accès /dashboard sans auth (redirect login)
-- [ ] 31.2 Tester accès /dashboard avec auth (accès autorisé)
-- [ ] 31.3 Tester accès /api/* sans auth (401 Unauthorized)
-- [ ] 31.4 Tester accès /login et /register sans auth (autorisé)
+- [x] 31.1 Tester accès /dashboard sans auth (redirect login)
+- [x] 31.2 Tester accès /dashboard avec auth (accès autorisé)
+- [x] 31.3 Tester accès /api/* sans auth (401 Unauthorized)
+- [x] 31.4 Tester accès /login et /register sans auth (autorisé)
 
 ## 32. Testing - Dashboard UI
 
-- [ ] 32.1 Tester sidebar navigation sur desktop
-- [ ] 32.2 Tester sidebar drawer sur mobile (ouverture/fermeture)
-- [ ] 32.3 Tester user menu dropdown
-- [ ] 32.4 Tester logout depuis user menu
-- [ ] 32.5 Tester navigation clavier
-- [ ] 32.6 Tester touch targets sur mobile (facilement cliquables)
+- [x] 32.1 Tester sidebar navigation sur desktop
+- [x] 32.2 Tester sidebar drawer sur mobile (ouverture/fermeture)
+- [x] 32.3 Tester user menu dropdown
+- [x] 32.4 Tester logout depuis user menu
+- [x] 32.5 Tester navigation clavier
+- [x] 32.6 Tester touch targets sur mobile (facilement cliquables)
 
 ## 33. Testing - Responsive Design
 
-- [ ] 33.1 Tester sur mobile 375px (iPhone SE)
-- [ ] 33.2 Tester sur tablet 768px
-- [ ] 33.3 Tester sur desktop 1024px et 1440px
+- [x] 33.1 Tester sur mobile 375px (iPhone SE)
+- [x] 33.2 Tester sur tablet 768px
+- [x] 33.3 Tester sur desktop 1024px et 1440px
 - [ ] 33.4 Tester orientation portrait et paysage mobile
 
 ## 34. Testing - Database
 
-- [ ] 34.1 Vérifier User créé avec password hashé
-- [ ] 34.2 Vérifier Stylist créé et lié au User
-- [ ] 34.3 Vérifier Subscription créée avec plan Free
-- [ ] 34.4 Vérifier Session créée au login
-- [ ] 34.5 Vérifier Session supprimée au logout
-- [ ] 34.6 Ouvrir Prisma Studio et inspecter données
+- [x] 34.1 Vérifier User créé avec password hashé
+- [x] 34.2 Vérifier Stylist créé et lié au User
+- [x] 34.3 Vérifier Subscription créée avec plan Free
+- [x] 34.4 Vérifier Session créée au login
+- [x] 34.5 Vérifier Session supprimée au logout
+- [x] 34.6 Ouvrir Prisma Studio et inspecter données
 
 ## 35. Performance Testing
 
@@ -309,7 +309,7 @@
 - [ ] 35.2 Exécuter Lighthouse audit mobile (target > 85)
 - [ ] 35.3 Vérifier First Contentful Paint < 2s
 - [ ] 35.4 Vérifier Time to Interactive < 3s
-- [ ] 35.5 Vérifier pas d'erreurs console
+- [x] 35.5 Vérifier pas d'erreurs console
 - [ ] 35.6 Tester sur connexion throttled 3G (Chrome DevTools)
 
 ## 36. Documentation
@@ -322,27 +322,27 @@
 
 ## 37. Code Quality
 
-- [ ] 37.1 Exécuter npm run lint et corriger warnings
-- [ ] 37.2 Exécuter npm run type-check et corriger erreurs TypeScript
+- [x] 37.1 Exécuter npm run lint et corriger warnings
+- [x] 37.2 Exécuter npm run type-check et corriger erreurs TypeScript
 - [ ] 37.3 Formater code avec Prettier (optionnel)
 - [ ] 37.4 Review code pour patterns anti-patterns
 
 ## 38. Git & Version Control
 
-- [ ] 38.1 Commit initial avec message "feat: initial project setup"
-- [ ] 38.2 Commit database schema "feat: add database schema and migrations"
-- [ ] 38.3 Commit authentication "feat: add authentication with NextAuth"
-- [ ] 38.4 Commit dashboard layout "feat: add dashboard layout with sidebar and header"
-- [ ] 38.5 Commit deployment "chore: configure Vercel deployment"
-- [ ] 38.6 Push vers GitHub
+- [x] 38.1 Commit initial avec message "feat: initial project setup"
+- [x] 38.2 Commit database schema "feat: add database schema and migrations"
+- [x] 38.3 Commit authentication "feat: add authentication with NextAuth"
+- [x] 38.4 Commit dashboard layout "feat: add dashboard layout with sidebar and header"
+- [x] 38.5 Commit deployment "chore: configure Vercel deployment"
+- [x] 38.6 Push vers GitHub
 - [ ] 38.7 Créer tag v0.1.0-sprint-1
 
 ## 39. Sprint 1 Completion Validation
 
-- [ ] 39.1 ✅ npm run dev fonctionne sans erreurs
-- [ ] 39.2 ✅ User peut s'inscrire, se connecter, voir dashboard
-- [ ] 39.3 ✅ Middleware redirige vers login si non authentifié
-- [ ] 39.4 ✅ Database Neon contient tables avec seed data
+- [x] 39.1 ✅ npm run dev fonctionne sans erreurs
+- [x] 39.2 ✅ User peut s'inscrire, se connecter, voir dashboard
+- [x] 39.3 ✅ Middleware redirige vers login si non authentifié
+- [x] 39.4 ✅ Database Neon contient tables avec seed data
 - [ ] 39.5 ✅ Déploiement Vercel accessible publiquement
 - [ ] 39.6 ✅ Lighthouse score desktop > 85, mobile > 80
-- [ ] 39.7 ✅ Toutes les 4 capabilities sont implémentées (project-setup, database-infrastructure, user-authentication, dashboard-layout)
+- [x] 39.7 ✅ Toutes les 4 capabilities sont implémentées (project-setup, database-infrastructure, user-authentication, dashboard-layout)

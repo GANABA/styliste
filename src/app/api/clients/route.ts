@@ -17,7 +17,8 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "50");
     const search = searchParams.get("search") || "";
-    const status = searchParams.get("status") || "active";
+    // Support both ?status=archived and ?archived=true
+    const archived = searchParams.get("archived") === "true" || searchParams.get("status") === "archived";
 
     const skip = (page - 1) * limit;
 
@@ -27,10 +28,10 @@ export async function GET(request: NextRequest) {
     };
 
     // Filter by status
-    if (status === "active") {
-      where.deletedAt = null;
-    } else if (status === "archived") {
+    if (archived) {
       where.deletedAt = { not: null };
+    } else {
+      where.deletedAt = null;
     }
 
     // Search by name or phone
@@ -53,6 +54,9 @@ export async function GET(request: NextRequest) {
 
     const totalPages = Math.ceil(total / limit);
 
+    // Include limit info for the counter UI
+    const limitInfo = await checkClientLimit(session.user.stylistId);
+
     return NextResponse.json({
       clients,
       pagination: {
@@ -60,6 +64,11 @@ export async function GET(request: NextRequest) {
         page,
         limit,
         totalPages,
+      },
+      limitInfo: {
+        current: limitInfo.current,
+        limit: limitInfo.limit,
+        planName: limitInfo.planName,
       },
     });
   } catch (error) {

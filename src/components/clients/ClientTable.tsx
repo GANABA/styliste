@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Phone, Mail, MapPin, MoreVertical } from 'lucide-react';
+import { Phone, Mail, MapPin, MoreVertical, RotateCcw } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -12,6 +12,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
@@ -26,13 +27,15 @@ interface Client {
   address?: string;
   city?: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 
 interface ClientTableProps {
   clients: Client[];
+  onRestore?: (clientId: string) => void;
 }
 
-export function ClientTable({ clients }: ClientTableProps) {
+export function ClientTable({ clients, onRestore }: ClientTableProps) {
   return (
     <div className="border rounded-lg overflow-hidden">
       <Table>
@@ -100,16 +103,32 @@ export function ClientTable({ clients }: ClientTableProps) {
                         Voir détails
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/dashboard/clients/${client.id}/edit`}>
-                        Modifier
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/dashboard/clients/${client.id}/measurements`}>
-                        Prendre mesures
-                      </Link>
-                    </DropdownMenuItem>
+                    {!client.deletedAt && (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/clients/${client.id}/edit`}>
+                            Modifier
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/clients/${client.id}/measurements`}>
+                            Prendre mesures
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                    {client.deletedAt && onRestore && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => onRestore(client.id)}
+                          className="text-green-600"
+                        >
+                          <RotateCcw className="h-4 w-4 mr-2" />
+                          Restaurer
+                        </DropdownMenuItem>
+                      </>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>

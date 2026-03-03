@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Edit, Trash2, Phone, Mail, MapPin, Calendar, Ruler } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, RotateCcw, Phone, Mail, MapPin, Calendar, Ruler, Archive } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -33,6 +33,7 @@ interface Client {
   notes?: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string | null;
 }
 
 export default function ClientDetailPage({ params }: { params: { id: string } }) {
@@ -63,7 +64,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Erreur lors de la suppression");
+        throw new Error(error.error || "Erreur lors de l'archivage");
       }
 
       return response.json();
@@ -71,6 +72,30 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
     onSuccess: () => {
       toast.success('Client archivé avec succès');
       queryClient.invalidateQueries({ queryKey: ['clients'] });
+      router.push('/dashboard/clients');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const restoreMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`/api/clients/${params.id}`, {
+        method: 'PATCH',
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Erreur lors de la restauration");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      toast.success('Client restauré avec succès');
+      queryClient.invalidateQueries({ queryKey: ['clients'] });
+      queryClient.invalidateQueries({ queryKey: ['client', params.id] });
       router.push('/dashboard/clients');
     },
     onError: (error: Error) => {
@@ -121,40 +146,70 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
         </div>
 
         <div className="flex gap-2">
-          <Link href={`/dashboard/clients/${client.id}/edit`}>
-            <Button variant="outline">
-              <Edit className="h-4 w-4 mr-2" />
-              Modifier
-            </Button>
-          </Link>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="outline" className="text-red-600 hover:text-red-700">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Archiver
+          {!client.deletedAt && (
+            <Link href={`/dashboard/clients/${client.id}/edit`}>
+              <Button variant="outline">
+                <Edit className="h-4 w-4 mr-2" />
+                Modifier
               </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Archiver ce client ?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Le client sera archivé mais toutes ses données seront conservées. Vous
-                  pourrez le restaurer plus tard si nécessaire.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Annuler</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => deleteMutation.mutate()}
-                  className="bg-red-600 hover:bg-red-700"
-                  disabled={deleteMutation.isPending}
-                >
-                  {deleteMutation.isPending ? 'Archivage...' : 'Archiver'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+            </Link>
+          )}
+
+          {client.deletedAt ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" className="text-green-600 hover:text-green-700">
+                  <RotateCcw className="h-4 w-4 mr-2" />
+                  Restaurer
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Restaurer ce client ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Le client sera réactivé et réapparaîtra dans votre liste de clients actifs.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => restoreMutation.mutate()}
+                    disabled={restoreMutation.isPending}
+                  >
+                    {restoreMutation.isPending ? 'Restauration...' : 'Restaurer'}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" className="text-red-600 hover:text-red-700">
+                  <Archive className="h-4 w-4 mr-2" />
+                  Archiver
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Archiver ce client ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Le client sera archivé mais toutes ses données seront conservées. Vous
+                    pourrez le restaurer plus tard si nécessaire.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => deleteMutation.mutate()}
+                    className="bg-red-600 hover:bg-red-700"
+                    disabled={deleteMutation.isPending}
+                  >
+                    {deleteMutation.isPending ? 'Archivage...' : 'Archiver'}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
       </div>
 

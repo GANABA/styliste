@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import { ClientCard } from '@/components/clients/ClientCard';
 import { ClientTable } from '@/components/clients/ClientTable';
 import { ClientCounter } from '@/components/clients/ClientCounter';
 import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from 'sonner';
 
 interface Client {
   id: string;
@@ -23,7 +24,7 @@ interface Client {
   notes?: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt?: string;
+  deletedAt?: string | null;
 }
 
 interface ClientsResponse {
@@ -46,6 +47,7 @@ export default function ClientsPage() {
   const [filter, setFilter] = useState<'active' | 'archived'>('active');
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(searchQuery, 300);
+  const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery<ClientsResponse>({
     queryKey: ['clients', { search: debouncedSearch, filter, page }],
@@ -72,6 +74,17 @@ export default function ClientsPage() {
       return response.json();
     },
   });
+
+  const handleRestore = async (clientId: string) => {
+    try {
+      const response = await fetch(`/api/clients/${clientId}`, { method: 'PATCH' });
+      if (!response.ok) throw new Error('Erreur lors de la restauration');
+      toast.success('Client restauré avec succès');
+      queryClient.invalidateQueries({ queryKey: ['clients'] });
+    } catch {
+      toast.error('Erreur lors de la restauration du client');
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -134,16 +147,19 @@ export default function ClientsPage() {
         <EmptyState filter={filter} searchQuery={debouncedSearch} />
       ) : (
         <>
-          {/* Mobile view - Cards */}
-          <div className="block sm:hidden space-y-3">
+          {/* Mobile view - Cards (< 768px) */}
+          <div className="block md:hidden space-y-3">
             {data?.clients.map((client) => (
               <ClientCard key={client.id} client={client} />
             ))}
           </div>
 
-          {/* Desktop view - Table */}
-          <div className="hidden sm:block">
-            <ClientTable clients={data?.clients || []} />
+          {/* Desktop view - Table (≥ 768px) */}
+          <div className="hidden md:block">
+            <ClientTable
+              clients={data?.clients || []}
+              onRestore={filter === 'archived' ? handleRestore : undefined}
+            />
           </div>
 
           {/* Pagination */}

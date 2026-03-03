@@ -27,7 +27,6 @@ export const navigationItems: NavItem[] = [
     label: 'Commandes',
     href: '/dashboard/orders',
     icon: ShoppingBag,
-    disabled: true,
   },
   {
     label: 'Calendrier',
@@ -50,7 +49,9 @@ export function Navigation() {
     <nav className="flex flex-col gap-1" aria-label="Navigation principale">
       {navigationItems.map((item) => {
         const Icon = item.icon;
-        const isActive = pathname === item.href;
+        const isActive = item.href === '/dashboard'
+          ? pathname === item.href
+          : pathname.startsWith(item.href);
 
         return (
           <Link
