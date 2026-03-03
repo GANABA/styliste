@@ -112,7 +112,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
       <div className="space-y-6">
         <div className="flex items-center gap-4">
           <Link href="/dashboard/clients">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="default" className="min-h-[44px]">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Retour
             </Button>
@@ -131,7 +131,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <Link href="/dashboard/clients">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="default" className="min-h-[44px]">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Retour
             </Button>

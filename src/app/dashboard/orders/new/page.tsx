@@ -28,9 +28,9 @@ export default function NewOrderPage() {
       <div className="mb-6">
         <Link
           href="/dashboard/orders"
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-4"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-4 min-h-[44px] -mx-2 px-2"
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft className="h-4 w-4 shrink-0" />
           Retour aux commandes
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">Nouvelle commande</h1>

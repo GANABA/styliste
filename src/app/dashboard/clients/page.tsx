@@ -127,9 +127,9 @@ export default function ClientsPage() {
         </div>
 
         <Tabs value={filter} onValueChange={(v) => setFilter(v as 'active' | 'archived')}>
-          <TabsList>
-            <TabsTrigger value="active">Actifs</TabsTrigger>
-            <TabsTrigger value="archived">Archivés</TabsTrigger>
+          <TabsList className="h-11">
+            <TabsTrigger value="active" className="h-9">Actifs</TabsTrigger>
+            <TabsTrigger value="archived" className="h-9">Archivés</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>

@@ -101,7 +101,7 @@ export default function RecordMeasurementsPage({ params }: { params: { id: strin
       <div className="space-y-6">
         <div className="flex items-center gap-4">
           <Link href="/dashboard/clients">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="default" className="min-h-[44px]">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Retour
             </Button>
@@ -119,7 +119,7 @@ export default function RecordMeasurementsPage({ params }: { params: { id: strin
       <div className="space-y-6 max-w-3xl">
         <div className="flex items-center gap-4">
           <Link href={`/dashboard/clients/${params.id}`}>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="default" className="min-h-[44px]">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Retour
             </Button>
@@ -151,7 +151,7 @@ export default function RecordMeasurementsPage({ params }: { params: { id: strin
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href={`/dashboard/clients/${params.id}`}>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="default" className="min-h-[44px]">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour
           </Button>

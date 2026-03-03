@@ -56,7 +56,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-6 md:py-12 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Connexion</CardTitle>
@@ -99,7 +99,7 @@ export default function LoginForm() {
                 <Label htmlFor="password">Mot de passe</Label>
                 <Link
                   href="#"
-                  className="text-sm text-muted-foreground hover:text-primary"
+                  className="text-sm text-muted-foreground hover:text-primary py-2 -my-2 inline-flex items-center"
                   onClick={(e) => {
                     e.preventDefault();
                     alert('Fonctionnalité à venir dans la Phase 2');
@@ -125,9 +125,9 @@ export default function LoginForm() {
             </Button>
           </form>
 
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 min-h-[44px] flex items-center justify-center text-sm">
             Vous n&apos;avez pas de compte ?{' '}
-            <Link href="/register" className="font-medium text-primary hover:underline">
+            <Link href="/register" className="font-medium text-primary hover:underline ml-1 py-2">
               S&apos;inscrire
             </Link>
           </div>

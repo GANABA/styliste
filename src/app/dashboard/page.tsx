@@ -26,7 +26,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick access cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Link href="/dashboard/clients">
           <Card className="hover:shadow-md transition-shadow cursor-pointer border-blue-100 hover:border-blue-300">
             <CardHeader className="pb-3">
@@ -78,7 +78,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick links + Roadmap */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Accès rapide</CardTitle>
@@ -86,7 +86,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <Link href="/dashboard/clients">
-              <Button variant="outline" className="w-full justify-between">
+              <Button variant="outline" className="w-full justify-between h-11">
                 <span className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-blue-500" />
                   Gestion des clients
@@ -95,7 +95,7 @@ export default function DashboardPage() {
               </Button>
             </Link>
             <Link href="/dashboard/measurements/templates">
-              <Button variant="outline" className="w-full justify-between">
+              <Button variant="outline" className="w-full justify-between h-11">
                 <span className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-purple-500" />
                   Templates de mesures
@@ -104,7 +104,7 @@ export default function DashboardPage() {
               </Button>
             </Link>
             <Link href="/dashboard/orders">
-              <Button variant="outline" className="w-full justify-between">
+              <Button variant="outline" className="w-full justify-between h-11">
                 <span className="flex items-center gap-2">
                   <ShoppingBag className="h-4 w-4 text-green-500" />
                   Gestion des commandes
@@ -125,27 +125,27 @@ export default function DashboardPage() {
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
                 <span className="text-gray-700">Authentification & Compte</span>
-                <span className="ml-auto text-xs text-green-600 font-medium">✓ Sprint 1</span>
+                <span className="ml-auto text-xs text-green-600 font-medium whitespace-nowrap shrink-0">✓ Sprint 1</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
                 <span className="text-gray-700">Clients & Mesures</span>
-                <span className="ml-auto text-xs text-green-600 font-medium">✓ Sprint 2</span>
+                <span className="ml-auto text-xs text-green-600 font-medium whitespace-nowrap shrink-0">✓ Sprint 2</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
                 <span className="text-gray-700">Commandes & Photos</span>
-                <span className="ml-auto text-xs text-green-600 font-medium">✓ Sprint 3</span>
+                <span className="ml-auto text-xs text-green-600 font-medium whitespace-nowrap shrink-0">✓ Sprint 3</span>
               </li>
               <li className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-gray-400 shrink-0" />
                 <span className="text-gray-500">Paiements & Planning</span>
-                <span className="ml-auto text-xs text-gray-400">Sprint 4</span>
+                <span className="ml-auto text-xs text-gray-400 whitespace-nowrap shrink-0">Sprint 4</span>
               </li>
               <li className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-gray-400 shrink-0" />
                 <span className="text-gray-500">Portfolio & Notifications</span>
-                <span className="ml-auto text-xs text-gray-400">Sprint 5</span>
+                <span className="ml-auto text-xs text-gray-400 whitespace-nowrap shrink-0">Sprint 5</span>
               </li>
             </ul>
           </CardContent>
