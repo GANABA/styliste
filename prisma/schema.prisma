@@ -26,6 +26,48 @@ enum SubscriptionStatus {
   TRIAL
 }
 
+// Sprint 3 Enums
+enum OrderStatus {
+  QUOTE
+  IN_PROGRESS
+  READY
+  DELIVERED
+  CANCELED
+}
+
+enum UrgencyLevel {
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum FabricProvidedBy {
+  CLIENT
+  STYLIST
+}
+
+enum PaymentStatus {
+  UNPAID
+  PARTIAL
+  PAID
+  REFUNDED
+}
+
+enum PhotoType {
+  REFERENCE
+  FABRIC
+  FITTING
+  FINISHED
+}
+
+enum OrderChangeType {
+  STATUS_CHANGE
+  PRICE_CHANGE
+  DATE_CHANGE
+  DESCRIPTION_CHANGE
+  OTHER
+}
+
 // Models
 model User {
   id        String    @id @default(uuid())
@@ -62,6 +104,7 @@ model Stylist {
   subscriptions        Subscription[]
   clients              Client[]
   measurementTemplates MeasurementTemplate[]
+  orders               Order[]
 
   @@map("stylists")
 }
@@ -161,8 +204,9 @@ model Client {
   deletedAt DateTime? @map("deleted_at")
 
   // Relations
-  stylist      Stylist            @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+  stylist      Stylist             @relation(fields: [stylistId], references: [id], onDelete: Cascade)
   measurements ClientMeasurement[]
+  orders       Order[]
 
   @@index([stylistId])
   @@index([name])
@@ -205,4 +249,99 @@ model ClientMeasurement {
   @@index([templateId])
   @@index([clientId, measuredAt(sort: Desc)])
   @@map("client_measurements")
+}
+
+// Sprint 3: Order Management Models
+model Order {
+  id          String   @id @default(uuid())
+  stylistId   String   @map("stylist_id")
+  clientId    String   @map("client_id")
+  orderNumber String   @unique @map("order_number")
+
+  // Type et description
+  garmentType  String  @map("garment_type")
+  description  String? @db.Text
+  notes        String? @db.Text
+  specialRequests String? @db.Text @map("special_requests")
+
+  // Statut
+  status             OrderStatus @default(QUOTE)
+  cancellationReason String?     @db.Text @map("cancellation_reason")
+  canceledAt         DateTime?   @map("canceled_at")
+
+  // Dates
+  orderDate          DateTime  @default(now()) @map("order_date")
+  promisedDate       DateTime  @map("promised_date")
+  actualDeliveryDate DateTime? @map("actual_delivery_date")
+  urgencyLevel       UrgencyLevel @default(NORMAL) @map("urgency_level")
+
+  // Tissu
+  fabricProvidedBy  FabricProvidedBy @map("fabric_provided_by")
+  fabricReceivedDate DateTime?        @map("fabric_received_date")
+  fabricDescription  String?          @db.Text @map("fabric_description")
+
+  // Prix (en centimes FCFA)
+  totalPrice     Int @map("total_price")
+  advanceAmount  Int @default(0) @map("advance_amount")
+  totalPaid      Int @default(0) @map("total_paid")
+  paymentStatus  PaymentStatus @default(UNPAID) @map("payment_status")
+
+  // Mesures (snapshot au moment de la commande)
+  measurementsSnapshot Json? @map("measurements_snapshot")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Relations
+  stylist Stylist        @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+  client  Client         @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  photos  OrderPhoto[]
+  history OrderHistory[]
+
+  @@index([stylistId])
+  @@index([clientId])
+  @@index([status])
+  @@index([orderNumber])
+  @@index([promisedDate])
+  @@index([stylistId, status])
+  @@index([stylistId, deletedAt])
+  @@map("orders")
+}
+
+model OrderPhoto {
+  id           String    @id @default(uuid())
+  orderId      String    @map("order_id")
+  photoUrl     String    @map("photo_url")
+  thumbnailUrl String?   @map("thumbnail_url")
+  photoType    PhotoType @map("photo_type")
+  caption      String?
+  displayOrder Int       @default(0) @map("display_order")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([orderId, photoType])
+  @@map("order_photos")
+}
+
+model OrderHistory {
+  id              String          @id @default(uuid())
+  orderId         String          @map("order_id")
+  changedByUserId String?         @map("changed_by_user_id")
+  changeType      OrderChangeType @map("change_type")
+  fieldName       String?         @map("field_name")
+  oldValue        String?         @db.Text @map("old_value")
+  newValue        String?         @db.Text @map("new_value")
+  comment         String?         @db.Text
+  createdAt       DateTime        @default(now()) @map("created_at")
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([orderId, createdAt(sort: Desc)])
+  @@map("order_history")
 }
