@@ -7,10 +7,20 @@ import { StatusTransitionButton } from './StatusTransitionButton'
 import { OrderTimeline } from './OrderTimeline'
 import { PhotoGallery } from './PhotoGallery'
 import { PhotoUploader } from './PhotoUploader'
+import { PaymentSummary } from '@/components/payments/PaymentSummary'
+import { PaymentHistory } from '@/components/payments/PaymentHistory'
+import { PaymentForm } from '@/components/payments/PaymentForm'
 import { useOrderStatus } from '@/hooks/useOrderStatus'
 import { useOrderPhotos } from '@/hooks/useOrderPhotos'
-import { Pencil, Calendar, User, Scissors, Banknote, ChevronDown, ChevronUp } from 'lucide-react'
+import { useOrderPayments } from '@/hooks/useOrderPayments'
+import { Pencil, Calendar, User, Scissors, Banknote, ChevronDown, ChevronUp, Plus, FileText } from 'lucide-react'
 import { useState } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 
 interface OrderDetailProps {
   order: OrderWithRelations
@@ -22,7 +32,7 @@ function formatPrice(amount: number): string {
 }
 
 function formatDate(date: Date | string | null | undefined): string {
-  if (!date) return '—'
+  if (!date) return 'Non définie'
   return new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(date))
 }
 
@@ -30,9 +40,24 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
   const [showPhotos, setShowPhotos] = useState(true)
   const [showHistory, setShowHistory] = useState(false)
   const [showUploader, setShowUploader] = useState(false)
+  const [showPayments, setShowPayments] = useState(true)
+  const [showPaymentForm, setShowPaymentForm] = useState(false)
+
+  const handleDownloadInvoice = async () => {
+    const res = await fetch(`/api/orders/${order.id}/invoice`)
+    if (!res.ok) return
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `facture-${order.orderNumber}.pdf`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   const { transition } = useOrderStatus(order.id, onRefresh)
   const { photos, refetch: refetchPhotos, deletePhoto } = useOrderPhotos(order.id)
+  const { payments, refetch: refetchPayments } = useOrderPayments(order.id)
 
   const balance = order.totalPrice - order.totalPaid
 
@@ -47,6 +72,13 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
           </div>
           <div className="flex items-center gap-2">
             <OrderStatusBadge status={order.status} />
+            <button
+              onClick={handleDownloadInvoice}
+              title="Télécharger la facture PDF"
+              className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"
+            >
+              <FileText className="h-4 w-4" />
+            </button>
             <Link
               href={`/dashboard/orders/${order.id}/edit`}
               className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"
@@ -78,19 +110,14 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
           </div>
         </div>
 
-        {/* Paiement */}
-        {balance > 0 && (
-          <div className="mt-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
-            <p className="text-sm text-orange-700">
-              Reste à payer : <span className="font-semibold">{formatPrice(balance)}</span>
-              {order.advanceAmount > 0 && (
-                <span className="text-orange-500 ml-1">
-                  (avance : {formatPrice(order.advanceAmount)})
-                </span>
-              )}
-            </p>
-          </div>
-        )}
+        {/* Résumé paiement */}
+        <div className="mt-3">
+          <PaymentSummary
+            totalPrice={order.totalPrice}
+            totalPaid={order.totalPaid}
+            paymentStatus={order.paymentStatus as 'UNPAID' | 'PARTIAL' | 'PAID' | 'REFUNDED'}
+          />
+        </div>
 
         {/* Description */}
         {order.description && (
@@ -104,6 +131,53 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
         orderId={order.id}
         onTransition={transition}
       />
+
+      {/* Section Paiements */}
+      <div className="bg-white rounded-xl border">
+        <button
+          onClick={() => setShowPayments(!showPayments)}
+          className="w-full flex items-center justify-between px-5 py-4 text-left"
+        >
+          <h2 className="font-semibold text-gray-900">
+            Paiements <span className="text-gray-400 font-normal text-sm">({payments.length})</span>
+          </h2>
+          {showPayments ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+        </button>
+
+        {showPayments && (
+          <div className="px-5 pb-5 space-y-4">
+            <PaymentHistory payments={payments} />
+            {order.paymentStatus !== 'PAID' && (
+              <button
+                onClick={() => setShowPaymentForm(true)}
+                className="w-full text-sm text-blue-600 hover:text-blue-700 py-2 border border-dashed border-blue-200 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-1.5"
+              >
+                <Plus className="h-4 w-4" />
+                Enregistrer un paiement
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Dialog PaymentForm */}
+      <Dialog open={showPaymentForm} onOpenChange={setShowPaymentForm}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Enregistrer un paiement</DialogTitle>
+          </DialogHeader>
+          <PaymentForm
+            orderId={order.id}
+            balanceDue={balance}
+            onSuccess={() => {
+              setShowPaymentForm(false)
+              refetchPayments()
+              onRefresh()
+            }}
+            onCancel={() => setShowPaymentForm(false)}
+          />
+        </DialogContent>
+      </Dialog>
 
       {/* Photos */}
       <div className="bg-white rounded-xl border">

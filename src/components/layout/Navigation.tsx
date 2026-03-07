@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LucideIcon, LayoutDashboard, Users, ShoppingBag, Calendar, Settings } from 'lucide-react';
+import { LucideIcon, LayoutDashboard, Users, ShoppingBag, Calendar, CreditCard, Ruler, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface NavItem {
@@ -29,10 +29,19 @@ export const navigationItems: NavItem[] = [
     icon: ShoppingBag,
   },
   {
-    label: 'Calendrier',
+    label: 'Paiements',
+    href: '/dashboard/payments',
+    icon: CreditCard,
+  },
+  {
+    label: 'Planning',
     href: '/dashboard/calendar',
     icon: Calendar,
-    disabled: true,
+  },
+  {
+    label: 'Mesures',
+    href: '/dashboard/measurements/templates',
+    icon: Ruler,
   },
   {
     label: 'Paramètres',

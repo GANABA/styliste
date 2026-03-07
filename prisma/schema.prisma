@@ -68,6 +68,27 @@ enum OrderChangeType {
   OTHER
 }
 
+// Sprint 4 Enums
+enum PaymentType {
+  ADVANCE
+  PARTIAL
+  FINAL
+  REFUND
+}
+
+enum PaymentMethod {
+  CASH
+  MOBILE_MONEY
+  BANK_TRANSFER
+}
+
+enum PaymentRecordStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
 // Models
 model User {
   id        String    @id @default(uuid())
@@ -105,6 +126,7 @@ model Stylist {
   clients              Client[]
   measurementTemplates MeasurementTemplate[]
   orders               Order[]
+  payments             Payment[]
 
   @@map("stylists")
 }
@@ -294,10 +316,11 @@ model Order {
   deletedAt DateTime? @map("deleted_at")
 
   // Relations
-  stylist Stylist        @relation(fields: [stylistId], references: [id], onDelete: Cascade)
-  client  Client         @relation(fields: [clientId], references: [id], onDelete: Restrict)
-  photos  OrderPhoto[]
-  history OrderHistory[]
+  stylist   Stylist        @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+  client    Client         @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  photos    OrderPhoto[]
+  history   OrderHistory[]
+  payments  Payment[]
 
   @@index([stylistId])
   @@index([clientId])
@@ -344,4 +367,42 @@ model OrderHistory {
   @@index([orderId])
   @@index([orderId, createdAt(sort: Desc)])
   @@map("order_history")
+}
+
+// Sprint 4: Payment Model
+model Payment {
+  id                   String              @id @default(uuid())
+  orderId              String              @map("order_id")
+  stylistId            String              @map("stylist_id")
+
+  // Montant
+  amount               Int                 // En centimes FCFA
+  paymentType          PaymentType         @map("payment_type")
+
+  // Méthode
+  paymentMethod        PaymentMethod       @map("payment_method")
+  mobileMoneyProvider  String?             @map("mobile_money_provider") // "MTN", "Moov", "Orange"
+  mobileMoneyNumber    String?             @map("mobile_money_number")
+  transactionReference String?             @map("transaction_reference")
+
+  // Statut
+  paymentStatus        PaymentRecordStatus @default(COMPLETED) @map("payment_status")
+  paymentDate          DateTime            @default(now()) @map("payment_date")
+
+  // Métadonnées
+  notes                String?             @db.Text
+  receiptUrl           String?             @map("receipt_url")
+
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+
+  // Relations
+  order    Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  stylist  Stylist @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([stylistId])
+  @@index([paymentDate])
+  @@index([stylistId, paymentDate(sort: Desc)])
+  @@map("payments")
 }

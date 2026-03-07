@@ -99,7 +99,9 @@ export async function POST(request: NextRequest) {
       // Générer le numéro de commande
       const orderNumber = await generateOrderNumber(tx, stylistId)
 
-      return tx.order.create({
+      const advance = body.advanceAmount ? Number(body.advanceAmount) : 0;
+
+      const order = await tx.order.create({
         data: {
           stylistId,
           clientId,
@@ -114,13 +116,36 @@ export async function POST(request: NextRequest) {
           urgencyLevel: body.urgencyLevel || 'NORMAL',
           fabricDescription: body.fabricDescription || null,
           fabricReceivedDate: body.fabricReceivedDate ? new Date(body.fabricReceivedDate) : null,
-          advanceAmount: body.advanceAmount ? Number(body.advanceAmount) : 0,
+          advanceAmount: advance,
+          // Si avance > 0, initialiser totalPaid et paymentStatus
+          totalPaid: advance > 0 ? advance : 0,
+          paymentStatus: advance > 0
+            ? (advance >= Number(totalPrice) ? 'PAID' : 'PARTIAL')
+            : 'UNPAID',
           measurementsSnapshot: body.measurementsSnapshot || null,
         },
         include: {
           client: { select: { id: true, name: true, phone: true } },
         },
-      })
+      });
+
+      // Si avance > 0, créer un enregistrement Payment pour traçabilité
+      if (advance > 0) {
+        await tx.payment.create({
+          data: {
+            orderId: order.id,
+            stylistId,
+            amount: advance * 100, // stocké en centimes
+            paymentType: 'ADVANCE',
+            paymentMethod: body.advanceMethod || 'CASH',
+            paymentDate: new Date(),
+            paymentStatus: 'COMPLETED',
+            notes: 'Avance versée à la prise de commande',
+          },
+        });
+      }
+
+      return order;
     })
 
     return NextResponse.json(order, { status: 201 })
