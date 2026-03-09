@@ -39,7 +39,7 @@ async function main() {
       },
       {
         name: 'Standard',
-        price: 500000,
+        price: 5000,
         features: JSON.stringify({
           clients: 100,
           orders: 15,
@@ -56,7 +56,7 @@ async function main() {
       },
       {
         name: 'Pro',
-        price: 1000000,
+        price: 10000,
         features: JSON.stringify({
           clients: 'unlimited',
           orders: 20,

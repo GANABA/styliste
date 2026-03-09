@@ -21,6 +21,11 @@ export default withAuth(
       }
     }
 
+    // Rediriger les ADMIN vers /admin/dashboard s'ils accèdent à /dashboard
+    if (token?.role === 'ADMIN' && pathname.startsWith('/dashboard')) {
+      return NextResponse.redirect(new URL('/admin/dashboard', req.url));
+    }
+
     return NextResponse.next();
   },
   {

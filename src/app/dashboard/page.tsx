@@ -73,8 +73,9 @@ export default function DashboardPage() {
   useEffect(() => {
     setLoading(true);
     fetch(`/api/dashboard/stats?period=${period}`)
-      .then((r) => r.json())
-      .then(setStats)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => setStats(data))
+      .catch(() => setStats(null))
       .finally(() => setLoading(false));
   }, [period]);
 

@@ -49,6 +49,8 @@ export function PortfolioUploadForm({ onSuccess, onCancel }: PortfolioUploadForm
           toast.error('Portfolio disponible sur le plan Pro uniquement')
         } else if (err.error === 'PORTFOLIO_LIMIT_REACHED') {
           toast.error('Limite de 50 photos atteinte')
+        } else if (err.error === 'STORAGE_NOT_CONFIGURED') {
+          toast.error('Stockage non configuré. Configurer Cloudflare R2 dans les variables d\'environnement Vercel.')
         } else {
           toast.error("Erreur lors de l'upload")
         }

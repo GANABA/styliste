@@ -77,10 +77,10 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => window.location.href = '/dashboard'}
+                  onClick={() => window.location.href = '/'}
                   className="w-full"
                 >
-                  Retour au tableau de bord
+                  Retour à l&apos;accueil
                 </Button>
               </div>
 

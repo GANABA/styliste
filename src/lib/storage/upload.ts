@@ -101,7 +101,12 @@ export async function uploadOrderPhoto(
       thumbnailKey,
     }
   } else {
-    // Fallback : filesystem local (développement)
+    // En production sans R2 configuré, le stockage de fichiers n'est pas disponible
+    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+      throw new Error('STORAGE_NOT_CONFIGURED')
+    }
+
+    // Fallback filesystem local (développement uniquement)
     const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'orders', orderId)
     await fs.mkdir(uploadDir, { recursive: true })
 
