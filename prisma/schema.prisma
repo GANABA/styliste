@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -68,6 +69,23 @@ enum OrderChangeType {
   OTHER
 }
 
+// Sprint 5 Enums
+enum NotificationType {
+  ORDER_READY
+  PAYMENT_REMINDER
+  PICKUP_REMINDER
+}
+
+enum NotificationChannel {
+  EMAIL
+}
+
+enum NotificationStatus {
+  SENT
+  FAILED
+  PENDING
+}
+
 // Sprint 4 Enums
 enum PaymentType {
   ADVANCE
@@ -113,6 +131,7 @@ model Stylist {
   id           String    @id @default(uuid())
   userId       String    @unique @map("user_id")
   businessName String?   @map("business_name")
+  slug         String?   @unique
   phone        String?
   city         String?
   address      String?
@@ -127,6 +146,8 @@ model Stylist {
   measurementTemplates MeasurementTemplate[]
   orders               Order[]
   payments             Payment[]
+  portfolioItems       PortfolioItem[]
+  notifications        Notification[]
 
   @@map("stylists")
 }
@@ -316,11 +337,12 @@ model Order {
   deletedAt DateTime? @map("deleted_at")
 
   // Relations
-  stylist   Stylist        @relation(fields: [stylistId], references: [id], onDelete: Cascade)
-  client    Client         @relation(fields: [clientId], references: [id], onDelete: Restrict)
-  photos    OrderPhoto[]
-  history   OrderHistory[]
-  payments  Payment[]
+  stylist       Stylist        @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+  client        Client         @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  photos        OrderPhoto[]
+  history       OrderHistory[]
+  payments      Payment[]
+  notifications Notification[]
 
   @@index([stylistId])
   @@index([clientId])
@@ -405,4 +427,49 @@ model Payment {
   @@index([paymentDate])
   @@index([stylistId, paymentDate(sort: Desc)])
   @@map("payments")
+}
+
+// Sprint 5: Portfolio & Notifications Models
+model PortfolioItem {
+  id            String   @id @default(uuid())
+  stylistId     String   @map("stylist_id")
+  imageUrl      String   @map("image_url")
+  thumbnailUrl  String?  @map("thumbnail_url")
+  title         String
+  description   String?  @db.Text
+  tags          String[] @default([])
+  clientConsent Boolean  @default(false) @map("client_consent")
+  isPublished   Boolean  @default(false) @map("is_published")
+  viewCount     Int      @default(0) @map("view_count")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  stylist Stylist @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+
+  @@index([stylistId])
+  @@index([stylistId, isPublished])
+  @@map("portfolio_items")
+}
+
+model Notification {
+  id           String             @id @default(uuid())
+  stylistId    String             @map("stylist_id")
+  orderId      String?            @map("order_id")
+  clientId     String             @map("client_id")
+  type         NotificationType
+  channel      NotificationChannel @default(EMAIL)
+  status       NotificationStatus  @default(PENDING)
+  sentAt       DateTime?           @map("sent_at")
+  errorMessage String?             @db.Text @map("error_message")
+  createdAt    DateTime            @default(now()) @map("created_at")
+
+  // Relations
+  stylist Stylist @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+  order   Order?  @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([stylistId])
+  @@index([orderId])
+  @@index([stylistId, createdAt(sort: Desc)])
+  @@map("notifications")
 }

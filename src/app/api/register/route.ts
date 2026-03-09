@@ -3,6 +3,7 @@ import { hash } from 'bcryptjs';
 import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { registerSchema } from '@/lib/validations';
+import { generateSlug, ensureUniqueSlug } from '@/lib/slug';
 
 // Force Node.js runtime (bcrypt et Prisma ne fonctionnent pas en Edge)
 export const runtime = 'nodejs';
@@ -59,10 +60,15 @@ export async function POST(req: Request) {
         },
       });
 
+      // Générer le slug unique
+      const baseSlug = generateSlug(validatedData.name);
+      const slug = await ensureUniqueSlug(baseSlug, prisma);
+
       // Créer le styliste
       const stylist = await tx.stylist.create({
         data: {
           userId: user.id,
+          slug,
         },
       });
 

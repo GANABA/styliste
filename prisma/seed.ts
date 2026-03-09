@@ -171,6 +171,38 @@ async function main() {
     plan: 'Découverte (Free)',
   });
 
+  // Migration slugs manquants pour les stylistes existants
+  console.log('Migration des slugs manquants...');
+  const stylistsWithoutSlug = await prisma.stylist.findMany({
+    where: { slug: null },
+    include: { user: { select: { name: true } } },
+  });
+
+  for (const s of stylistsWithoutSlug) {
+    const baseName = s.businessName ?? s.user.name ?? 'styliste';
+    const baseSlug = baseName
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-');
+
+    let slug = baseSlug;
+    let attempt = 1;
+    while (true) {
+      const existing = await prisma.stylist.findUnique({ where: { slug } });
+      if (!existing) break;
+      attempt++;
+      slug = `${baseSlug}-${attempt}`;
+    }
+    await prisma.stylist.update({ where: { id: s.id }, data: { slug } });
+    console.log(`  ✓ Slug généré pour ${s.businessName ?? s.user.name}: ${slug}`);
+  }
+
+  if (stylistsWithoutSlug.length === 0) {
+    console.log('  ✓ Tous les stylistes ont déjà un slug.');
+  }
+
   console.log('🎉 Seeding complété avec succès !');
 }
 

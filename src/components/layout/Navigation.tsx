@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LucideIcon, LayoutDashboard, Users, ShoppingBag, Calendar, CreditCard, Ruler, Settings } from 'lucide-react';
+import { LucideIcon, LayoutDashboard, Users, ShoppingBag, Calendar, CreditCard, Ruler, ImageIcon, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface NavItem {
@@ -42,6 +42,11 @@ export const navigationItems: NavItem[] = [
     label: 'Mesures',
     href: '/dashboard/measurements/templates',
     icon: Ruler,
+  },
+  {
+    label: 'Portfolio',
+    href: '/dashboard/portfolio',
+    icon: ImageIcon,
   },
   {
     label: 'Paramètres',

@@ -13,7 +13,10 @@ import { PaymentForm } from '@/components/payments/PaymentForm'
 import { useOrderStatus } from '@/hooks/useOrderStatus'
 import { useOrderPhotos } from '@/hooks/useOrderPhotos'
 import { useOrderPayments } from '@/hooks/useOrderPayments'
-import { Pencil, Calendar, User, Scissors, Banknote, ChevronDown, ChevronUp, Plus, FileText } from 'lucide-react'
+import { useOrderNotifications } from '@/hooks/useOrderNotifications'
+import { NotifyClientButton } from './NotifyClientButton'
+import { NotificationHistory } from './NotificationHistory'
+import { Pencil, Calendar, User, Scissors, Banknote, ChevronDown, ChevronUp, Plus, FileText, Bell } from 'lucide-react'
 import { useState } from 'react'
 import {
   Dialog,
@@ -42,6 +45,7 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
   const [showUploader, setShowUploader] = useState(false)
   const [showPayments, setShowPayments] = useState(true)
   const [showPaymentForm, setShowPaymentForm] = useState(false)
+  const [showNotifications, setShowNotifications] = useState(false)
 
   const handleDownloadInvoice = async () => {
     const res = await fetch(`/api/orders/${order.id}/invoice`)
@@ -58,6 +62,7 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
   const { transition } = useOrderStatus(order.id, onRefresh)
   const { photos, refetch: refetchPhotos, deletePhoto } = useOrderPhotos(order.id)
   const { payments, refetch: refetchPayments } = useOrderPayments(order.id)
+  const { notifications, sending, sendNotification } = useOrderNotifications(order.id)
 
   const balance = order.totalPrice - order.totalPaid
 
@@ -72,6 +77,13 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
           </div>
           <div className="flex items-center gap-2">
             <OrderStatusBadge status={order.status} />
+            <NotifyClientButton
+              hasEmail={!!order.client.email}
+              orderStatus={order.status}
+              paymentStatus={order.paymentStatus}
+              onSend={sendNotification}
+              sending={sending}
+            />
             <button
               onClick={handleDownloadInvoice}
               title="Télécharger la facture PDF"
@@ -217,6 +229,25 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
                 )}
               </>
             )}
+          </div>
+        )}
+      </div>
+
+      {/* Notifications */}
+      <div className="bg-white rounded-xl border">
+        <button
+          onClick={() => setShowNotifications(!showNotifications)}
+          className="w-full flex items-center justify-between px-5 py-4 text-left"
+        >
+          <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+            <Bell className="h-4 w-4 text-gray-400" />
+            Notifications <span className="text-gray-400 font-normal text-sm">({notifications.length})</span>
+          </h2>
+          {showNotifications ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+        </button>
+        {showNotifications && (
+          <div className="px-5 pb-5">
+            <NotificationHistory notifications={notifications} />
           </div>
         )}
       </div>
