@@ -3,7 +3,24 @@ import { NextResponse } from 'next/server';
 
 export default withAuth(
   function middleware(req) {
-    // Middleware s'exécute seulement si l'utilisateur est authentifié
+    const token = req.nextauth.token;
+    const pathname = req.nextUrl.pathname;
+
+    // Bloquer les comptes suspendus
+    if (token?.suspended) {
+      return NextResponse.redirect(new URL('/login?error=AccountSuspended', req.url));
+    }
+
+    // Protéger les routes admin : seuls les ADMIN peuvent y accéder
+    if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
+      if (token?.role !== 'ADMIN') {
+        if (pathname.startsWith('/api/')) {
+          return NextResponse.json({ error: 'Accès refusé' }, { status: 403 });
+        }
+        return NextResponse.redirect(new URL('/dashboard', req.url));
+      }
+    }
+
     return NextResponse.next();
   },
   {
@@ -21,7 +38,7 @@ export default withAuth(
           return true;
         }
 
-        // Pour toutes les autres routes (dashboard, api), vérifier le token
+        // Pour toutes les autres routes (dashboard, api, admin), vérifier le token
         return !!token;
       },
     },
@@ -36,6 +53,8 @@ export const config = {
   matcher: [
     // Protéger toutes les routes dashboard
     '/dashboard/:path*',
+    // Protéger toutes les routes admin
+    '/admin/:path*',
     // Protéger toutes les routes API sauf auth
     '/api/:path((?!auth).*)',
   ],

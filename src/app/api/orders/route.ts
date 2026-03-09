@@ -5,8 +5,7 @@ import prisma from '@/lib/prisma'
 import { OrderStatus } from '@prisma/client'
 import { generateOrderNumber } from '@/lib/orders/number'
 import { ACTIVE_STATUSES } from '@/lib/orders/status'
-
-const ACTIVE_ORDER_LIMIT = 15
+import { checkOrderLimit } from '@/lib/helpers/subscription'
 
 export async function GET(request: NextRequest) {
   try {
@@ -48,7 +47,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       orders,
-      meta: { activeCount, activeLimit: ACTIVE_ORDER_LIMIT },
+      meta: { activeCount, activeLimit: 15 },
     })
   } catch (error) {
     console.error('[GET /api/orders]', error)
@@ -75,6 +74,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Vérifier la limite de commandes du plan
+    const orderLimit = await checkOrderLimit(stylistId)
+    if (!orderLimit.canCreate) {
+      return NextResponse.json(
+        {
+          error: 'PLAN_LIMIT_REACHED',
+          message: `Limite de commandes actives atteinte (${orderLimit.current}/${orderLimit.limit}). Passez à un plan supérieur.`,
+          current: orderLimit.current,
+          limit: orderLimit.limit,
+          planName: orderLimit.planName,
+        },
+        { status: 403 }
+      )
+    }
+
     const order = await prisma.$transaction(async (tx) => {
       // Vérifier que le client appartient au styliste
       const client = await tx.client.findFirst({
@@ -82,18 +96,6 @@ export async function POST(request: NextRequest) {
       })
       if (!client) {
         throw { code: 'CLIENT_NOT_FOUND', status: 404 }
-      }
-
-      // Vérifier la limite de 15 commandes actives
-      const activeCount = await tx.order.count({
-        where: {
-          stylistId,
-          status: { in: ACTIVE_STATUSES },
-          deletedAt: null,
-        },
-      })
-      if (activeCount >= ACTIVE_ORDER_LIMIT) {
-        throw { code: 'CAPACITY_EXCEEDED', activeOrders: activeCount, limit: ACTIVE_ORDER_LIMIT, status: 422 }
       }
 
       // Générer le numéro de commande

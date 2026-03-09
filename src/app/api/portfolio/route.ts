@@ -3,11 +3,9 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { uploadOrderPhoto, validateFile } from '@/lib/storage/upload'
-import { getCurrentPlan } from '@/lib/helpers/subscription'
+import { checkPortfolioLimit } from '@/lib/helpers/subscription'
 
-const MAX_PORTFOLIO_ITEMS = 50
 const ACCEPTED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp']
-const PORTFOLIO_PLANS = ['Pro', 'Premium']
 
 export async function GET(request: NextRequest) {
   try {
@@ -37,21 +35,19 @@ export async function POST(request: NextRequest) {
 
     const stylistId = session.user.stylistId
 
-    // Vérifier le plan
-    const plan = await getCurrentPlan(stylistId)
-    if (!PORTFOLIO_PLANS.includes(plan.name)) {
+    // Vérifier le plan et la limite portfolio
+    const portfolioLimit = await checkPortfolioLimit(stylistId)
+    if (!portfolioLimit.canCreate) {
+      const isPlanIssue = !('limit' in portfolioLimit) || portfolioLimit.limit === 0
       return NextResponse.json(
-        { error: 'PLAN_UPGRADE_REQUIRED', requiredPlan: 'PRO' },
+        {
+          error: isPlanIssue ? 'PLAN_UPGRADE_REQUIRED' : 'PORTFOLIO_LIMIT_REACHED',
+          message: isPlanIssue
+            ? 'Le portfolio est disponible sur les plans Pro et Premium. Passez au plan Pro.'
+            : `Limite portfolio atteinte (${portfolioLimit.current}/${portfolioLimit.limit}).`,
+          requiredPlan: 'Pro',
+        },
         { status: 403 }
-      )
-    }
-
-    // Vérifier la limite
-    const itemCount = await prisma.portfolioItem.count({ where: { stylistId } })
-    if (itemCount >= MAX_PORTFOLIO_ITEMS) {
-      return NextResponse.json(
-        { error: 'PORTFOLIO_LIMIT_REACHED', limit: MAX_PORTFOLIO_ITEMS },
-        { status: 422 }
       )
     }
 

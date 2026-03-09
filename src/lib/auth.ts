@@ -45,12 +45,18 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Invalid credentials');
         }
 
+        // Vérifier si le compte est suspendu
+        if (user.suspended) {
+          throw new Error('Votre compte est suspendu. Contactez le support.');
+        }
+
         // Retourner les données utilisateur
         return {
           id: user.id,
           email: user.email,
           name: user.name,
           role: user.role,
+          suspended: user.suspended,
           stylistId: user.stylist?.id || null,
         };
       },
@@ -62,6 +68,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.suspended = user.suspended;
         token.stylistId = user.stylistId;
       }
       return token;
@@ -71,6 +78,7 @@ export const authOptions: NextAuthOptions = {
       if (token && session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.suspended = token.suspended as boolean;
         session.user.stylistId = token.stylistId as string | null;
       }
       return session;

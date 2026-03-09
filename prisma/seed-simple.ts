@@ -3,7 +3,7 @@ import * as path from 'path';
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 import { Client } from 'pg';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 async function main() {
   console.log('🌱 Début du seeding...');
