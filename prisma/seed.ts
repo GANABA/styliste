@@ -7,7 +7,7 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 import { PrismaClient } from '@prisma/client';
 import { neonConfig, Pool } from '@neondatabase/serverless';
 import { PrismaNeon } from '@prisma/adapter-neon';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import ws from 'ws';
 
 // Configure Neon with WebSocket

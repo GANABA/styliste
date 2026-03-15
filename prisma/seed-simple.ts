@@ -86,14 +86,14 @@ async function main() {
     // Créer admin user
     console.log('Création de l\'admin user...');
     const adminPassword = await bcrypt.hash('admin1234', 12);
-    const adminResult = await client.query(
+    await client.query(
       `INSERT INTO users (id, email, password, name, role, created_at, updated_at)
        VALUES (gen_random_uuid(), $1, $2, $3, 'ADMIN', NOW(), NOW())
-       ON CONFLICT (email) DO UPDATE SET password = $2
+       ON CONFLICT (email) DO UPDATE SET password = $2, role = 'ADMIN'
        RETURNING id`,
       ['admin@styliste.com', adminPassword, 'Admin Styliste']
     );
-    console.log('✓ Admin user créé:', 'admin@styliste.com');
+    console.log('✓ Admin user créé/mis à jour:', 'admin@styliste.com / admin1234');
 
     // Créer test user + stylist + subscription
     console.log('Création d\'un styliste de test...');
@@ -141,6 +141,68 @@ async function main() {
 
       console.log('✓ Styliste de test créé: test@styliste.com');
     }
+
+    // Créer styliste Pro de démo (pour l'annuaire public)
+    console.log('Création du styliste Pro de démo...');
+    const proPassword = await bcrypt.hash('pro1234', 12);
+    const proUserResult = await client.query(
+      `INSERT INTO users (id, email, password, name, role, created_at, updated_at)
+       VALUES (gen_random_uuid(), $1, $2, $3, 'STYLIST', NOW(), NOW())
+       ON CONFLICT (email) DO UPDATE SET password = $2
+       RETURNING id`,
+      ['pro@styliste.com', proPassword, 'Aminata Coulibaly']
+    );
+
+    const proUserId = proUserResult.rows[0].id;
+
+    const proStylistResult = await client.query(
+      `INSERT INTO stylists (id, user_id, business_name, slug, phone, city, address, onboarding_completed, created_at, updated_at)
+       VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, true, NOW(), NOW())
+       ON CONFLICT (user_id) DO UPDATE SET business_name = $2, slug = $3
+       RETURNING id`,
+      [proUserId, 'Atelier Aminata Couture', 'aminata-couture', '+229 97 11 22 33', 'Cotonou', 'Haie Vive, Cotonou, Bénin']
+    );
+
+    const proStylistId = proStylistResult.rows[0].id;
+
+    // Abonnement Pro actif
+    const proPlanResult = await client.query(
+      `SELECT id FROM subscription_plans WHERE name = 'Pro' LIMIT 1`
+    );
+    if (proPlanResult.rows.length > 0) {
+      const proPlanId = proPlanResult.rows[0].id;
+      const existingProSub = await client.query(
+        `SELECT id FROM subscriptions WHERE stylist_id = $1`, [proStylistId]
+      );
+      if (existingProSub.rows.length === 0) {
+        await client.query(
+          `INSERT INTO subscriptions (id, stylist_id, plan_id, status, current_period_start, current_period_end, created_at, updated_at)
+           VALUES (gen_random_uuid(), $1, $2, 'ACTIVE', NOW(), NOW() + INTERVAL '1 year', NOW(), NOW())`,
+          [proStylistId, proPlanId]
+        );
+      }
+    }
+
+    // Portfolio items publiés
+    const existingPortfolio = await client.query(
+      `SELECT id FROM portfolio_items WHERE stylist_id = $1 LIMIT 1`, [proStylistId]
+    );
+    if (existingPortfolio.rows.length === 0) {
+      const portfolioItems = [
+        ['Boubou brodé festif', 'Boubou en bazin riche avec broderies dorées, tenue de cérémonie.', '{"boubou","bazin","ceremonie"}', 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800', 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400'],
+        ['Robe africaine wax', 'Robe longue en pagne wax, coupe moderne et élégante.', '{"robe","wax","moderne"}', 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800', 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400'],
+        ['Ensemble tailleur kente', 'Tailleur pantalon en tissu kente, coupe africaine contemporaine.', '{"tailleur","kente","contemporain"}', 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800', 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400'],
+      ];
+      for (const [title, description, tags, imageUrl, thumbnailUrl] of portfolioItems) {
+        await client.query(
+          `INSERT INTO portfolio_items (id, stylist_id, image_url, thumbnail_url, title, description, tags, client_consent, is_published, created_at, updated_at)
+           VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, true, true, NOW(), NOW())`,
+          [proStylistId, imageUrl, thumbnailUrl, title, description, tags]
+        );
+      }
+      console.log('✓ 3 portfolio items créés pour Aminata Couture');
+    }
+    console.log('✓ Styliste Pro créé: pro@styliste.com / pro1234');
 
     console.log('\n🎉 Seeding complété avec succès !');
   } catch (error) {
