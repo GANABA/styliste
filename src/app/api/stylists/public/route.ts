@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
         },
         subscriptions: {
           some: {
-            status: 'ACTIVE',
+            status: { in: ['ACTIVE', 'TRIAL'] },
             plan: { name: { in: PORTFOLIO_PLANS } },
           },
         },

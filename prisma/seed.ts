@@ -114,7 +114,7 @@ async function main() {
 
   const adminUser = await prisma.user.upsert({
     where: { email: 'admin@styliste.com' },
-    update: {},
+    update: { role: 'ADMIN', password: hashedPassword }, // force le rôle ADMIN même si le compte existait déjà
     create: {
       email: 'admin@styliste.com',
       password: hashedPassword,
@@ -169,6 +169,100 @@ async function main() {
     email: testUser.email,
     businessName: testStylist.businessName,
     plan: 'Découverte (Free)',
+  });
+
+  // Créer un styliste Pro de démo (pour l'annuaire public)
+  console.log('Création d\'un styliste Pro de démo...');
+
+  const proHashedPassword = await bcrypt.hash('pro123', 12);
+
+  const proUser = await prisma.user.upsert({
+    where: { email: 'pro@styliste.com' },
+    update: {},
+    create: {
+      email: 'pro@styliste.com',
+      password: proHashedPassword,
+      name: 'Aminata Coulibaly',
+      role: 'STYLIST',
+    },
+  });
+
+  const proStylist = await prisma.stylist.upsert({
+    where: { userId: proUser.id },
+    update: {},
+    create: {
+      userId: proUser.id,
+      businessName: 'Atelier Aminata Couture',
+      slug: 'aminata-couture',
+      phone: '+229 97 11 22 33',
+      city: 'Cotonou',
+      address: 'Haie Vive, Cotonou, Bénin',
+      onboardingCompleted: true,
+    },
+  });
+
+  // Abonnement Pro actif
+  const existingProSub = await prisma.subscription.findFirst({
+    where: { stylistId: proStylist.id },
+  });
+  if (!existingProSub) {
+    await prisma.subscription.create({
+      data: {
+        stylistId: proStylist.id,
+        planId: proPlan.id,
+        status: 'ACTIVE',
+        currentPeriodStart: new Date(),
+        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+      },
+    });
+  }
+
+  // Portfolio items publiés (images placeholder)
+  const existingPortfolio = await prisma.portfolioItem.findFirst({
+    where: { stylistId: proStylist.id },
+  });
+  if (!existingPortfolio) {
+    await prisma.portfolioItem.createMany({
+      data: [
+        {
+          stylistId: proStylist.id,
+          imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800',
+          thumbnailUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400',
+          title: 'Boubou brodé festif',
+          description: 'Boubou en bazin riche avec broderies dorées, tenue de cérémonie.',
+          tags: ['boubou', 'bazin', 'ceremonie'],
+          isPublished: true,
+          clientConsent: true,
+        },
+        {
+          stylistId: proStylist.id,
+          imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800',
+          thumbnailUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400',
+          title: 'Robe africaine wax',
+          description: 'Robe longue en pagne wax, coupe moderne et élégante.',
+          tags: ['robe', 'wax', 'moderne'],
+          isPublished: true,
+          clientConsent: true,
+        },
+        {
+          stylistId: proStylist.id,
+          imageUrl: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800',
+          thumbnailUrl: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400',
+          title: 'Ensemble tailleur kente',
+          description: 'Tailleur pantalon en tissu kente, coupe africaine contemporaine.',
+          tags: ['tailleur', 'kente', 'contemporain'],
+          isPublished: true,
+          clientConsent: true,
+        },
+      ],
+    });
+  }
+
+  console.log('✅ Styliste Pro de démo créé:', {
+    email: proUser.email,
+    businessName: proStylist.businessName,
+    slug: 'aminata-couture',
+    plan: 'Pro',
   });
 
   // Migration slugs manquants pour les stylistes existants
