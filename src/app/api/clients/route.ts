@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     // Validate input
     const validatedData = clientCreateSchema.parse(body);
 
-    // Check subscription limits
+    // Vérifier la limite (pré-check pour retourner un message précis)
     const limitCheck = await checkClientLimit(session.user.stylistId);
 
     if (!limitCheck.canCreate) {
@@ -108,13 +108,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create client
-    const client = await prisma.client.create({
-      data: {
-        ...validatedData,
-        email: validatedData.email || null,
-        stylistId: session.user.stylistId,
-      },
+    // Créer le client dans une transaction avec re-vérification atomique du compteur
+    const stylistId = session.user.stylistId;
+    const client = await prisma.$transaction(async (tx) => {
+      // Re-vérifier le compteur à l'intérieur de la transaction (évite les race conditions)
+      if (limitCheck.limit !== -1) {
+        const currentCount = await tx.client.count({
+          where: { stylistId, deletedAt: null },
+        });
+        if (currentCount >= limitCheck.limit) {
+          throw Object.assign(new Error('LIMIT_REACHED'), {
+            code: 'LIMIT_REACHED',
+            limit: limitCheck.limit,
+            current: currentCount,
+          });
+        }
+      }
+      return tx.client.create({
+        data: {
+          ...validatedData,
+          email: validatedData.email || null,
+          stylistId,
+        },
+      });
     });
 
     return NextResponse.json(client, { status: 201 });
@@ -125,6 +141,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Données invalides", details: error.errors },
         { status: 400 }
+      );
+    }
+
+    if (error.code === "LIMIT_REACHED") {
+      return NextResponse.json(
+        { error: `Limite de ${error.limit} clients atteinte. Passez au plan supérieur.`, limit: error.limit },
+        { status: 403 }
       );
     }
 

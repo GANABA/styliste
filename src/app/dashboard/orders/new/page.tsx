@@ -2,14 +2,14 @@
 
 import { useRouter } from 'next/navigation'
 import { OrderForm } from '@/components/orders/OrderForm'
-import { CreateOrderInput } from '@/types/orders'
+import { CreateOrderInput, UpdateOrderInput } from '@/types/orders'
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 
 export default function NewOrderPage() {
   const router = useRouter()
 
-  const handleCreate = async (data: CreateOrderInput) => {
+  const handleCreate = async (data: CreateOrderInput | UpdateOrderInput) => {
     const res = await fetch('/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -38,7 +38,7 @@ export default function NewOrderPage() {
       </div>
 
       <div className="bg-white rounded-xl border p-6">
-        <OrderForm mode="create" onSubmit={handleCreate as any} />
+        <OrderForm mode="create" onSubmit={handleCreate} />
       </div>
     </div>
   )

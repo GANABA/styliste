@@ -5,19 +5,14 @@ import prisma from '@/lib/prisma';
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
+  if (!session?.user?.stylistId) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
   }
 
-  const stylist = await prisma.stylist.findUnique({
-    where: { userId: session.user.id },
-  });
-  if (!stylist) {
-    return NextResponse.json({ error: 'Styliste introuvable' }, { status: 404 });
-  }
+  const stylistId = session.user.stylistId;
 
   const payments = await prisma.payment.findMany({
-    where: { stylistId: stylist.id },
+    where: { stylistId },
     include: {
       order: {
         select: {

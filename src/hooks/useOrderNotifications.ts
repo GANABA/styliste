@@ -35,13 +35,20 @@ export function useOrderNotifications(orderId: string) {
           toast.error('Notifications disponibles à partir du plan Standard')
         } else if (err.error === 'ORDER_ALREADY_PAID') {
           toast.error('La commande est déjà soldée')
+        } else if (err.error === 'EMAIL_SEND_FAILED') {
+          toast.error(`Échec envoi email : ${err.detail ?? 'erreur inconnue'}`, { duration: 8000 })
         } else {
-          toast.error("Erreur lors de l'envoi")
+          toast.error(`Erreur lors de l'envoi : ${err.error ?? 'erreur inconnue'}`)
         }
         return false
       }
 
-      toast.success('Notification envoyée')
+      const data = await res.json()
+      if (data.dryRun) {
+        toast.warning('Email simulé — Resend non configuré (aucun email réel envoyé)', { duration: 6000 })
+      } else {
+        toast.success('Email envoyé avec succès')
+      }
       fetchNotifications()
       return true
     } catch {

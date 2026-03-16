@@ -37,7 +37,7 @@ export async function GET(
     return NextResponse.json({
       id: stylist.id,
       slug: stylist.slug,
-      name: stylist.businessName ?? stylist.user.name,
+      businessName: stylist.businessName ?? stylist.user.name,
       phone: stylist.phone,
       city: stylist.city,
       portfolioItems: stylist.portfolioItems,

@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation'
 import { useOrder } from '@/hooks/useOrders'
 import { OrderForm } from '@/components/orders/OrderForm'
-import { UpdateOrderInput } from '@/types/orders'
+import { CreateOrderInput, UpdateOrderInput } from '@/types/orders'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -13,7 +13,7 @@ export default function EditOrderPage() {
   const id = params.id as string
   const { order, isLoading, error } = useOrder(id)
 
-  const handleUpdate = async (data: UpdateOrderInput) => {
+  const handleUpdate = async (data: CreateOrderInput | UpdateOrderInput) => {
     const res = await fetch(`/api/orders/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -60,7 +60,7 @@ export default function EditOrderPage() {
           <OrderForm
             mode="edit"
             initialData={order}
-            onSubmit={handleUpdate as any}
+            onSubmit={handleUpdate}
           />
         </div>
       )}

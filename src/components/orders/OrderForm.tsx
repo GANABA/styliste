@@ -64,7 +64,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
     fetch('/api/clients')
       .then((r) => r.json())
       .then((data) => setClients(data.clients ?? []))
-      .catch(() => {})
+      .catch(() => setError('Impossible de charger la liste des clients. Rechargez la page.'))
   }, [])
 
   // Vérifier si le type initial est dans la liste prédéfinie

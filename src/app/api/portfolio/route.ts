@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { uploadOrderPhoto, validateFile } from '@/lib/storage/upload'
 import { checkPortfolioLimit } from '@/lib/helpers/subscription'
+import { validateMagicBytes } from '@/lib/storage/validateMagicBytes'
 
 const ACCEPTED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
@@ -72,6 +73,11 @@ export async function POST(request: NextRequest) {
 
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
+
+    const magicCheck = validateMagicBytes(buffer, file.type)
+    if (!magicCheck.valid) {
+      return NextResponse.json({ error: 'INVALID_FILE_CONTENT' }, { status: 415 })
+    }
     const { photoUrl, thumbnailUrl } = await uploadOrderPhoto(buffer, `portfolio-${stylistId}`)
 
     const tags = tagsRaw

@@ -362,6 +362,8 @@ model OrderPhoto {
   orderId      String    @map("order_id")
   photoUrl     String    @map("photo_url")
   thumbnailUrl String?   @map("thumbnail_url")
+  storageKey   String?   @map("storage_key")
+  thumbnailKey String?   @map("thumbnail_key")
   photoType    PhotoType @map("photo_type")
   caption      String?
   displayOrder Int       @default(0) @map("display_order")

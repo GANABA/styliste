@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { PhotoType } from '@prisma/client'
 import { uploadOrderPhoto, validateFile } from '@/lib/storage/upload'
+import { validateMagicBytes } from '@/lib/storage/validateMagicBytes'
 
 const MAX_PHOTOS_PER_ORDER = 10
 const ACCEPTED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp']
@@ -92,6 +93,7 @@ export async function POST(
       )
     }
 
+    // Valider la taille (avant de lire le contenu en mémoire)
     const validation = validateFile(Buffer.alloc(0), mimeType, size)
     if (!validation.valid) {
       if (validation.error === 'FILE_TOO_LARGE') {
@@ -100,9 +102,14 @@ export async function POST(
       return NextResponse.json({ error: validation.error }, { status: 400 })
     }
 
-    // Convertir en Buffer et uploader
+    // Convertir en Buffer et valider les magic bytes
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
+
+    const magicCheck = validateMagicBytes(buffer, mimeType)
+    if (!magicCheck.valid) {
+      return NextResponse.json({ error: 'INVALID_FILE_CONTENT' }, { status: 415 })
+    }
 
     const { photoUrl, thumbnailUrl, key, thumbnailKey } = await uploadOrderPhoto(buffer, params.id)
 
@@ -111,15 +118,13 @@ export async function POST(
         orderId: params.id,
         photoUrl,
         thumbnailUrl,
+        storageKey: key,
+        thumbnailKey,
         photoType: photoType as PhotoType,
         caption: caption || null,
         displayOrder: photoCount,
       },
     })
-
-    // Stocker les clés de stockage dans un champ séparé non exposé via l'API publique
-    // (Dans une vraie app, on stockerait key/thumbnailKey en DB pour pouvoir supprimer)
-    // Pour le MVP, on les encode dans une convention de nommage de l'URL
 
     return NextResponse.json(photo, { status: 201 })
   } catch (error) {

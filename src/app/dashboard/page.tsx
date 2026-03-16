@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import {
   Users, ShoppingBag, Banknote, ArrowRight, CheckCircle2,
-  Clock, AlertTriangle, CalendarDays, Plus, CreditCard, ChevronDown
+  AlertTriangle, CalendarDays, Plus, CreditCard, ChevronDown
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -345,36 +345,6 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Roadmap */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Roadmap MVP</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2 text-sm">
-            {[
-              { label: 'Authentification & Compte', sprint: 'Sprint 1', done: true },
-              { label: 'Clients & Mesures', sprint: 'Sprint 2', done: true },
-              { label: 'Commandes & Photos', sprint: 'Sprint 3', done: true },
-              { label: 'Paiements & Planning & Dashboard', sprint: 'Sprint 4', done: true },
-              { label: 'Portfolio & Notifications email', sprint: 'Sprint 5', done: false },
-              { label: 'Abonnements & Admin', sprint: 'Sprint 6', done: false },
-            ].map((item) => (
-              <li key={item.sprint} className="flex items-center gap-2">
-                {item.done ? (
-                  <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
-                ) : (
-                  <Clock className="h-4 w-4 text-gray-300 shrink-0" />
-                )}
-                <span className={item.done ? 'text-gray-700' : 'text-gray-400'}>{item.label}</span>
-                <span className={cn('ml-auto text-xs whitespace-nowrap shrink-0', item.done ? 'text-green-600 font-medium' : 'text-gray-400')}>
-                  {item.done ? `✓ ${item.sprint}` : item.sprint}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
     </div>
   );
 }

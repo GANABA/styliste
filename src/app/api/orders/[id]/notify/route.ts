@@ -134,7 +134,11 @@ export async function POST(
       return NextResponse.json({ error: 'EMAIL_SEND_FAILED', detail: result.error }, { status: 502 })
     }
 
-    return NextResponse.json({ success: true, notificationId: notification.id })
+    return NextResponse.json({
+      success: true,
+      notificationId: notification.id,
+      dryRun: result.dryRun ?? false,
+    })
   } catch (error) {
     console.error('[POST /api/orders/:id/notify]', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })

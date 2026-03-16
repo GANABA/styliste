@@ -1,9 +1,16 @@
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user || session.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
+  }
+
   return NextResponse.json({
     status: 'OK',
     message: 'API route works!',

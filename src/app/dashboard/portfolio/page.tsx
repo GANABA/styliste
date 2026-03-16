@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ImageIcon, Plus, ExternalLink } from 'lucide-react'
+import { ImageIcon, Plus, ExternalLink, Info } from 'lucide-react'
 import { PortfolioItem } from '@prisma/client'
 import { PortfolioItemCard } from '@/components/portfolio/PortfolioItemCard'
 import { PortfolioUploadForm } from '@/components/portfolio/PortfolioUploadForm'
@@ -15,6 +15,7 @@ export default function PortfolioPage() {
   const [items, setItems] = useState<PortfolioItem[]>([])
   const [loading, setLoading] = useState(true)
   const [showUpload, setShowUpload] = useState(false)
+  const [stylistSlug, setStylistSlug] = useState<string | null>(null)
 
   const fetchItems = () => {
     fetch('/api/portfolio')
@@ -25,6 +26,13 @@ export default function PortfolioPage() {
   }
 
   useEffect(() => { fetchItems() }, [])
+
+  useEffect(() => {
+    fetch('/api/stylists/me')
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => { if (data?.slug) setStylistSlug(data.slug) })
+      .catch(() => {})
+  }, [])
 
   const handleTogglePublish = async (id: string, isPublished: boolean) => {
     const res = await fetch(`/api/portfolio/${id}`, {
@@ -60,9 +68,11 @@ export default function PortfolioPage() {
           </p>
         </div>
         <div className="flex gap-2 shrink-0">
-          {session?.user && (
+          {session?.user && stylistSlug && (
             <Link
-              href="#"
+              href={`/${stylistSlug}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm border rounded-lg text-gray-600 hover:bg-gray-50"
             >
               <ExternalLink className="h-4 w-4" />
@@ -86,6 +96,30 @@ export default function PortfolioPage() {
             onSuccess={() => { setShowUpload(false); fetchItems() }}
             onCancel={() => setShowUpload(false)}
           />
+        </div>
+      )}
+
+      {/* Lien vers portfolio public (mobile) */}
+      {stylistSlug && (
+        <Link
+          href={`/${stylistSlug}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="md:hidden flex items-center gap-2 px-3 py-2.5 text-sm border rounded-lg text-gray-600 hover:bg-gray-50 bg-white"
+        >
+          <ExternalLink className="h-4 w-4 shrink-0" />
+          <span>Voir mon portfolio public</span>
+        </Link>
+      )}
+
+      {/* Avertissement : photos non publiées */}
+      {items.length > 0 && publishedCount === 0 && (
+        <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
+          <Info className="h-4 w-4 mt-0.5 shrink-0 text-amber-600" />
+          <span>
+            Vos photos sont en <strong>Brouillon</strong> et ne sont pas visibles sur votre portfolio public.
+            Survolez une photo et cliquez sur l&apos;icône <strong>œil</strong> pour la publier.
+          </span>
         </div>
       )}
 

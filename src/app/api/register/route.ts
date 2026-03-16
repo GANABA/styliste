@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'Email already exists' },
+        { error: 'Inscription impossible. Vérifiez vos informations.' },
         { status: 400 }
       );
     }

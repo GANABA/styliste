@@ -64,10 +64,27 @@ async function processImage(buffer: Buffer): Promise<{ main: Buffer; thumbnail: 
   return { main: mainBuffer, thumbnail: thumbnailBuffer }
 }
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const SAFE_FOLDER_REGEX = /^[a-z0-9-]+$/i
+
+function sanitizeFolderSegment(segment: string): string {
+  // Accepte les UUID, et les préfixes comme "portfolio-{uuid}"
+  // Rejette tout ce qui contient des caractères de traversée de chemin
+  if (segment.includes('..') || segment.includes('/') || segment.includes('\\')) {
+    throw new Error('INVALID_FOLDER_SEGMENT')
+  }
+  if (!SAFE_FOLDER_REGEX.test(segment)) {
+    throw new Error('INVALID_FOLDER_SEGMENT')
+  }
+  return segment
+}
+
 export async function uploadOrderPhoto(
   buffer: Buffer,
   orderId: string
 ): Promise<UploadResult> {
+  sanitizeFolderSegment(orderId) // Valider avant tout usage dans les chemins
+
   const { main, thumbnail } = await processImage(buffer)
   const filename = uuidv4()
   const key = `orders/${orderId}/${filename}.webp`

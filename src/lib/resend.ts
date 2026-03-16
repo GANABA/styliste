@@ -2,6 +2,7 @@ import { Resend } from 'resend'
 import { ReactElement } from 'react'
 
 const resendApiKey = process.env.RESEND_API_KEY
+const resendFromEmail = process.env.RESEND_FROM_EMAIL ?? 'Styliste.com <onboarding@resend.dev>'
 
 // Instance singleton
 export const resend = resendApiKey && resendApiKey !== 're_dev_placeholder_replace_with_real_key'
@@ -32,7 +33,7 @@ export async function sendEmail({ to, subject, react, from }: SendEmailOptions):
 
   try {
     const { data, error } = await resend.emails.send({
-      from: from ?? 'Styliste.com <onboarding@resend.dev>',
+      from: from ?? resendFromEmail,
       to,
       subject,
       react,

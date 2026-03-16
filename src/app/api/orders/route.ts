@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Vérifier la limite de commandes du plan
+    // Vérifier la limite de commandes du plan (pré-check pour message précis)
     const orderLimit = await checkOrderLimit(stylistId)
     if (!orderLimit.canCreate) {
       return NextResponse.json(
@@ -90,6 +90,16 @@ export async function POST(request: NextRequest) {
     }
 
     const order = await prisma.$transaction(async (tx) => {
+      // Re-vérifier la limite à l'intérieur de la transaction (évite les race conditions)
+      if (orderLimit.limit !== -1) {
+        const activeCount = await tx.order.count({
+          where: { stylistId, status: { in: ACTIVE_STATUSES }, deletedAt: null },
+        })
+        if (activeCount >= orderLimit.limit) {
+          throw { code: 'PLAN_LIMIT_REACHED', activeOrders: activeCount, limit: orderLimit.limit }
+        }
+      }
+
       // Vérifier que le client appartient au styliste
       const client = await tx.client.findFirst({
         where: { id: clientId, stylistId, deletedAt: null },

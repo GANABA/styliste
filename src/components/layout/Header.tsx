@@ -64,6 +64,7 @@ function HeaderComponent({ onMenuClick }: HeaderProps) {
               variant="ghost"
               className="relative h-11 w-11 rounded-full"
               aria-label="Menu utilisateur"
+              data-testid="user-menu-trigger"
             >
               <Avatar className="h-10 w-10">
                 <AvatarFallback className="bg-blue-100 text-blue-700 font-semibold">
@@ -93,7 +94,7 @@ function HeaderComponent({ onMenuClick }: HeaderProps) {
               <span>Abonnement</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">
+            <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600" data-testid="logout-button">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Se déconnecter</span>
             </DropdownMenuItem>

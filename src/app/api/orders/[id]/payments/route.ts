@@ -22,19 +22,14 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
+  if (!session?.user?.stylistId) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
   }
 
-  const stylist = await prisma.stylist.findUnique({
-    where: { userId: session.user.id },
-  });
-  if (!stylist) {
-    return NextResponse.json({ error: 'Styliste introuvable' }, { status: 404 });
-  }
+  const stylistId = session.user.stylistId;
 
   const order = await prisma.order.findFirst({
-    where: { id: params.id, stylistId: stylist.id, deletedAt: null },
+    where: { id: params.id, stylistId, deletedAt: null },
   });
   if (!order) {
     return NextResponse.json({ error: 'Commande introuvable' }, { status: 404 });
@@ -53,19 +48,14 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
+  if (!session?.user?.stylistId) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
   }
 
-  const stylist = await prisma.stylist.findUnique({
-    where: { userId: session.user.id },
-  });
-  if (!stylist) {
-    return NextResponse.json({ error: 'Styliste introuvable' }, { status: 404 });
-  }
+  const stylistId = session.user.stylistId;
 
   const order = await prisma.order.findFirst({
-    where: { id: params.id, stylistId: stylist.id, deletedAt: null },
+    where: { id: params.id, stylistId, deletedAt: null },
   });
   if (!order) {
     return NextResponse.json({ error: 'Commande introuvable' }, { status: 404 });
@@ -87,7 +77,7 @@ export async function POST(
     const payment = await tx.payment.create({
       data: {
         orderId: params.id,
-        stylistId: stylist.id,
+        stylistId,
         amount: data.amount, // stocké en centimes
         paymentType: data.paymentType,
         paymentMethod: data.paymentMethod,
@@ -107,7 +97,7 @@ export async function POST(
     });
     const totalPaidCentimes = allPayments._sum.amount ?? 0;
     // order.totalPrice est en FCFA, on convertit totalPaid en FCFA aussi
-    const totalPaidFCFA = Math.round(totalPaidCentimes / 100);
+    const totalPaidFCFA = Math.floor(totalPaidCentimes / 100);
 
     // Calculer le statut de paiement — comparaison FCFA vs FCFA
     let newPaymentStatus: PaymentStatus;
