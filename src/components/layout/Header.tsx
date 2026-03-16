@@ -2,6 +2,7 @@
 
 import { memo } from 'react';
 import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { Menu, User, CreditCard, LogOut } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
@@ -31,6 +32,7 @@ function getUserInitials(name?: string | null): string {
 
 function HeaderComponent({ onMenuClick }: HeaderProps) {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/login' });
@@ -82,15 +84,13 @@ function HeaderComponent({ onMenuClick }: HeaderProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={() => router.push('/dashboard/settings')}>
               <User className="mr-2 h-4 w-4" />
               <span>Mon profil</span>
-              <span className="ml-auto text-xs text-muted-foreground">Bientôt</span>
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={() => router.push('/dashboard/subscription')}>
               <CreditCard className="mr-2 h-4 w-4" />
               <span>Abonnement</span>
-              <span className="ml-auto text-xs text-muted-foreground">Bientôt</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">

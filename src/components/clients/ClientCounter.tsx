@@ -10,11 +10,13 @@ interface ClientCounterProps {
 }
 
 export function ClientCounter({ current, limit, planName }: ClientCounterProps) {
-  const percentage = limit === Infinity ? 0 : (current / limit) * 100;
-  const isNearLimit = percentage >= 80;
-  const isAtLimit = current >= limit;
+  // Toute valeur négative ou null/undefined signifie "illimité"
+  const isUnlimited = limit == null || limit < 0 || limit === Infinity;
+  const percentage = isUnlimited ? 0 : (current / limit) * 100;
+  const isNearLimit = !isUnlimited && percentage >= 80;
+  const isAtLimit = !isUnlimited && current >= limit;
 
-  if (limit === Infinity) {
+  if (isUnlimited) {
     return (
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div className="flex items-center gap-3">

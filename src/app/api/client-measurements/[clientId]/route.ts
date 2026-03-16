@@ -2,6 +2,56 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { z } from "zod";
+
+const updateMeasurementSchema = z.object({
+  measurements: z.record(z.string(), z.number()),
+});
+
+// PATCH /api/client-measurements/[measurementId] — modifier une mesure existante
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { clientId: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.stylistId) {
+      return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+    }
+
+    const measurementId = params.clientId; // le segment dynamique sert ici comme measurementId
+    const body = await request.json();
+    const { measurements } = updateMeasurementSchema.parse(body);
+
+    // Vérifier que la mesure appartient à ce styliste via le client
+    const measurement = await prisma.clientMeasurement.findUnique({
+      where: { id: measurementId },
+      include: { client: true },
+    });
+
+    if (!measurement) {
+      return NextResponse.json({ error: "Mesure introuvable" }, { status: 404 });
+    }
+
+    if (measurement.client.stylistId !== session.user.stylistId) {
+      return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
+    }
+
+    const updated = await prisma.clientMeasurement.update({
+      where: { id: measurementId },
+      data: { measurements: measurements as any, measuredAt: new Date() },
+      include: { template: true },
+    });
+
+    return NextResponse.json(updated);
+  } catch (error: any) {
+    if (error.name === "ZodError") {
+      return NextResponse.json({ error: "Données invalides" }, { status: 400 });
+    }
+    console.error("PATCH /api/client-measurements error:", error);
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+  }
+}
 
 export async function GET(
   request: NextRequest,
