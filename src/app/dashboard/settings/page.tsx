@@ -169,7 +169,7 @@ export default function SettingsPage() {
               ) : (
                 <Input value={profile?.user.email ?? ''} disabled className="bg-gray-50 text-gray-500" />
               )}
-              <p className="text-xs text-gray-400">L'email ne peut pas être modifié</p>
+              <p className="text-xs text-gray-400">L&apos;email ne peut pas être modifié</p>
             </div>
           </CardContent>
         </Card>
@@ -185,7 +185,7 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="businessName">Nom de l'atelier</Label>
+              <Label htmlFor="businessName">Nom de l&apos;atelier</Label>
               {loading ? (
                 <Skeleton className="h-10 w-full" />
               ) : (
