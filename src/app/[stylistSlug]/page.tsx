@@ -3,23 +3,55 @@ import { notFound } from 'next/navigation'
 import { Phone } from 'lucide-react'
 import { PortfolioGallery } from '@/components/portfolio/PortfolioGallery'
 import { StylistPublicProfile } from '@/types/portfolio'
+import prisma from '@/lib/prisma'
 
 interface Props {
   params: { stylistSlug: string }
 }
 
 async function getStylistProfile(slug: string): Promise<StylistPublicProfile | null> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
   try {
-    const res = await fetch(`${baseUrl}/api/stylists/${slug}`, {
-      next: { revalidate: 60 },
+    const stylist = await prisma.stylist.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        slug: true,
+        businessName: true,
+        phone: true,
+        city: true,
+        user: { select: { name: true } },
+        portfolioItems: {
+          where: { isPublished: true },
+          select: {
+            id: true,
+            imageUrl: true,
+            thumbnailUrl: true,
+            title: true,
+            description: true,
+            tags: true,
+            viewCount: true,
+          },
+          orderBy: { createdAt: 'desc' },
+        },
+      },
     })
-    if (!res.ok) return null
-    return res.json()
+
+    if (!stylist) return null
+
+    return {
+      id: stylist.id,
+      slug: stylist.slug ?? slug,
+      businessName: stylist.businessName ?? stylist.user.name,
+      phone: stylist.phone,
+      city: stylist.city,
+      portfolioItems: stylist.portfolioItems,
+    }
   } catch {
     return null
   }
 }
+
+export const revalidate = 60
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const profile = await getStylistProfile(params.stylistSlug)

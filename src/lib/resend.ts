@@ -19,19 +19,20 @@ interface SendEmailResult {
   success: boolean
   id?: string
   error?: string
+  dryRun?: boolean
 }
 
 export async function sendEmail({ to, subject, react, from }: SendEmailOptions): Promise<SendEmailResult> {
   // Mode dry-run en développement si pas de clé Resend
   if (!resend) {
-    console.warn('[Resend] Clé API absente ou placeholder — email simulé.')
+    console.warn('[Resend] Clé API absente ou placeholder — email simulé (dry-run).')
     console.warn(`[Resend] TO: ${to} | SUBJECT: ${subject}`)
-    return { success: true, id: 'dry-run-' + Date.now() }
+    return { success: true, id: 'dry-run-' + Date.now(), dryRun: true }
   }
 
   try {
     const { data, error } = await resend.emails.send({
-      from: from ?? 'Styliste.com <noreply@styliste.com>',
+      from: from ?? 'Styliste.com <onboarding@resend.dev>',
       to,
       subject,
       react,
