@@ -130,7 +130,7 @@ export default function HelpPage() {
           <h3 className="font-semibold text-gray-900 mb-1">Vous ne trouvez pas votre réponse ?</h3>
           <p className="text-sm text-gray-600 mb-3">Notre équipe répond sur WhatsApp en moins de 4h.</p>
           <a
-            href="https://wa.me/22900000000"
+            href="https://wa.me/22996745791"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
