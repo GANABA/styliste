@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { loginSchema, LoginFormData } from '@/lib/validations';
@@ -45,8 +45,13 @@ export default function LoginForm() {
         return;
       }
 
-      // Rediriger vers le dashboard
-      router.push('/dashboard');
+      // Rediriger selon le rôle
+      const session = await getSession();
+      if (session?.user?.role === 'ADMIN') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
       router.refresh();
     } catch (err) {
       setError('Une erreur est survenue. Veuillez réessayer.');
