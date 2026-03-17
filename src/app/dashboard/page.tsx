@@ -1,195 +1,190 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import {
   Users, ShoppingBag, Banknote, ArrowRight, CheckCircle2,
-  AlertTriangle, CalendarDays, Plus, CreditCard, ChevronDown
-} from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
+  AlertTriangle, CalendarDays, Plus, ChevronDown, TrendingUp
+} from 'lucide-react'
+import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
 
-type Period = '7d' | '30d' | '3m' | '12m' | 'all';
+type Period = '7d' | '30d' | '3m' | '12m' | 'all'
 
 const PERIOD_LABELS: Record<Period, string> = {
-  '7d':  '7 derniers jours',
-  '30d': '30 derniers jours',
-  '3m':  '3 derniers mois',
-  '12m': '12 derniers mois',
-  'all': 'Tout le temps',
-};
+  '7d':  '7 jours',
+  '30d': '30 jours',
+  '3m':  '3 mois',
+  '12m': '12 mois',
+  'all': 'Tout',
+}
 
 interface DashboardStats {
-  activeOrders: number;
-  readyOrders: number;
-  overdueOrders: number;
-  revenue: number;
+  activeOrders: number
+  readyOrders: number
+  overdueOrders: number
+  revenue: number
   recentOrders: Array<{
-    id: string;
-    orderNumber: string;
-    garmentType: string;
-    status: string;
-    promisedDate: string;
-    client: { id: string; name: string };
-  }>;
+    id: string
+    orderNumber: string
+    garmentType: string
+    status: string
+    promisedDate: string
+    client: { id: string; name: string }
+  }>
   upcomingDeadlines: Array<{
-    id: string;
-    orderNumber: string;
-    garmentType: string;
-    status: string;
-    promisedDate: string;
-    client: { id: string; name: string };
-  }>;
+    id: string
+    orderNumber: string
+    garmentType: string
+    status: string
+    promisedDate: string
+    client: { id: string; name: string }
+  }>
 }
 
 function formatFCFA(amount: number): string {
-  // revenue vient de paiements (centimes) → diviser par 100
-  return new Intl.NumberFormat('fr-FR').format(Math.round(amount / 100)) + ' FCFA';
+  return new Intl.NumberFormat('fr-FR').format(Math.round(amount / 100)) + ' FCFA'
 }
 
 function formatDate(date: string): string {
-  return new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: 'short' }).format(new Date(date));
+  return new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: 'short' }).format(new Date(date))
 }
 
-const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
-  QUOTE:      { label: 'Devis',    className: 'bg-gray-100 text-gray-600' },
-  IN_PROGRESS:{ label: 'En cours', className: 'bg-blue-100 text-blue-700' },
-  READY:      { label: 'Prête',    className: 'bg-green-100 text-green-700' },
-  DELIVERED:  { label: 'Livrée',   className: 'bg-purple-100 text-purple-700' },
-  CANCELED:   { label: 'Annulée',  className: 'bg-red-100 text-red-600' },
-};
+const STATUS_CONFIG: Record<string, { label: string; dot: string }> = {
+  QUOTE:       { label: 'Devis',    dot: 'bg-stone-400' },
+  IN_PROGRESS: { label: 'En cours', dot: 'bg-amber-400' },
+  READY:       { label: 'Prête',    dot: 'bg-emerald-400' },
+  DELIVERED:   { label: 'Livrée',   dot: 'bg-stone-300' },
+  CANCELED:    { label: 'Annulée',  dot: 'bg-red-400' },
+}
 
 export default function DashboardPage() {
-  const { data: session } = useSession();
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [period, setPeriod] = useState<Period>('30d');
-  const [showPeriodMenu, setShowPeriodMenu] = useState(false);
+  const { data: session } = useSession()
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [period, setPeriod] = useState<Period>('30d')
+  const [showPeriodMenu, setShowPeriodMenu] = useState(false)
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
     fetch(`/api/dashboard/stats?period=${period}`)
       .then((r) => r.ok ? r.json() : null)
-      .then((data) => setStats(data))
+      .then(setStats)
       .catch(() => setStats(null))
-      .finally(() => setLoading(false));
-  }, [period]);
+      .finally(() => setLoading(false))
+  }, [period])
 
-  const firstName = session?.user?.name?.split(' ')[0] ?? 'vous';
+  const firstName = session?.user?.name?.split(' ')[0] ?? 'vous'
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
-      {/* Welcome */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 max-w-6xl mx-auto">
+
+      {/* ── En-tête ── */}
+      <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Bonjour, {firstName} !</h1>
-          <p className="text-sm text-muted-foreground mt-1">Voici l&apos;état de votre atelier</p>
+          <h1 className="text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
+            Bonjour, {firstName} ✦
+          </h1>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Voici l&apos;état de votre atelier
+          </p>
         </div>
-        <Link href="/dashboard/orders/new">
-          <Button size="sm" className="gap-1.5">
-            <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">Nouvelle commande</span>
-          </Button>
+        <Link
+          href="/dashboard/orders/new"
+          className="flex items-center gap-1.5 bg-stone-900 dark:bg-amber-400 text-white dark:text-stone-950 text-sm font-semibold px-4 py-2.5 rounded-xl hover:opacity-90 transition-opacity shrink-0"
+        >
+          <Plus className="h-4 w-4" />
+          <span className="hidden sm:inline">Nouvelle commande</span>
+          <span className="sm:hidden">Nouveau</span>
         </Link>
       </div>
 
-      {/* Alerte retards */}
+      {/* ── Alerte retards ── */}
       {!loading && stats && stats.overdueOrders > 0 && (
-        <div className="flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-          <AlertTriangle className="h-5 w-5 text-red-500 shrink-0" />
-          <p className="text-sm text-red-700">
+        <div className="flex items-center gap-3 rounded-xl border border-red-200 dark:border-red-500/20 bg-red-50 dark:bg-red-500/10 px-4 py-3">
+          <AlertTriangle className="h-4 w-4 text-red-500 shrink-0" />
+          <p className="text-sm text-red-700 dark:text-red-400">
             <span className="font-semibold">{stats.overdueOrders} commande(s) en retard</span>
-            {' '}— date promise dépassée, livraison urgente.
+            {' '}— livraison urgente requise.
           </p>
-          <Link href="/dashboard/calendar" className="ml-auto text-xs text-red-600 underline shrink-0">
-            Voir le planning
+          <Link href="/dashboard/calendar" className="ml-auto text-xs text-red-500 hover:text-red-600 underline shrink-0">
+            Planning
           </Link>
         </div>
       )}
 
-      {/* KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* ── KPIs ── */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Commandes actives */}
         <Link href="/dashboard/orders?status=IN_PROGRESS">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer border-blue-100 hover:border-blue-300">
-            <CardHeader className="pb-2">
-              <CardDescription className="flex items-center justify-between text-xs">
-                <span>Commandes actives</span>
-                <ShoppingBag className="h-4 w-4 text-blue-400" />
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <Skeleton className="h-8 w-12" />
-              ) : (
-                <p className="text-3xl font-bold text-blue-700">{stats?.activeOrders ?? 0}</p>
-              )}
-              <p className="text-xs text-gray-400 mt-1">En cours + prêtes</p>
-            </CardContent>
-          </Card>
+          <div className="group rounded-2xl border border-border bg-card hover:border-amber-300 dark:hover:border-amber-400/30 hover:shadow-md transition-all duration-200 p-5 cursor-pointer">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Commandes actives</p>
+              <div className="h-8 w-8 rounded-xl bg-amber-50 dark:bg-amber-400/10 flex items-center justify-center">
+                <ShoppingBag className="h-4 w-4 text-amber-500" />
+              </div>
+            </div>
+            {loading ? <Skeleton className="h-9 w-16" /> : (
+              <p className="text-4xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
+                {stats?.activeOrders ?? 0}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground mt-1">En cours + prêtes</p>
+          </div>
         </Link>
 
         {/* Prêtes à livrer */}
         <Link href="/dashboard/orders?status=READY">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer border-green-100 hover:border-green-300">
-            <CardHeader className="pb-2">
-              <CardDescription className="flex items-center justify-between text-xs">
-                <span>Prêtes à livrer</span>
-                <CheckCircle2 className="h-4 w-4 text-green-400" />
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <Skeleton className="h-8 w-12" />
-              ) : (
-                <p className="text-3xl font-bold text-green-700">{stats?.readyOrders ?? 0}</p>
-              )}
-              <p className="text-xs text-gray-400 mt-1">À remettre au client</p>
-            </CardContent>
-          </Card>
+          <div className="group rounded-2xl border border-border bg-card hover:border-emerald-300 dark:hover:border-emerald-400/30 hover:shadow-md transition-all duration-200 p-5 cursor-pointer">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Prêtes à livrer</p>
+              <div className="h-8 w-8 rounded-xl bg-emerald-50 dark:bg-emerald-400/10 flex items-center justify-center">
+                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+              </div>
+            </div>
+            {loading ? <Skeleton className="h-9 w-16" /> : (
+              <p className="text-4xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
+                {stats?.readyOrders ?? 0}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground mt-1">À remettre au client</p>
+          </div>
         </Link>
 
-        {/* CA avec filtre de période */}
+        {/* CA */}
         <div className="relative">
           <Link href="/dashboard/payments">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer border-purple-100 hover:border-purple-300 h-full">
-              <CardHeader className="pb-2">
-                <CardDescription className="flex items-center justify-between text-xs">
-                  <span>Chiffre d&apos;affaires</span>
-                  <Banknote className="h-4 w-4 text-purple-400" />
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {loading ? (
-                  <Skeleton className="h-7 w-24" />
-                ) : (
-                  <p className="text-xl font-bold text-purple-700 leading-tight">
-                    {formatFCFA(stats?.revenue ?? 0)}
-                  </p>
-                )}
-                <button
-                  onClick={(e) => { e.preventDefault(); setShowPeriodMenu(!showPeriodMenu); }}
-                  className="flex items-center gap-1 text-xs text-purple-500 hover:text-purple-700 mt-1"
-                >
-                  {PERIOD_LABELS[period]}
-                  <ChevronDown className="h-3 w-3" />
-                </button>
-              </CardContent>
-            </Card>
+            <div className="group rounded-2xl border border-border bg-card hover:border-stone-300 dark:hover:border-stone-600 hover:shadow-md transition-all duration-200 p-5 cursor-pointer h-full">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Chiffre d&apos;affaires</p>
+                <div className="h-8 w-8 rounded-xl bg-stone-100 dark:bg-stone-800 flex items-center justify-center">
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                </div>
+              </div>
+              {loading ? <Skeleton className="h-7 w-32" /> : (
+                <p className="text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
+                  {formatFCFA(stats?.revenue ?? 0)}
+                </p>
+              )}
+              <button
+                onClick={(e) => { e.preventDefault(); setShowPeriodMenu(!showPeriodMenu) }}
+                className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-1.5 transition-colors"
+              >
+                {PERIOD_LABELS[period]}
+                <ChevronDown className="h-3 w-3" />
+              </button>
+            </div>
           </Link>
           {showPeriodMenu && (
-            <div className="absolute top-full left-0 z-20 mt-1 bg-white rounded-lg shadow-lg border py-1 min-w-[160px]">
+            <div className="absolute top-full left-0 z-20 mt-1.5 bg-card rounded-xl shadow-lg border border-border py-1.5 min-w-[150px]">
               {(Object.entries(PERIOD_LABELS) as [Period, string][]).map(([key, label]) => (
                 <button
                   key={key}
-                  onClick={() => { setPeriod(key); setShowPeriodMenu(false); }}
+                  onClick={() => { setPeriod(key); setShowPeriodMenu(false) }}
                   className={cn(
-                    'w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50',
-                    period === key && 'text-purple-700 font-medium bg-purple-50'
+                    'w-full text-left px-4 py-2 text-sm hover:bg-muted transition-colors',
+                    period === key && 'text-amber-500 font-semibold'
                   )}
                 >
                   {label}
@@ -198,153 +193,143 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
-
-        {/* En retard */}
-        <Link href="/dashboard/calendar">
-          <Card className={cn(
-            'hover:shadow-md transition-shadow cursor-pointer',
-            !loading && stats && stats.overdueOrders > 0
-              ? 'border-red-200 hover:border-red-400 bg-red-50'
-              : 'border-gray-100 hover:border-gray-300'
-          )}>
-            <CardHeader className="pb-2">
-              <CardDescription className="flex items-center justify-between text-xs">
-                <span>En retard</span>
-                <AlertTriangle className={cn('h-4 w-4', stats && stats.overdueOrders > 0 ? 'text-red-400' : 'text-gray-300')} />
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <Skeleton className="h-8 w-12" />
-              ) : (
-                <p className={cn('text-3xl font-bold', stats && stats.overdueOrders > 0 ? 'text-red-600' : 'text-gray-400')}>
-                  {stats?.overdueOrders ?? 0}
-                </p>
-              )}
-              <p className="text-xs text-gray-400 mt-1">Date promise dépassée</p>
-            </CardContent>
-          </Card>
-        </Link>
       </div>
 
-      {/* Grille principale */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* ── Commandes récentes + Échéances ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Commandes récentes */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
-            <CardTitle className="text-base">Commandes récentes</CardTitle>
-            <Link href="/dashboard/orders" className="text-xs text-blue-600 hover:underline">
-              Tout voir
+        <div className="rounded-2xl border border-border bg-card overflow-hidden">
+          <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+            <h2 className="font-semibold text-foreground text-sm">Commandes récentes</h2>
+            <Link href="/dashboard/orders" className="text-xs text-amber-500 hover:text-amber-600 font-medium">
+              Voir tout →
             </Link>
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="divide-y divide-border">
             {loading ? (
-              <div className="space-y-3">
-                {[1,2,3].map(i => <Skeleton key={i} className="h-10 w-full" />)}
-              </div>
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="px-5 py-3 flex items-center gap-3">
+                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <div className="flex-1 space-y-1">
+                    <Skeleton className="h-3 w-24" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                  <Skeleton className="h-5 w-16 rounded-full" />
+                </div>
+              ))
             ) : !stats?.recentOrders.length ? (
-              <div className="text-center py-6 space-y-2">
-                <ShoppingBag className="h-8 w-8 mx-auto text-gray-200" />
-                <p className="text-sm text-gray-500">Aucune commande encore</p>
-                <Link href="/dashboard/orders/new">
-                  <Button variant="outline" size="sm" className="mt-1">Créer une commande</Button>
-                </Link>
+              <div className="px-5 py-8 text-center text-sm text-muted-foreground">
+                Aucune commande récente
               </div>
             ) : (
-              <div className="space-y-1">
-                {stats.recentOrders.map((order) => {
-                  const s = STATUS_CONFIG[order.status] ?? STATUS_CONFIG.QUOTE;
-                  return (
-                    <Link
-                      key={order.id}
-                      href={`/dashboard/orders/${order.id}`}
-                      className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 transition-colors group"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-gray-900 truncate">{order.garmentType}</p>
-                        <p className="text-xs text-gray-500 truncate">{order.client.name}</p>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <Badge className={cn('text-xs border-0 font-normal', s.className)}>{s.label}</Badge>
-                        <ArrowRight className="h-3.5 w-3.5 text-gray-300 group-hover:text-gray-500" />
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
+              stats.recentOrders.slice(0, 5).map((order) => {
+                const sc = STATUS_CONFIG[order.status]
+                return (
+                  <Link
+                    key={order.id}
+                    href={`/dashboard/orders/${order.id}`}
+                    className="flex items-center gap-3 px-5 py-3 hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="h-8 w-8 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
+                      {order.client.name.charAt(0)}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-foreground truncate">{order.client.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{order.garmentType}</p>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className={cn('h-1.5 w-1.5 rounded-full', sc.dot)} />
+                      <span className="text-xs text-muted-foreground">{sc.label}</span>
+                    </div>
+                  </Link>
+                )
+              })
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        {/* Prochaines échéances */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
-            <CardTitle className="text-base">Échéances (7 prochains jours)</CardTitle>
-            <Link href="/dashboard/calendar" className="text-xs text-blue-600 hover:underline">
-              Planning
+        {/* Échéances à venir */}
+        <div className="rounded-2xl border border-border bg-card overflow-hidden">
+          <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+            <h2 className="font-semibold text-foreground text-sm">Échéances — 7 jours</h2>
+            <Link href="/dashboard/calendar" className="text-xs text-amber-500 hover:text-amber-600 font-medium">
+              Planning →
             </Link>
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="divide-y divide-border">
             {loading ? (
-              <div className="space-y-3">
-                {[1,2,3].map(i => <Skeleton key={i} className="h-10 w-full" />)}
-              </div>
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="px-5 py-3 flex items-center gap-3">
+                  <Skeleton className="h-9 w-9 rounded-xl" />
+                  <div className="flex-1 space-y-1">
+                    <Skeleton className="h-3 w-28" />
+                    <Skeleton className="h-3 w-20" />
+                  </div>
+                </div>
+              ))
             ) : !stats?.upcomingDeadlines.length ? (
-              <div className="text-center py-6 space-y-1">
-                <CalendarDays className="h-8 w-8 mx-auto text-gray-200" />
-                <p className="text-sm text-gray-500">Aucune échéance dans 7 jours</p>
+              <div className="px-5 py-8 text-center text-sm text-muted-foreground">
+                Aucune échéance dans les 7 prochains jours
               </div>
             ) : (
-              <div className="space-y-1">
-                {stats.upcomingDeadlines.map((order) => {
-                  const s = STATUS_CONFIG[order.status] ?? STATUS_CONFIG.QUOTE;
-                  return (
-                    <Link
-                      key={order.id}
-                      href={`/dashboard/orders/${order.id}`}
-                      className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 transition-colors group"
-                    >
-                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-orange-50 text-orange-700 shrink-0">
-                        <span className="text-xs font-bold leading-tight text-center">{formatDate(order.promisedDate)}</span>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-gray-900 truncate">{order.garmentType}</p>
-                        <p className="text-xs text-gray-500 truncate">{order.client.name}</p>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <Badge className={cn('text-xs border-0 font-normal', s.className)}>{s.label}</Badge>
-                        <ArrowRight className="h-3.5 w-3.5 text-gray-300 group-hover:text-gray-500" />
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
+              stats.upcomingDeadlines.slice(0, 5).map((order) => {
+                const daysLeft = Math.ceil(
+                  (new Date(order.promisedDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+                )
+                const isUrgent = daysLeft <= 1
+                return (
+                  <Link
+                    key={order.id}
+                    href={`/dashboard/orders/${order.id}`}
+                    className="flex items-center gap-3 px-5 py-3 hover:bg-muted/50 transition-colors"
+                  >
+                    <div className={cn(
+                      'h-9 w-9 rounded-xl flex flex-col items-center justify-center text-center shrink-0',
+                      isUrgent ? 'bg-red-50 dark:bg-red-500/10' : 'bg-amber-50 dark:bg-amber-400/10'
+                    )}>
+                      <span className={cn('text-[10px] font-bold leading-none', isUrgent ? 'text-red-500' : 'text-amber-500')}>
+                        {daysLeft <= 0 ? 'Auj.' : `J-${daysLeft}`}
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-foreground truncate">{order.client.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{order.garmentType}</p>
+                    </div>
+                    <span className="text-xs text-muted-foreground shrink-0">{formatDate(order.promisedDate)}</span>
+                  </Link>
+                )
+              })
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
-      {/* Accès rapide */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: 'Nouvelle commande', href: '/dashboard/orders/new', icon: Plus, color: 'text-blue-600 bg-blue-50' },
-          { label: 'Clients', href: '/dashboard/clients', icon: Users, color: 'text-purple-600 bg-purple-50' },
-          { label: 'Paiements', href: '/dashboard/payments', icon: CreditCard, color: 'text-green-600 bg-green-50' },
-          { label: 'Planning', href: '/dashboard/calendar', icon: CalendarDays, color: 'text-orange-600 bg-orange-50' },
-        ].map((item) => (
-          <Link key={item.href} href={item.href}>
-            <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
-              <CardContent className="flex flex-col items-center justify-center gap-2 py-5 text-center">
-                <div className={cn('p-2.5 rounded-lg', item.color)}>
-                  <item.icon className="h-5 w-5" />
-                </div>
-                <span className="text-xs font-medium text-gray-700">{item.label}</span>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+      {/* ── Accès rapides ── */}
+      <div>
+        <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Accès rapide</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { href: '/dashboard/clients/new',   icon: Users,       label: 'Nouveau client',   color: 'text-blue-500   bg-blue-50   dark:bg-blue-500/10' },
+            { href: '/dashboard/orders/new',    icon: ShoppingBag, label: 'Nouvelle commande', color: 'text-amber-500  bg-amber-50  dark:bg-amber-400/10' },
+            { href: '/dashboard/payments',      icon: Banknote,    label: 'Paiements',         color: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10' },
+            { href: '/dashboard/calendar',      icon: CalendarDays,label: 'Planning',          color: 'text-rose-500   bg-rose-50   dark:bg-rose-500/10' },
+          ].map(({ href, icon: Icon, label, color }) => (
+            <Link
+              key={href}
+              href={href}
+              className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-card hover:border-border/80 hover:shadow-sm p-4 text-center transition-all duration-150 group"
+            >
+              <div className={cn('h-10 w-10 rounded-xl flex items-center justify-center', color)}>
+                <Icon className="h-5 w-5" />
+              </div>
+              <span className="text-xs font-medium text-foreground group-hover:text-amber-500 transition-colors">
+                {label}
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
 
     </div>
-  );
+  )
 }

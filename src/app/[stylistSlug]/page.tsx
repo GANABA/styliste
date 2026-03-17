@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Phone } from 'lucide-react'
+import Link from 'next/link'
+import { Phone, ArrowLeft, MapPin, Grid3X3, MessageCircle } from 'lucide-react'
 import { PortfolioGallery } from '@/components/portfolio/PortfolioGallery'
 import { StylistPublicProfile } from '@/types/portfolio'
 import prisma from '@/lib/prisma'
@@ -56,10 +57,8 @@ export const revalidate = 60
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const profile = await getStylistProfile(params.stylistSlug)
   if (!profile) return { title: 'Portfolio introuvable' }
-
   const name = profile.businessName ?? 'Styliste'
   const city = profile.city ? ` — ${profile.city}` : ''
-
   return {
     title: `${name}${city} | Portfolio`,
     description: `Découvrez les créations de ${name}${city} sur Styliste.com`,
@@ -71,26 +70,72 @@ export default async function StylistPortfolioPage({ params }: Props) {
   if (!profile) notFound()
 
   const displayName = profile.businessName ?? 'Styliste'
+  const initial = displayName.charAt(0).toUpperCase()
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
-        {/* Header profil */}
-        <div className="bg-white rounded-2xl border p-6 text-center">
-          <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-600 font-bold text-2xl flex items-center justify-center mx-auto mb-4">
-            {displayName.charAt(0).toUpperCase()}
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">{displayName}</h1>
-          {profile.city && (
-            <p className="text-gray-500 text-sm mt-1">{profile.city}</p>
-          )}
+    <div className="min-h-screen bg-background">
 
-          {/* Boutons contact */}
+      {/* ── NAV ── */}
+      <nav className="border-b border-border bg-background/95 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+          <Link
+            href="/stylistes"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Annuaire</span>
+          </Link>
+          <Link
+            href="/"
+            className="text-base font-black"
+            style={{ fontFamily: 'var(--font-playfair)' }}
+          >
+            Styliste<span className="text-amber-500">.com</span>
+          </Link>
+          <div className="w-16" />
+        </div>
+      </nav>
+
+      {/* ── HERO PROFIL ── */}
+      <section className="bg-stone-950 py-12 px-4">
+        <div className="max-w-4xl mx-auto flex flex-col items-center text-center gap-4">
+          {/* Avatar */}
+          <div className="relative">
+            <div className="w-20 h-20 rounded-2xl bg-amber-400/10 border-2 border-amber-400/30 flex items-center justify-center">
+              <span
+                className="text-3xl font-black text-amber-400"
+                style={{ fontFamily: 'var(--font-playfair)' }}
+              >
+                {initial}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <h1
+              className="text-3xl md:text-4xl font-black text-white"
+              style={{ fontFamily: 'var(--font-playfair)' }}
+            >
+              {displayName}
+            </h1>
+            {profile.city && (
+              <p className="flex items-center justify-center gap-1.5 text-stone-400 text-sm mt-2">
+                <MapPin className="h-3.5 w-3.5" />
+                {profile.city}, Bénin
+              </p>
+            )}
+            <p className="flex items-center justify-center gap-1.5 text-stone-500 text-sm mt-1">
+              <Grid3X3 className="h-3.5 w-3.5" />
+              {profile.portfolioItems.length} création{profile.portfolioItems.length !== 1 ? 's' : ''}
+            </p>
+          </div>
+
+          {/* CTAs contact */}
           {profile.phone && (
-            <div className="flex justify-center gap-3 mt-4">
+            <div className="flex gap-3 mt-1">
               <a
                 href={`tel:${profile.phone}`}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                className="flex items-center gap-2 px-5 py-2.5 bg-white text-stone-950 rounded-xl text-sm font-semibold hover:bg-stone-100 transition-colors"
               >
                 <Phone className="h-4 w-4" />
                 Appeler
@@ -99,28 +144,50 @@ export default async function StylistPortfolioPage({ params }: Props) {
                 href={`https://wa.me/${profile.phone.replace(/\D/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors"
+                className="flex items-center gap-2 px-5 py-2.5 bg-amber-400 text-stone-950 rounded-xl text-sm font-semibold hover:bg-amber-300 transition-colors"
               >
+                <MessageCircle className="h-4 w-4" />
                 WhatsApp
               </a>
             </div>
           )}
         </div>
+      </section>
 
-        {/* Galerie */}
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Créations ({profile.portfolioItems.length})
-          </h2>
-          <PortfolioGallery items={profile.portfolioItems} />
-        </div>
+      {/* ── GALERIE ── */}
+      <section className="max-w-4xl mx-auto px-4 py-10">
+        {profile.portfolioItems.length === 0 ? (
+          <div className="text-center py-16 space-y-3">
+            <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mx-auto">
+              <Grid3X3 className="h-7 w-7 text-muted-foreground" />
+            </div>
+            <p className="text-muted-foreground text-sm">
+              Aucune création publiée pour le moment.
+            </p>
+          </div>
+        ) : (
+          <>
+            <h2
+              className="text-xl font-black text-foreground mb-6"
+              style={{ fontFamily: 'var(--font-playfair)' }}
+            >
+              Créations
+            </h2>
+            <PortfolioGallery items={profile.portfolioItems} />
+          </>
+        )}
+      </section>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-gray-400 pb-4">
+      {/* Footer */}
+      <footer className="border-t border-border py-6 px-4 text-center">
+        <p className="text-xs text-muted-foreground">
           Portfolio propulsé par{' '}
-          <a href="/" className="text-blue-500 hover:underline">Styliste.com</a>
+          <Link href="/" className="text-amber-500 hover:underline font-medium">
+            Styliste.com
+          </Link>
+          {' '}— la plateforme des stylistes africains
         </p>
-      </div>
+      </footer>
     </div>
   )
 }
