@@ -45,12 +45,19 @@ export default function LoginForm() {
         return;
       }
 
-      // Rediriger selon le rôle
+      // Rediriger selon le rôle et l'état d'onboarding
       const session = await getSession();
       if (session?.user?.role === 'ADMIN') {
         router.push('/admin/dashboard');
       } else {
-        router.push('/dashboard');
+        // Vérifier si l'onboarding est complété
+        const onboardingRes = await fetch('/api/stylists/me/onboarding-status');
+        const onboardingData = onboardingRes.ok ? await onboardingRes.json() : null;
+        if (onboardingData && !onboardingData.onboardingCompleted) {
+          router.push('/onboarding');
+        } else {
+          router.push('/dashboard');
+        }
       }
       router.refresh();
     } catch (err) {
