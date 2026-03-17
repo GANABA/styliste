@@ -9,7 +9,6 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { cn } from '@/lib/utils'
 import { navigationItems } from './Navigation'
 
 interface HeaderProps {
@@ -24,7 +23,6 @@ function getUserInitials(name?: string | null): string {
     : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
 }
 
-// Retrouve le label de la page courante
 function usePageTitle(pathname: string): string {
   if (pathname === '/dashboard') return 'Dashboard'
   const match = navigationItems.find(
@@ -40,24 +38,21 @@ function HeaderComponent({ onMenuClick }: HeaderProps) {
   const pageTitle = usePageTitle(pathname)
 
   return (
-    <header className={cn(
-      'h-14 border-b border-border bg-background/95 backdrop-blur-sm',
-      'px-4 md:px-6 flex items-center justify-between gap-4',
-      'sticky top-0 z-30 transition-colors duration-200'
-    )}>
-      {/* Gauche : hamburger (mobile) + breadcrumb (desktop) */}
+    <header className="h-14 border-b border-border bg-white px-4 md:px-6 flex items-center justify-between gap-4 sticky top-0 z-30">
+
+      {/* Gauche */}
       <div className="flex items-center gap-3">
         <button
-          className="md:hidden flex items-center justify-center h-9 w-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          className="md:hidden flex items-center justify-center h-9 w-9 rounded-xl text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors"
           onClick={onMenuClick}
           aria-label="Ouvrir le menu"
         >
           <Menu className="h-5 w-5" />
         </button>
 
-        {/* Logo mobile */}
+        {/* Logo mobile uniquement */}
         <span
-          className="md:hidden text-lg font-black"
+          className="md:hidden text-lg font-black text-stone-900"
           style={{ fontFamily: 'var(--font-playfair)' }}
         >
           Styliste<span className="text-amber-500">.com</span>
@@ -66,16 +61,16 @@ function HeaderComponent({ onMenuClick }: HeaderProps) {
         {/* Breadcrumb desktop */}
         <div className="hidden md:flex items-center gap-1.5 text-sm">
           <span className="text-muted-foreground">Atelier</span>
-          <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/50" />
+          <ChevronRight className="h-3.5 w-3.5 text-stone-300" />
           <span className="font-semibold text-foreground">{pageTitle}</span>
         </div>
       </div>
 
-      {/* Droite : avatar + dropdown */}
+      {/* Droite — avatar + dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
-            className="flex items-center gap-2.5 rounded-xl px-2 py-1.5 hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex items-center gap-2 rounded-xl px-2 py-1.5 hover:bg-stone-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="Menu utilisateur"
             data-testid="user-menu-trigger"
           >
@@ -85,10 +80,10 @@ function HeaderComponent({ onMenuClick }: HeaderProps) {
               </AvatarFallback>
             </Avatar>
             <div className="hidden md:block text-left">
-              <p className="text-sm font-medium leading-tight text-foreground">
+              <p className="text-sm font-semibold leading-tight text-foreground">
                 {session?.user?.name?.split(' ')[0] ?? 'Mon compte'}
               </p>
-              <p className="text-[11px] text-muted-foreground leading-tight">
+              <p className="text-[11px] text-muted-foreground leading-tight truncate max-w-[140px]">
                 {session?.user?.email}
               </p>
             </div>

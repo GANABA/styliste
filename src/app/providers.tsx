@@ -11,16 +11,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
     () =>
       new QueryClient({
         defaultOptions: {
-          queries: {
-            staleTime: 60 * 1000,
-            refetchOnWindowFocus: false,
-          },
+          queries: { staleTime: 60 * 1000, refetchOnWindowFocus: false },
         },
       })
   )
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange={false}>
+    /* forcedTheme="light" — dark mode désactivé pour le moment */
+    <ThemeProvider attribute="class" forcedTheme="light">
       <SessionProvider>
         <QueryClientProvider client={queryClient}>
           {children}
