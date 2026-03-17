@@ -266,7 +266,7 @@ export default function LandingPage() {
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {FEATURES.map((f) => (
               <div key={f.title} className="bg-white rounded-2xl border border-stone-100 p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
                 <div className={`w-11 h-11 rounded-xl ${f.color} flex items-center justify-center mb-4`}>
@@ -331,7 +331,7 @@ export default function LandingPage() {
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {TESTIMONIALS.map((t) => (
               <div key={t.name} className="bg-stone-50 rounded-2xl p-6 border border-stone-100">
                 <div className="flex gap-0.5 mb-3">
@@ -361,7 +361,7 @@ export default function LandingPage() {
             <p className="text-stone-500 text-sm">14 jours d&apos;essai Pro offerts. Aucune carte bancaire requise.</p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {PLANS.map((plan) => (
               <div
                 key={plan.name}

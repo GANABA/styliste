@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { CheckCircle2, Circle, ArrowRight, Users, ShoppingBag, UserCircle, Images, ChevronRight } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Users, ShoppingBag, UserCircle, Images, ChevronRight } from 'lucide-react'
 import { toast } from 'sonner'
 
 interface OnboardingData {
@@ -117,57 +117,61 @@ export function OnboardingWizard({ data }: OnboardingWizardProps) {
         <div className="space-y-3">
           {steps.map((step) => {
             const Icon = STEP_ICONS[step.id - 1]
-            return (
-              <div
-                key={step.id}
-                className={`rounded-2xl border p-4 transition-all ${
-                  step.done
-                    ? 'bg-emerald-500/10 border-emerald-500/20'
-                    : 'bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  {/* Icône statut */}
-                  <div className="shrink-0 mt-0.5">
-                    {step.done ? (
-                      <CheckCircle2 className="h-6 w-6 text-emerald-400" />
-                    ) : (
-                      <div className="h-6 w-6 rounded-full border-2 border-stone-600 flex items-center justify-center">
-                        <span className="text-xs font-bold text-stone-500">{step.id}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Contenu */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className={`text-sm font-bold ${step.done ? 'text-emerald-400 line-through' : 'text-white'}`}>
-                        {step.label}
-                      </p>
-                      {step.optional && (
-                        <span className="text-xs text-stone-500 bg-stone-800 px-1.5 py-0.5 rounded-md">optionnel</span>
-                      )}
+            const cardContent = (
+              <div className="flex items-start gap-3">
+                {/* Icône statut */}
+                <div className="shrink-0 mt-0.5">
+                  {step.done ? (
+                    <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+                  ) : (
+                    <div className="h-6 w-6 rounded-full border-2 border-stone-600 flex items-center justify-center">
+                      <span className="text-xs font-bold text-stone-500">{step.id}</span>
                     </div>
-                    <p className={`text-xs mt-0.5 ${step.done ? 'text-emerald-500/70' : 'text-stone-400'}`}>
-                      {step.description}
-                    </p>
-                    {!step.done && (
-                      <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">{step.detail}</p>
-                    )}
-                  </div>
-
-                  {/* Bouton action */}
-                  {!step.done && (
-                    <Link
-                      href={step.href}
-                      className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-amber-400 bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/20 px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap"
-                    >
-                      Faire
-                      <ChevronRight className="h-3 w-3" />
-                    </Link>
                   )}
                 </div>
+
+                {/* Contenu */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className={`text-sm font-bold ${step.done ? 'text-emerald-400 line-through' : 'text-white'}`}>
+                      {step.label}
+                    </p>
+                    {step.optional && (
+                      <span className="text-xs text-stone-500 bg-stone-800 px-1.5 py-0.5 rounded-md">optionnel</span>
+                    )}
+                  </div>
+                  <p className={`text-xs mt-0.5 ${step.done ? 'text-emerald-500/70' : 'text-stone-400'}`}>
+                    {step.description}
+                  </p>
+                  {!step.done && (
+                    <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">{step.detail}</p>
+                  )}
+                </div>
+
+                {/* Flèche action */}
+                {!step.done && (
+                  <div className="shrink-0 self-center">
+                    <ChevronRight className="h-5 w-5 text-amber-400" />
+                  </div>
+                )}
               </div>
+            )
+
+            return step.done ? (
+              <div
+                key={step.id}
+                className="rounded-2xl border p-4 bg-emerald-500/10 border-emerald-500/20"
+              >
+                {cardContent}
+              </div>
+            ) : (
+              <Link
+                key={step.id}
+                href={step.href}
+                className="block rounded-2xl border p-4 bg-white/5 border-white/10 hover:bg-white/[0.08] hover:border-amber-400/30 active:scale-[0.98] transition-all duration-150 cursor-pointer"
+              >
+                {cardContent}
+              </Link>
             )
           })}
         </div>
