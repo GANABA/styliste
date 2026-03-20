@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-const PORTFOLIO_PLANS = ['Pro', 'Premium']
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const search = searchParams.get('search')?.trim()
     const city = searchParams.get('city')?.trim()
 
-    // Trouver les stylistes avec au moins 1 item publié et plan Pro/Premium
     const stylists = await prisma.stylist.findMany({
       where: {
         slug: { not: null },
@@ -23,12 +20,6 @@ export async function GET(request: NextRequest) {
         } : {}),
         portfolioItems: {
           some: { isPublished: true },
-        },
-        subscriptions: {
-          some: {
-            status: { in: ['ACTIVE', 'TRIAL'] },
-            plan: { name: { in: PORTFOLIO_PLANS } },
-          },
         },
       },
       select: {
@@ -60,8 +51,8 @@ export async function GET(request: NextRequest) {
     }))
 
     return NextResponse.json(result)
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[GET /api/stylists/public]', error)
-    return NextResponse.json({ error: 'Erreur serveur', detail: error?.message, code: error?.code }, { status: 500 })
+    return NextResponse.json([], { status: 200 })
   }
 }
