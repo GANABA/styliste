@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-// Seuls les plans Pro et Premium donnent accès au portfolio public et à l'annuaire
 const PORTFOLIO_PLANS = ['Pro', 'Premium']
 
 export async function GET(request: NextRequest) {
@@ -10,10 +9,27 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search')?.trim()
     const city = searchParams.get('city')?.trim()
 
+    // Étape 1 : récupérer les stylistIds avec un abonnement Pro/Premium actif
+    const eligibleSubs = await prisma.subscription.findMany({
+      where: {
+        status: { in: ['ACTIVE', 'TRIAL'] },
+        plan: { name: { in: PORTFOLIO_PLANS } },
+      },
+      select: { stylistId: true },
+    })
+    const eligibleIds = eligibleSubs.map((s) => s.stylistId)
+
+    if (eligibleIds.length === 0) {
+      return NextResponse.json([])
+    }
+
+    // Étape 2 : récupérer les stylistes éligibles avec portfolio publié
     const stylists = await prisma.stylist.findMany({
       where: {
+        id: { in: eligibleIds },
         slug: { not: null },
         deletedAt: null,
+        portfolioItems: { some: { isPublished: true } },
         ...(city ? { city: { contains: city, mode: 'insensitive' } } : {}),
         ...(search ? {
           OR: [
@@ -21,15 +37,6 @@ export async function GET(request: NextRequest) {
             { user: { name: { contains: search, mode: 'insensitive' } } },
           ],
         } : {}),
-        portfolioItems: {
-          some: { isPublished: true },
-        },
-        subscriptions: {
-          some: {
-            status: { in: ['ACTIVE', 'TRIAL'] },
-            plan: { name: { in: PORTFOLIO_PLANS } },
-          },
-        },
       },
       select: {
         id: true,
@@ -61,8 +68,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(result)
   } catch (error: unknown) {
-    // Retourne un tableau vide plutôt qu'un objet erreur
-    // pour éviter le crash côté client (.map is not a function)
     console.error('[GET /api/stylists/public]', error)
     return NextResponse.json([], { status: 200 })
   }
