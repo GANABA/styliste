@@ -110,7 +110,7 @@ export default function EditMeasurementTemplatePage({ params }: { params: { id: 
           </Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Modifier le template</h1>
+          <h1 className="page-title">Modifier le template</h1>
           <p className="text-sm text-gray-500 mt-1">{template.name}</p>
         </div>
       </div>

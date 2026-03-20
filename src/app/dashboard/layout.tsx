@@ -14,17 +14,12 @@ export default function DashboardLayout({
 
   return (
     <ErrorBoundary>
-      <div className="flex min-h-screen bg-background">
-        {/* Sidebar */}
+      {/* h-screen + overflow-hidden : sidebar fixe, seul le main scroll */}
+      <div className="flex h-screen overflow-hidden bg-background">
         <Sidebar />
-
-        {/* Main content */}
-        <div className="flex flex-1 flex-col">
-          {/* Header */}
+        <div className="flex flex-1 flex-col min-h-0">
           <Header onMenuClick={toggle} />
-
-          {/* Page content */}
-          <main className="flex-1 p-4 md:p-6 overflow-y-auto">{children}</main>
+          <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
         </div>
       </div>
     </ErrorBoundary>

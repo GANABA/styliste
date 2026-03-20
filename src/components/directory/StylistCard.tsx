@@ -27,7 +27,7 @@ export function StylistCard({ stylist }: StylistCardProps) {
   const gradient = GRADIENT_PALETTE[gradientIndex]
 
   return (
-    <div className="group bg-card border border-border rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-stone-200/50 dark:hover:shadow-stone-900/50 hover:-translate-y-0.5 transition-all duration-200">
+    <div className="group bg-card border border-border rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-stone-200/50 hover:-translate-y-0.5 transition-all duration-200">
       {/* Cover */}
       <div className="aspect-[4/3] relative overflow-hidden bg-stone-900">
         {stylist.coverImage ? (
@@ -84,7 +84,7 @@ export function StylistCard({ stylist }: StylistCardProps) {
           {stylist.phone && (
             <a
               href={`tel:${stylist.phone}`}
-              className="flex items-center justify-center h-9 w-9 rounded-xl bg-stone-100 dark:bg-stone-800 text-muted-foreground hover:bg-amber-400 hover:text-stone-950 transition-all duration-150"
+              className="flex items-center justify-center h-9 w-9 rounded-xl bg-stone-100 text-muted-foreground hover:bg-amber-400 hover:text-stone-950 transition-all duration-150"
               aria-label={`Appeler ${name}`}
             >
               <Phone className="h-4 w-4" />

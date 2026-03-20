@@ -151,7 +151,7 @@ export default function AnnuairePage() {
         <p className="text-xs text-muted-foreground">
           Vous êtes styliste ?{' '}
           <Link href="/register" className="text-amber-500 hover:text-amber-600 font-medium">
-            Rejoignez Styliste.com gratuitement →
+            Rejoignez Styliste.com gratuitement
           </Link>
         </p>
       </footer>

@@ -93,16 +93,11 @@ export default function LoginForm() {
             <h1 className="text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
               Connexion
             </h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              Pas encore de compte ?{' '}
-              <Link href="/register" className="text-amber-500 hover:text-amber-600 font-medium">
-                S&apos;inscrire gratuitement
-              </Link>
-            </p>
+            <p className="text-muted-foreground text-sm mt-1">Bienvenue, connectez-vous à votre atelier.</p>
           </div>
 
           {registered && (
-            <div className="flex items-center gap-2 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 px-4 py-3 text-sm text-emerald-700 dark:text-emerald-400">
+            <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-700">
               <CheckCircle2 className="h-4 w-4 shrink-0" />
               Compte créé ! Connectez-vous maintenant.
             </div>
@@ -161,7 +156,7 @@ export default function LoginForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 flex items-center justify-center gap-2 bg-stone-900 dark:bg-amber-400 text-white dark:text-stone-950 font-bold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+              className="w-full h-11 flex items-center justify-center gap-2 bg-stone-900 text-white font-bold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
@@ -176,6 +171,13 @@ export default function LoginForm() {
               )}
             </button>
           </form>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Pas encore de compte ?{' '}
+            <Link href="/register" className="text-amber-600 hover:text-amber-700 font-semibold">
+              S&apos;inscrire gratuitement
+            </Link>
+          </p>
         </div>
       </div>
     </div>

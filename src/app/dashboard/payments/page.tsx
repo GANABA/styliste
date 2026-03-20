@@ -88,7 +88,7 @@ export default function PaymentsPage() {
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Paiements</h1>
+        <h1 className="page-title">Paiements</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Historique de tous vos encaissements
         </p>

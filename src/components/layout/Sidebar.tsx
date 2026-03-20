@@ -38,8 +38,8 @@ function SidebarComponent() {
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        {/* Logo */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+        {/* Logo — h-14 pour aligner avec le header */}
+        <div className="flex items-center justify-between px-5 h-14 border-b border-border shrink-0">
           <div>
             <h2
               className="text-xl font-black leading-none text-stone-900"

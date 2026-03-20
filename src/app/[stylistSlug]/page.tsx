@@ -185,7 +185,7 @@ export default async function StylistPortfolioPage({ params }: Props) {
           <Link href="/" className="text-amber-500 hover:underline font-medium">
             Styliste.com
           </Link>
-          {' '}— la plateforme des stylistes africains
+          {' '}· la plateforme des stylistes africains
         </p>
       </footer>
     </div>

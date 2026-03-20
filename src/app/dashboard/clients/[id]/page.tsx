@@ -137,7 +137,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{client.name}</h1>
+            <h1 className="page-title">{client.name}</h1>
             <p className="text-sm text-gray-500 mt-1">
               Client depuis{' '}
               {format(new Date(client.createdAt), 'MMMM yyyy', { locale: fr })}

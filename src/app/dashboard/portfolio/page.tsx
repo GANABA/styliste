@@ -119,7 +119,7 @@ export default function PortfolioPage() {
         <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
           <Info className="h-4 w-4 mt-0.5 shrink-0 text-amber-600" />
           <span>
-            Vos photos sont en <strong>Brouillon</strong> — non visibles publiquement.
+            Vos photos sont en <strong>Brouillon</strong>, non visibles publiquement.
             Survolez une photo et cliquez sur l&apos;icône <strong>œil</strong> pour publier.
           </span>
         </div>

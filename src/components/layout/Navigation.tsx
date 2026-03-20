@@ -27,7 +27,7 @@ export const navigationItems: NavItem[] = [
   { label: 'Portfolio',   href: '/dashboard/portfolio',              icon: ImageIcon,       section: 'atelier' },
   { label: 'Abonnement',  href: '/dashboard/subscription',          icon: BadgeCheck,      section: 'compte' },
   { label: 'Paramètres',  href: '/dashboard/settings',              icon: Settings,        section: 'compte' },
-  { label: 'Aide',        href: '/help',                             icon: HelpCircle,      section: 'compte' },
+  { label: 'Aide',        href: '/dashboard/help',                   icon: HelpCircle,      section: 'compte' },
 ]
 
 const SECTIONS: Record<string, string> = {

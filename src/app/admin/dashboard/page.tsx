@@ -43,7 +43,7 @@ export default async function AdminDashboardPage() {
       <div className="flex items-center gap-3">
         <Shield className="h-6 w-6 text-red-500" />
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Dashboard Administration</h1>
+          <h1 className="page-title">Dashboard Administration</h1>
           <p className="text-sm text-gray-500">Vue d&apos;ensemble de la plateforme</p>
         </div>
       </div>

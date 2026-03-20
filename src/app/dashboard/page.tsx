@@ -92,7 +92,7 @@ export default function DashboardPage() {
         </div>
         <Link
           href="/dashboard/orders/new"
-          className="flex items-center gap-1.5 bg-stone-900 dark:bg-amber-400 text-white dark:text-stone-950 text-sm font-semibold px-4 py-2.5 rounded-xl hover:opacity-90 transition-opacity shrink-0"
+          className="flex items-center gap-1.5 bg-stone-900 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:opacity-90 transition-opacity shrink-0"
         >
           <Plus className="h-4 w-4" />
           <span className="hidden sm:inline">Nouvelle commande</span>
@@ -102,13 +102,13 @@ export default function DashboardPage() {
 
       {/* ── Alerte retards ── */}
       {!loading && stats && stats.overdueOrders > 0 && (
-        <div className="flex items-center gap-3 rounded-xl border border-red-200 dark:border-red-500/20 bg-red-50 dark:bg-red-500/10 px-4 py-3">
+        <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
           <AlertTriangle className="h-4 w-4 text-red-500 shrink-0" />
-          <p className="text-sm text-red-700 dark:text-red-400">
+          <p className="text-sm text-red-700">
             <span className="font-semibold">{stats.overdueOrders} commande(s) en retard</span>
-            {' '}— livraison urgente requise.
+            {' '}livraison urgente requise.
           </p>
-          <Link href="/dashboard/calendar" className="ml-auto text-xs text-red-500 hover:text-red-600 underline shrink-0">
+          <Link href="/dashboard/calendar" className="ml-auto text-xs text-red-500 hover:text-red-600 font-medium shrink-0">
             Planning
           </Link>
         </div>
@@ -118,10 +118,10 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Commandes actives */}
         <Link href="/dashboard/orders?status=IN_PROGRESS">
-          <div className="group rounded-2xl border border-border bg-card hover:border-amber-300 dark:hover:border-amber-400/30 hover:shadow-md transition-all duration-200 p-5 cursor-pointer">
+          <div className="group rounded-2xl border border-border bg-card hover:border-amber-300 hover:shadow-md transition-all duration-200 p-5 cursor-pointer">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Commandes actives</p>
-              <div className="h-8 w-8 rounded-xl bg-amber-50 dark:bg-amber-400/10 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-xl bg-amber-50 flex items-center justify-center">
                 <ShoppingBag className="h-4 w-4 text-amber-500" />
               </div>
             </div>
@@ -136,10 +136,10 @@ export default function DashboardPage() {
 
         {/* Prêtes à livrer */}
         <Link href="/dashboard/orders?status=READY">
-          <div className="group rounded-2xl border border-border bg-card hover:border-emerald-300 dark:hover:border-emerald-400/30 hover:shadow-md transition-all duration-200 p-5 cursor-pointer">
+          <div className="group rounded-2xl border border-border bg-card hover:border-emerald-300 hover:shadow-md transition-all duration-200 p-5 cursor-pointer">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Prêtes à livrer</p>
-              <div className="h-8 w-8 rounded-xl bg-emerald-50 dark:bg-emerald-400/10 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-xl bg-emerald-50 flex items-center justify-center">
                 <CheckCircle2 className="h-4 w-4 text-emerald-500" />
               </div>
             </div>
@@ -155,10 +155,10 @@ export default function DashboardPage() {
         {/* CA */}
         <div className="relative">
           <Link href="/dashboard/payments">
-            <div className="group rounded-2xl border border-border bg-card hover:border-stone-300 dark:hover:border-stone-600 hover:shadow-md transition-all duration-200 p-5 cursor-pointer h-full">
+            <div className="group rounded-2xl border border-border bg-card hover:border-stone-300 hover:shadow-md transition-all duration-200 p-5 cursor-pointer h-full">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Chiffre d&apos;affaires</p>
-                <div className="h-8 w-8 rounded-xl bg-stone-100 dark:bg-stone-800 flex items-center justify-center">
+                <div className="h-8 w-8 rounded-xl bg-stone-100 flex items-center justify-center">
                   <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 </div>
               </div>
@@ -202,7 +202,7 @@ export default function DashboardPage() {
           <div className="px-5 py-4 border-b border-border flex items-center justify-between">
             <h2 className="font-semibold text-foreground text-sm">Commandes récentes</h2>
             <Link href="/dashboard/orders" className="text-xs text-amber-500 hover:text-amber-600 font-medium">
-              Voir tout →
+              Voir tout
             </Link>
           </div>
           <div className="divide-y divide-border">
@@ -230,7 +230,7 @@ export default function DashboardPage() {
                     href={`/dashboard/orders/${order.id}`}
                     className="flex items-center gap-3 px-5 py-3 hover:bg-muted/50 transition-colors"
                   >
-                    <div className="h-8 w-8 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
+                    <div className="h-8 w-8 rounded-full bg-stone-100 flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
                       {order.client.name.charAt(0)}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -251,9 +251,9 @@ export default function DashboardPage() {
         {/* Échéances à venir */}
         <div className="rounded-2xl border border-border bg-card overflow-hidden">
           <div className="px-5 py-4 border-b border-border flex items-center justify-between">
-            <h2 className="font-semibold text-foreground text-sm">Échéances — 7 jours</h2>
+            <h2 className="font-semibold text-foreground text-sm">Échéances · 7 prochains jours</h2>
             <Link href="/dashboard/calendar" className="text-xs text-amber-500 hover:text-amber-600 font-medium">
-              Planning →
+              Planning
             </Link>
           </div>
           <div className="divide-y divide-border">
@@ -285,7 +285,7 @@ export default function DashboardPage() {
                   >
                     <div className={cn(
                       'h-9 w-9 rounded-xl flex flex-col items-center justify-center text-center shrink-0',
-                      isUrgent ? 'bg-red-50 dark:bg-red-500/10' : 'bg-amber-50 dark:bg-amber-400/10'
+                      isUrgent ? 'bg-red-50' : 'bg-amber-50'
                     )}>
                       <span className={cn('text-[10px] font-bold leading-none', isUrgent ? 'text-red-500' : 'text-amber-500')}>
                         {daysLeft <= 0 ? 'Auj.' : `J-${daysLeft}`}
@@ -309,10 +309,10 @@ export default function DashboardPage() {
         <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Accès rapide</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { href: '/dashboard/clients/new',   icon: Users,       label: 'Nouveau client',   color: 'text-blue-500   bg-blue-50   dark:bg-blue-500/10' },
-            { href: '/dashboard/orders/new',    icon: ShoppingBag, label: 'Nouvelle commande', color: 'text-amber-500  bg-amber-50  dark:bg-amber-400/10' },
-            { href: '/dashboard/payments',      icon: Banknote,    label: 'Paiements',         color: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10' },
-            { href: '/dashboard/calendar',      icon: CalendarDays,label: 'Planning',          color: 'text-rose-500   bg-rose-50   dark:bg-rose-500/10' },
+            { href: '/dashboard/clients/new',   icon: Users,       label: 'Nouveau client',   color: 'text-blue-500   bg-blue-50' },
+            { href: '/dashboard/orders/new',    icon: ShoppingBag, label: 'Nouvelle commande', color: 'text-amber-500  bg-amber-50' },
+            { href: '/dashboard/payments',      icon: Banknote,    label: 'Paiements',         color: 'text-emerald-500 bg-emerald-50' },
+            { href: '/dashboard/calendar',      icon: CalendarDays,label: 'Planning',          color: 'text-rose-500   bg-rose-50' },
           ].map(({ href, icon: Icon, label, color }) => (
             <Link
               key={href}

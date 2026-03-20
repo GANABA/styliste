@@ -64,9 +64,9 @@ export function OnboardingChecklist({ steps }: OnboardingChecklistProps) {
             {!step.done && (
               <Link
                 href={step.href}
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-medium shrink-0"
+                className="text-xs text-amber-600 hover:text-amber-700 font-semibold shrink-0 underline underline-offset-2"
               >
-                Faire →
+                Faire
               </Link>
             )}
           </div>

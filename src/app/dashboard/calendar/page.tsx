@@ -104,7 +104,7 @@ export default function CalendarPage() {
     <div className="space-y-6 max-w-3xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Planning</h1>
+        <h1 className="page-title">Planning</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Vos commandes en cours classées par date de livraison promise. Les commandes en <span className="text-red-600 font-medium">rouge</span> ont dépassé leur date limite.
         </p>

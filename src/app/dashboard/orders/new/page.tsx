@@ -33,7 +33,7 @@ export default function NewOrderPage() {
           <ChevronLeft className="h-4 w-4 shrink-0" />
           Retour aux commandes
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Nouvelle commande</h1>
+        <h1 className="page-title">Nouvelle commande</h1>
         <p className="text-sm text-gray-500 mt-1">Créer une commande pour un client</p>
       </div>
 

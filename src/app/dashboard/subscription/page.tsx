@@ -71,7 +71,7 @@ export default function SubscriptionPage() {
       <div className="flex items-center gap-3">
         <CreditCard className="h-6 w-6 text-indigo-600" />
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Abonnement</h1>
+          <h1 className="page-title" style={{fontSize:"1.25rem"}}>Abonnement</h1>
           <p className="text-sm text-gray-500">
             Plan actuel : <span className="font-medium text-gray-900">{data?.plan}</span>
             {data?.subscription?.status === 'TRIAL' && (

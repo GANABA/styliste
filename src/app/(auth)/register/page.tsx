@@ -84,12 +84,7 @@ export default function RegisterPage() {
             <h1 className="text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
               Créer votre compte
             </h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              Déjà inscrit ?{' '}
-              <Link href="/login" className="text-amber-500 hover:text-amber-600 font-medium">
-                Se connecter
-              </Link>
-            </p>
+            <p className="text-muted-foreground text-sm mt-1">14 jours d&apos;essai Pro gratuit, sans carte bancaire.</p>
           </div>
 
           {error && (
@@ -164,7 +159,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 flex items-center justify-center gap-2 bg-stone-900 dark:bg-amber-400 text-white dark:text-stone-950 font-bold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+              className="w-full h-11 flex items-center justify-center gap-2 bg-stone-900 text-white font-bold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
@@ -173,12 +168,19 @@ export default function RegisterPage() {
                 </span>
               ) : (
                 <>
-                  Créer mon compte — 14j gratuit
+                  Créer mon compte · 14j gratuit
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
             </button>
           </form>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Déjà inscrit ?{' '}
+            <Link href="/login" className="text-amber-600 hover:text-amber-700 font-semibold">
+              Se connecter
+            </Link>
+          </p>
 
           <p className="text-center text-xs text-muted-foreground">
             En vous inscrivant, vous acceptez nos conditions d&apos;utilisation.

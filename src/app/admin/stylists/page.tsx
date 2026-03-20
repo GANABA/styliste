@@ -51,7 +51,7 @@ export default function AdminStylistsPage() {
       <div className="flex items-center gap-3">
         <Users className="h-6 w-6 text-gray-600" />
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Stylistes</h1>
+          <h1 className="page-title">Stylistes</h1>
           <p className="text-sm text-gray-500">{total} styliste(s) inscrit(s)</p>
         </div>
       </div>
