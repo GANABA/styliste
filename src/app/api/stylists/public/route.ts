@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
+// Seuls les plans Pro et Premium donnent accès au portfolio public et à l'annuaire
+const PORTFOLIO_PLANS = ['Pro', 'Premium']
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -20,6 +23,12 @@ export async function GET(request: NextRequest) {
         } : {}),
         portfolioItems: {
           some: { isPublished: true },
+        },
+        subscriptions: {
+          some: {
+            status: { in: ['ACTIVE', 'TRIAL'] },
+            plan: { name: { in: PORTFOLIO_PLANS } },
+          },
         },
       },
       select: {
@@ -52,6 +61,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(result)
   } catch (error: unknown) {
+    // Retourne un tableau vide plutôt qu'un objet erreur
+    // pour éviter le crash côté client (.map is not a function)
     console.error('[GET /api/stylists/public]', error)
     return NextResponse.json([], { status: 200 })
   }
