@@ -18,7 +18,7 @@ const dm = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Styliste.com — Gestion Atelier de Couture',
+  title: 'Styliste.com | Gestion Atelier de Couture',
   description: 'Plateforme SaaS pour stylistes et tailleurs africains. Gérez clients, commandes, paiements et portfolio depuis votre téléphone.',
 }
 

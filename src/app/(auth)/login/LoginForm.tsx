@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn, getSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Eye, EyeOff, CheckCircle2 } from 'lucide-react'
 import { loginSchema, LoginFormData } from '@/lib/validations'
 
 export default function LoginForm() {
@@ -72,12 +72,9 @@ export default function LoginForm() {
             Connectez-vous pour retrouver vos clients, commandes et paiements.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          {['200+ stylistes', '14j d\'essai', 'Mobile-first'].map((t) => (
-            <span key={t} className="text-xs text-stone-500 bg-stone-900 px-3 py-1.5 rounded-full border border-stone-800">
-              {t}
-            </span>
-          ))}
+        <div className="text-xs text-stone-600 space-y-1">
+          <p>Aucune carte bancaire requise</p>
+          <p>Annulation à tout moment</p>
         </div>
       </div>
 
@@ -164,10 +161,7 @@ export default function LoginForm() {
                   Connexion...
                 </span>
               ) : (
-                <>
-                  Se connecter
-                  <ArrowRight className="h-4 w-4" />
-                </>
+                'Se connecter'
               )}
             </button>
           </form>

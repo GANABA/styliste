@@ -2,8 +2,7 @@ import Link from 'next/link'
 import { Playfair_Display, DM_Sans } from 'next/font/google'
 import {
   CheckCircle2, Users, ShoppingBag, CreditCard,
-  ArrowRight, Smartphone, Globe, Ruler, Star,
-  ChevronRight,
+  Smartphone, Globe, Ruler, Star,
 } from 'lucide-react'
 
 const playfair = Playfair_Display({
@@ -28,12 +27,12 @@ const FEATURES = [
   {
     icon: ShoppingBag,
     title: 'Suivi des commandes en temps réel',
-    desc: 'De la prise en charge à la livraison — statut, photos, délais, relances automatiques. Vos clients restent informés.',
+    desc: 'De la prise en charge à la livraison, statut, photos, délais, relances automatiques. Vos clients restent informés.',
     color: 'bg-emerald-50 text-emerald-700',
   },
   {
     icon: CreditCard,
-    title: 'Paiements & factures instantanés',
+    title: 'Paiements et factures instantanés',
     desc: 'Enregistrez les avances, suivez les soldes, générez un reçu PDF en un tap. Plus de pertes d\'argent.',
     color: 'bg-sky-50 text-sky-700',
   },
@@ -45,7 +44,7 @@ const FEATURES = [
   },
   {
     icon: Globe,
-    title: 'Portfolio public & annuaire',
+    title: 'Portfolio public et annuaire',
     desc: 'Une page pro à votre nom pour montrer vos créations. Vos clients potentiels vous trouvent facilement.',
     color: 'bg-violet-50 text-violet-700',
   },
@@ -60,7 +59,7 @@ const FEATURES = [
 const STEPS = [
   { n: '01', title: 'Créez votre compte', desc: '2 minutes. Aucune carte bancaire requise pour démarrer.' },
   { n: '02', title: 'Configurez votre atelier', desc: 'Ajoutez vos clients, modèles de mesures, et premières commandes.' },
-  { n: '03', title: 'Gérez tout depuis votre téléphone', desc: 'Statuts, paiements, relances — tout en quelques taps.' },
+  { n: '03', title: 'Gérez tout depuis votre téléphone', desc: 'Statuts, paiements, relances, tout en quelques taps.' },
 ]
 
 const PLANS = [
@@ -70,7 +69,7 @@ const PLANS = [
     period: '',
     desc: 'Pour commencer sans risque',
     highlight: false,
-    features: ['20 clients', '5 commandes actives', 'Mesures & templates', 'Accès web & mobile'],
+    features: ['20 clients', '5 commandes actives', 'Mesures et templates', 'Accès web et mobile'],
     cta: 'Commencer gratuitement',
     href: '/register',
   },
@@ -128,17 +127,41 @@ const TESTIMONIALS = [
   },
 ]
 
+const FOOTER_LINKS = {
+  Produit: [
+    { label: 'Fonctionnalités', href: '/#fonctionnalites' },
+    { label: 'Tarifs', href: '/#pricing' },
+    { label: 'Annuaire', href: '/stylistes' },
+    { label: 'Connexion', href: '/login' },
+  ],
+  Ressources: [
+    { label: 'Aide et FAQ', href: '/dashboard/help' },
+    { label: 'Annuaire stylistes', href: '/stylistes' },
+  ],
+  Légal: [
+    { label: 'Conditions d\'utilisation', href: '/cgu' },
+    { label: 'Politique de confidentialité', href: '/confidentialite' },
+    { label: 'Gestion des données', href: '/donnees' },
+    { label: 'Mentions légales', href: '/mentions-legales' },
+  ],
+}
+
 // ── Component ────────────────────────────────────────────────
 export default function LandingPage() {
   return (
     <div className={`${playfair.variable} ${dm.variable}`} style={{ fontFamily: 'var(--font-dm), sans-serif' }}>
 
       {/* ── NAV ── */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-100">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-b border-stone-100">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <span className="text-xl font-black tracking-tight text-stone-900" style={{ fontFamily: 'var(--font-playfair)' }}>
+          <Link href="/" className="text-xl font-black tracking-tight text-stone-900" style={{ fontFamily: 'var(--font-playfair)' }}>
             Styliste<span className="text-amber-500">.com</span>
-          </span>
+          </Link>
+          <div className="hidden md:flex items-center gap-6 text-sm text-stone-600">
+            <Link href="/#fonctionnalites" className="hover:text-stone-900 transition-colors">Fonctionnalités</Link>
+            <Link href="/#pricing" className="hover:text-stone-900 transition-colors">Tarifs</Link>
+            <Link href="/stylistes" className="hover:text-stone-900 transition-colors">Annuaire</Link>
+          </div>
           <div className="flex items-center gap-3">
             <Link href="/login" className="hidden sm:inline text-sm text-stone-600 hover:text-stone-900 px-3 py-2 transition-colors">
               Connexion
@@ -168,7 +191,7 @@ export default function LandingPage() {
           <div className="space-y-7">
             <div className="inline-flex items-center gap-2 text-xs font-medium text-amber-400 bg-amber-400/10 border border-amber-400/20 px-3 py-1.5 rounded-full">
               <Star className="h-3 w-3 fill-amber-400" />
-              Essai gratuit 14 jours — Aucune carte requise
+              Essai gratuit 14 jours · Aucune carte requise
             </div>
 
             <h1
@@ -181,20 +204,19 @@ export default function LandingPage() {
 
             <p className="text-lg text-stone-400 leading-relaxed max-w-lg">
               Gérez clients, commandes, paiements et portfolio depuis votre téléphone.
-              Fini les cahiers perdus et les oublis — tout est dans Styliste.com.
+              Fini les cahiers perdus et les oublis.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center gap-2 bg-amber-400 text-stone-950 font-bold px-6 py-3.5 rounded-xl hover:bg-amber-300 transition-colors text-sm"
+                className="inline-flex items-center justify-center bg-amber-400 text-stone-950 font-bold px-6 py-3.5 rounded-xl hover:bg-amber-300 transition-colors text-sm"
               >
                 Créer mon compte gratuitement
-                <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/stylistes"
-                className="inline-flex items-center justify-center gap-2 text-stone-300 border border-stone-700 px-6 py-3.5 rounded-xl hover:border-stone-500 hover:text-white transition-colors text-sm"
+                className="inline-flex items-center justify-center text-stone-300 border border-stone-700 px-6 py-3.5 rounded-xl hover:border-stone-500 hover:text-white transition-colors text-sm"
               >
                 Voir l&apos;annuaire
               </Link>
@@ -249,7 +271,7 @@ export default function LandingPage() {
               </div>
               {/* Floating badge */}
               <div className="absolute -bottom-4 -right-4 bg-emerald-500 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg">
-                ✓ Paiement reçu — 25 000 FCFA
+                ✓ Paiement reçu · 25 000 FCFA
               </div>
             </div>
           </div>
@@ -257,7 +279,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ── */}
-      <section className="bg-stone-50 py-20 px-4">
+      <section id="fonctionnalites" className="bg-stone-50 py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14 space-y-3">
             <p className="text-xs font-semibold text-amber-600 uppercase tracking-widest">Fonctionnalités</p>
@@ -315,7 +337,6 @@ export default function LandingPage() {
               className="inline-flex items-center gap-2 bg-amber-400 text-stone-950 font-bold px-8 py-4 rounded-xl hover:bg-amber-300 transition-colors"
             >
               Je me lance maintenant
-              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -410,14 +431,13 @@ export default function LandingPage() {
 
                 <Link
                   href={plan.href}
-                  className={`inline-flex items-center justify-center gap-1.5 w-full py-3 rounded-xl text-sm font-bold transition-colors ${
+                  className={`inline-flex items-center justify-center w-full py-3 rounded-xl text-sm font-bold transition-colors ${
                     plan.highlight
                       ? 'bg-amber-400 text-stone-950 hover:bg-amber-300'
                       : 'bg-stone-100 text-stone-800 hover:bg-stone-200'
                   }`}
                 >
                   {plan.cta}
-                  <ChevronRight className="h-4 w-4" />
                 </Link>
               </div>
             ))}
@@ -438,8 +458,7 @@ export default function LandingPage() {
             href="/register"
             className="inline-flex items-center gap-2 bg-stone-950 text-white font-bold px-8 py-4 rounded-xl hover:bg-stone-800 transition-colors text-sm"
           >
-            Commencer gratuitement — 14 jours Pro offerts
-            <ArrowRight className="h-4 w-4" />
+            Commencer gratuitement
           </Link>
           <p className="text-xs text-stone-700">
             Aucune carte bancaire. Annulation à tout moment.
@@ -448,17 +467,51 @@ export default function LandingPage() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-stone-950 text-stone-500 py-10 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
-          <span className="font-black text-white" style={{ fontFamily: 'var(--font-playfair)' }}>
-            Styliste<span className="text-amber-400">.com</span>
-          </span>
-          <div className="flex gap-6">
-            <Link href="/stylistes" className="hover:text-white transition-colors">Annuaire</Link>
-            <Link href="/help" className="hover:text-white transition-colors">Aide</Link>
-            <Link href="/login" className="hover:text-white transition-colors">Connexion</Link>
+      <footer className="bg-stone-950 text-stone-400">
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            {/* Colonne marque */}
+            <div className="space-y-4">
+              <Link href="/" className="text-xl font-black text-white" style={{ fontFamily: 'var(--font-playfair)' }}>
+                Styliste<span className="text-amber-400">.com</span>
+              </Link>
+              <p className="text-sm text-stone-500 leading-relaxed max-w-xs">
+                La plateforme de gestion pour stylistes et tailleurs africains. Clients, commandes, paiements et portfolio en un seul endroit.
+              </p>
+              <div className="flex items-center gap-1.5">
+                <span className="text-lg">🇧🇯</span>
+                <span className="text-xs text-stone-600">Conçu pour le Bénin et l&apos;Afrique de l&apos;Ouest</span>
+              </div>
+            </div>
+
+            {/* Colonnes liens */}
+            {Object.entries(FOOTER_LINKS).map(([section, links]) => (
+              <div key={section} className="space-y-4">
+                <h4 className="text-sm font-semibold text-white uppercase tracking-wider">{section}</h4>
+                <ul className="space-y-2.5">
+                  {links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="text-sm text-stone-500 hover:text-white transition-colors">
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
-          <p className="text-xs">© {new Date().getFullYear()} Styliste.com — Bénin 🇧🇯</p>
+        </div>
+
+        {/* Bas de footer */}
+        <div className="border-t border-stone-800">
+          <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-stone-600">
+            <p>© {new Date().getFullYear()} Styliste.com. Tous droits réservés.</p>
+            <div className="flex items-center gap-4">
+              <Link href="/confidentialite" className="hover:text-stone-400 transition-colors">Confidentialité</Link>
+              <Link href="/cgu" className="hover:text-stone-400 transition-colors">CGU</Link>
+              <Link href="/mentions-legales" className="hover:text-stone-400 transition-colors">Mentions légales</Link>
+            </div>
+          </div>
         </div>
       </footer>
 

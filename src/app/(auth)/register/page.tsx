@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Eye, EyeOff, CheckCircle2 } from 'lucide-react'
 import { registerSchema, RegisterFormData } from '@/lib/validations'
 
 export default function RegisterPage() {
@@ -84,7 +84,7 @@ export default function RegisterPage() {
             <h1 className="text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
               Créer votre compte
             </h1>
-            <p className="text-muted-foreground text-sm mt-1">14 jours d&apos;essai Pro gratuit, sans carte bancaire.</p>
+            <p className="text-muted-foreground text-sm mt-1">Créez votre espace styliste en 2 minutes.</p>
           </div>
 
           {error && (
@@ -167,10 +167,7 @@ export default function RegisterPage() {
                   Création...
                 </span>
               ) : (
-                <>
-                  Créer mon compte · 14j gratuit
-                  <ArrowRight className="h-4 w-4" />
-                </>
+                'Créer mon compte'
               )}
             </button>
           </form>
