@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
         businessName: true,
         phone: true,
         city: true,
+        logoUrl: true,
         user: { select: { name: true } },
         portfolioItems: {
           where: { isPublished: true },
@@ -62,6 +63,7 @@ export async function GET(request: NextRequest) {
       name: s.businessName ?? s.user.name,
       phone: s.phone,
       city: s.city,
+      logoUrl: s.logoUrl,
       coverImage: s.portfolioItems[0] ?? null,
       portfolioCount: s._count.portfolioItems,
     }))

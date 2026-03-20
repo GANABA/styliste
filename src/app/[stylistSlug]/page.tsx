@@ -20,6 +20,7 @@ async function getStylistProfile(slug: string): Promise<StylistPublicProfile | n
         businessName: true,
         phone: true,
         city: true,
+        logoUrl: true,
         user: { select: { name: true } },
         portfolioItems: {
           where: { isPublished: true },
@@ -45,6 +46,7 @@ async function getStylistProfile(slug: string): Promise<StylistPublicProfile | n
       businessName: stylist.businessName ?? stylist.user.name,
       phone: stylist.phone,
       city: stylist.city,
+      logoUrl: stylist.logoUrl ?? null,
       portfolioItems: stylist.portfolioItems,
     }
   } catch {
@@ -99,16 +101,19 @@ export default async function StylistPortfolioPage({ params }: Props) {
       {/* ── HERO PROFIL ── */}
       <section className="bg-stone-950 py-12 px-4">
         <div className="max-w-4xl mx-auto flex flex-col items-center text-center gap-4">
-          {/* Avatar */}
-          <div className="relative">
-            <div className="w-20 h-20 rounded-2xl bg-amber-400/10 border-2 border-amber-400/30 flex items-center justify-center">
+          {/* Avatar / Logo */}
+          <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-amber-400/30 bg-amber-400/10 flex items-center justify-center">
+            {profile.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile.logoUrl} alt={displayName} className="w-full h-full object-cover" />
+            ) : (
               <span
                 className="text-3xl font-black text-amber-400"
                 style={{ fontFamily: 'var(--font-playfair)' }}
               >
                 {initial}
               </span>
-            </div>
+            )}
           </div>
 
           <div>

@@ -8,6 +8,7 @@ interface StylistCardProps {
     name: string | null
     phone: string | null
     city: string | null
+    logoUrl?: string | null
     coverImage: { thumbnailUrl: string | null; imageUrl: string } | null
     portfolioCount: number
   }
@@ -59,16 +60,29 @@ export function StylistCard({ stylist }: StylistCardProps) {
 
       {/* Infos */}
       <div className="p-4">
-        <div className="mb-3">
-          <h3
-            className="font-bold text-foreground text-base leading-tight"
-            style={{ fontFamily: 'var(--font-playfair)' }}
-          >
-            {name}
-          </h3>
-          {stylist.city && (
-            <p className="text-sm text-muted-foreground mt-0.5">{stylist.city}, Bénin</p>
-          )}
+        <div className="mb-3 flex items-center gap-3">
+          {/* Logo ou initiale */}
+          <div className="w-10 h-10 rounded-xl border border-border overflow-hidden shrink-0 bg-stone-50 flex items-center justify-center">
+            {stylist.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={stylist.logoUrl} alt={name} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-base font-black text-stone-400" style={{ fontFamily: 'var(--font-playfair)' }}>
+                {initial}
+              </span>
+            )}
+          </div>
+          <div className="min-w-0">
+            <h3
+              className="font-bold text-foreground text-base leading-tight truncate"
+              style={{ fontFamily: 'var(--font-playfair)' }}
+            >
+              {name}
+            </h3>
+            {stylist.city && (
+              <p className="text-xs text-muted-foreground mt-0.5 truncate">{stylist.city}, Bénin</p>
+            )}
+          </div>
         </div>
 
         <div className="flex gap-2">
