@@ -101,11 +101,11 @@ export function PhotoUploader({ orderId, onUploadSuccess }: PhotoUploaderProps) 
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center cursor-pointer hover:border-blue-300 hover:bg-blue-50/30 transition-colors"
+          className="border-2 border-dashed border-input rounded-xl p-8 text-center cursor-pointer hover:border-amber-400 hover:bg-amber-50/30 transition-colors"
         >
           <Upload className="h-8 w-8 text-gray-300 mx-auto mb-3" />
           <p className="text-sm text-gray-500">
-            Glissez une photo ou <span className="text-blue-600 font-medium">parcourir</span>
+            Glissez une photo ou <span className="text-amber-600 font-medium">parcourir</span>
           </p>
           <p className="text-xs text-gray-400 mt-1">JPEG, PNG, WebP · max 5 MB</p>
           <input
@@ -120,7 +120,7 @@ export function PhotoUploader({ orderId, onUploadSuccess }: PhotoUploaderProps) 
           />
         </div>
       ) : (
-        <div className="relative rounded-xl overflow-hidden border border-gray-200">
+        <div className="relative rounded-xl overflow-hidden border border-input">
           {preview && (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={preview} alt="Aperçu" className="w-full h-48 object-cover" />
@@ -149,8 +149,8 @@ export function PhotoUploader({ orderId, onUploadSuccess }: PhotoUploaderProps) 
               className={cn(
                 'px-3 py-1.5 rounded-full text-sm border transition-colors',
                 photoType === type
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                  ? 'bg-amber-500 text-white border-amber-500'
+                  : 'bg-white text-stone-600 border-input hover:bg-stone-50'
               )}
             >
               {PHOTO_TYPE_LABELS[type]}
@@ -166,7 +166,7 @@ export function PhotoUploader({ orderId, onUploadSuccess }: PhotoUploaderProps) 
           placeholder="Légende (optionnel)"
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="w-full border border-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50"
         />
       </div>
 

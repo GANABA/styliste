@@ -89,7 +89,7 @@ export default function ClientsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="page-title">Clients</h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -97,7 +97,7 @@ export default function ClientsPage() {
           </p>
         </div>
         <Link href="/dashboard/clients/new">
-          <Button className="w-full sm:w-auto">
+          <Button className="w-full md:w-auto">
             <Plus className="h-4 w-4 mr-2" />
             Nouveau client
           </Button>
@@ -114,7 +114,7 @@ export default function ClientsPage() {
       )}
 
       {/* Search and Filters */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input

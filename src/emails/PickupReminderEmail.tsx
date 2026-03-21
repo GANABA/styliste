@@ -33,7 +33,7 @@ export function PickupReminderEmail({
   return (
     <Html>
       <Head />
-      <Preview>Rappel de retrait — {garmentType} vous attend</Preview>
+      <Preview>Rappel de retrait : {garmentType} vous attend</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={h1}>N&apos;oubliez pas votre commande !</Heading>
@@ -51,7 +51,7 @@ export function PickupReminderEmail({
             <Text style={infoLabel}>Votre styliste :</Text>
             <Text style={infoValue}>
               {stylistName}
-              {stylistCity && ` — ${stylistCity}`}
+              {stylistCity && ` · ${stylistCity}`}
             </Text>
             <Text style={infoValue}>📞 {stylistPhone}</Text>
           </Section>

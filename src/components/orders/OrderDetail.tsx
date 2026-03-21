@@ -104,7 +104,7 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
         <div className="grid grid-cols-2 gap-3">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <User className="h-4 w-4 text-gray-400 shrink-0" />
-            <Link href={`/dashboard/clients/${order.clientId}`} className="hover:text-blue-600 truncate">
+            <Link href={`/dashboard/clients/${order.clientId}`} className="hover:text-amber-600 truncate">
               {order.client.name}
             </Link>
           </div>
@@ -162,7 +162,7 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
             {order.paymentStatus !== 'PAID' && (
               <button
                 onClick={() => setShowPaymentForm(true)}
-                className="w-full text-sm text-blue-600 hover:text-blue-700 py-2 border border-dashed border-blue-200 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-1.5"
+                className="w-full text-sm text-amber-600 hover:text-amber-700 py-2 border border-dashed border-amber-200 rounded-lg hover:bg-amber-50 transition-colors flex items-center justify-center gap-1.5"
               >
                 <Plus className="h-4 w-4" />
                 Enregistrer un paiement
@@ -214,7 +214,7 @@ export function OrderDetail({ order, onRefresh }: OrderDetailProps) {
               <>
                 <button
                   onClick={() => setShowUploader(!showUploader)}
-                  className="w-full text-sm text-blue-600 hover:text-blue-700 py-2 border border-dashed border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+                  className="w-full text-sm text-amber-600 hover:text-amber-700 py-2 border border-dashed border-amber-200 rounded-lg hover:bg-amber-50 transition-colors"
                 >
                   {showUploader ? 'Masquer l\'upload' : '+ Ajouter une photo'}
                 </button>

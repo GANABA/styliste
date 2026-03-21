@@ -72,11 +72,11 @@ export function PortfolioUploadForm({ onSuccess, onCancel }: PortfolioUploadForm
       {!preview ? (
         <div
           onClick={() => inputRef.current?.click()}
-          className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center cursor-pointer hover:border-blue-300 hover:bg-blue-50/30 transition-colors"
+          className="border-2 border-dashed border-input rounded-xl p-8 text-center cursor-pointer hover:border-amber-400 hover:bg-amber-50/30 transition-colors"
         >
           <Upload className="h-8 w-8 text-gray-300 mx-auto mb-2" />
           <p className="text-sm text-gray-500">Cliquez pour choisir une photo</p>
-          <p className="text-xs text-gray-400 mt-1">JPG, PNG, WebP — 5 MB max</p>
+          <p className="text-xs text-gray-400 mt-1">JPG, PNG, WebP · 5 MB max</p>
           <input
             ref={inputRef}
             type="file"

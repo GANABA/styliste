@@ -62,12 +62,12 @@ function SidebarComponent() {
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 px-3 py-4 overflow-y-auto">
+        <div className="flex-1 min-h-0 px-3 py-4 overflow-y-auto">
           <Navigation />
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-border">
+        <div className="shrink-0 px-5 py-3 border-t border-border">
           <p className="text-[11px] text-stone-400 font-medium">v0.1 MVP</p>
         </div>
       </aside>

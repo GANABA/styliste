@@ -65,7 +65,7 @@ export default function AnnuairePage() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <div className="relative hidden sm:block">
+            <div className="relative hidden md:block">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
               <input
                 className="h-9 w-28 pl-8 pr-3 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 placeholder-stone-400 text-sm focus:outline-none focus:border-amber-400 focus:bg-white transition-all"
@@ -86,7 +86,7 @@ export default function AnnuairePage() {
         </div>
 
         {/* Filtre ville mobile */}
-        <div className="sm:hidden px-4 pb-3">
+        <div className="md:hidden px-4 pb-3">
           <div className="relative">
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
             <input
@@ -178,7 +178,7 @@ export default function AnnuairePage() {
 
       {/* ── FOOTER ── */}
       <footer className="border-t border-stone-200 bg-white py-6 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-stone-400">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-stone-400">
           <p>
             Vous êtes styliste ?{' '}
             <Link href="/register" className="text-amber-600 hover:text-amber-700 font-medium">

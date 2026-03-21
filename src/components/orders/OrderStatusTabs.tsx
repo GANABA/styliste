@@ -40,15 +40,15 @@ export function OrderStatusTabs({ activeTab, counts, onTabChange }: OrderStatusT
             className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors shrink-0',
               isActive
-                ? 'bg-blue-600 text-white font-medium'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                ? 'bg-amber-400 text-stone-950 font-medium border border-amber-400'
+                : 'bg-white text-stone-600 border border-input hover:bg-stone-50'
             )}
           >
             {tab.label}
             {(count ?? 0) > 0 && (
               <span className={cn(
                 'text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center',
-                isActive ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600'
+                isActive ? 'bg-amber-500 text-stone-950' : 'bg-stone-100 text-stone-600'
               )}>
                 {count}
               </span>

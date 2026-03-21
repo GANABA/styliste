@@ -18,19 +18,19 @@ export function ClientCounter({ current, limit, planName }: ClientCounterProps) 
 
   if (isUnlimited) {
     return (
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
         <div className="flex items-center gap-3">
           <div className="flex-shrink-0">
-            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-              <Info className="h-5 w-5 text-blue-600" />
+            <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
+              <Info className="h-5 w-5 text-amber-600" />
             </div>
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-blue-900">
+            <p className="text-sm font-medium text-stone-900">
               {current} client{current > 1 ? 's' : ''}
             </p>
-            <p className="text-xs text-blue-700">
-              Plan {planName} - Clients illimités
+            <p className="text-xs text-stone-600">
+              Plan {planName} · Clients illimités
             </p>
           </div>
         </div>
@@ -94,7 +94,7 @@ export function ClientCounter({ current, limit, planName }: ClientCounterProps) 
         <div className="w-32">
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-blue-600 transition-all"
+              className="h-full bg-amber-400 transition-all"
               style={{ width: `${percentage}%` }}
             />
           </div>

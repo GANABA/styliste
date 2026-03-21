@@ -69,7 +69,7 @@ export default function RegisterPage() {
             ))}
           </ul>
         </div>
-        <p className="text-stone-600 text-sm">© 2025 Styliste.com — Bénin 🇧🇯</p>
+        <p className="text-stone-600 text-sm">© 2025 Styliste.com</p>
       </div>
 
       {/* Formulaire */}

@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { AlertTriangle, CalendarDays, ArrowRight } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { AlertTriangle, CalendarDays, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Order {
@@ -51,8 +50,8 @@ const STATUS_CONFIG: Record<string, { label: string; badgeClass: string; dotClas
   },
   IN_PROGRESS: {
     label: 'En cours',
-    badgeClass: 'bg-blue-100 text-blue-700 border-blue-200',
-    dotClass: 'bg-blue-500',
+    badgeClass: 'bg-sky-100 text-sky-700 border-sky-200',
+    dotClass: 'bg-sky-500',
   },
   READY: {
     label: 'Prête',
@@ -135,7 +134,7 @@ export default function CalendarPage() {
           <p className="text-sm text-gray-400">
             Toutes vos commandes sont livrées ou vous n&apos;en avez pas encore.
           </p>
-          <Link href="/dashboard/orders/new" className="inline-block mt-2 text-sm text-blue-600 underline">
+          <Link href="/dashboard/orders/new" className="inline-block mt-2 text-sm text-amber-600 underline">
             Créer une commande
           </Link>
         </div>
@@ -189,15 +188,15 @@ export default function CalendarPage() {
                       {/* Badges */}
                       <div className="flex items-center gap-2 shrink-0">
                         {isOverdue ? (
-                          <Badge className="bg-red-100 text-red-700 border-red-200 text-xs">
+                          <span className="inline-flex items-center rounded-md border border-red-200 bg-red-100 text-red-700 px-2.5 py-0.5 text-xs font-semibold">
                             En retard
-                          </Badge>
+                          </span>
                         ) : (
-                          <Badge className={cn('text-xs border', statusCfg.badgeClass)}>
+                          <span className={cn('inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold', statusCfg.badgeClass)}>
                             {statusCfg.label}
-                          </Badge>
+                          </span>
                         )}
-                        <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-gray-500" />
+                        <ChevronRight className="h-4 w-4 text-stone-300 group-hover:text-stone-600 transition-colors" />
                       </div>
                     </Link>
                   );

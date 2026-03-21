@@ -128,7 +128,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
           <Link href="/dashboard/clients">
             <Button variant="ghost" size="default" className="min-h-[44px]">

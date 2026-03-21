@@ -149,7 +149,7 @@ function MeasurementCard({
           {/* Mesures */}
           {editing ? (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-3 border-t">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 pt-3 border-t">
                 {Object.entries(measurement.measurements).map(([key]) => {
                   const { label, unit } = resolveLabel(key, templateFields);
                   return (
@@ -186,7 +186,7 @@ function MeasurementCard({
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-3 border-t">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-3 border-t">
               {Object.entries(measurement.measurements).map(([key, value]) => {
                 const { label, unit } = resolveLabel(key, templateFields);
                 return (

@@ -71,7 +71,7 @@ export default function SubscriptionPage() {
       <div className="flex items-center gap-3">
         <CreditCard className="h-6 w-6 text-indigo-600" />
         <div>
-          <h1 className="page-title" style={{fontSize:"1.25rem"}}>Abonnement</h1>
+          <h1 className="text-xl font-black text-foreground">Abonnement</h1>
           <p className="text-sm text-gray-500">
             Plan actuel : <span className="font-medium text-gray-900">{data?.plan}</span>
             {data?.subscription?.status === 'TRIAL' && (
@@ -114,7 +114,7 @@ export default function SubscriptionPage() {
         <h2 className="mb-4 text-sm font-semibold text-gray-700 uppercase tracking-wide">
           Changer de plan
         </h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan) => (
             <SubscriptionPlanCard
               key={plan.id}

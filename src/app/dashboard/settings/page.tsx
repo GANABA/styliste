@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { User, Phone, MapPin, Home, Store, Loader2, Check, ImageIcon, X } from 'lucide-react'
+import { signOut } from 'next-auth/react'
+import { User, Phone, MapPin, Home, Store, Loader2, Check, ImageIcon, X, ShieldAlert, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -38,6 +39,9 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [logoUploading, setLogoUploading] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteConfirmText, setDeleteConfirmText] = useState('')
+  const [deleting, setDeleting] = useState(false)
 
   const {
     register,
@@ -136,6 +140,20 @@ export default function SettingsPage() {
     }
   }
 
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText !== 'SUPPRIMER') return
+    setDeleting(true)
+    try {
+      const res = await fetch('/api/stylists/me/account', { method: 'DELETE' })
+      if (!res.ok) throw new Error('Erreur lors de la suppression')
+      toast.success('Compte supprimé. À bientôt.')
+      await signOut({ callbackUrl: '/' })
+    } catch (err: any) {
+      toast.error(err.message)
+      setDeleting(false)
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
@@ -145,7 +163,7 @@ export default function SettingsPage() {
 
       {/* Profil public */}
       {profile?.slug && (
-        <div className="flex items-center gap-3 px-4 py-3 bg-blue-50 border border-blue-100 rounded-lg text-sm text-blue-700">
+        <div className="flex items-center gap-3 px-4 py-3 bg-amber-50 border border-amber-100 rounded-lg text-sm text-amber-700">
           <Check className="h-4 w-4 shrink-0" />
           <span>
             Votre portfolio public est accessible sur{' '}
@@ -250,7 +268,7 @@ export default function SettingsPage() {
               ) : (
                 <div className="relative">
                   <Home className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input id="address" {...register('address')} placeholder="Haie Vive, Cotonou, Bénin" className="pl-9" />
+                  <Input id="address" {...register('address')} placeholder="Haie Vive, Cotonou" className="pl-9" />
                 </div>
               )}
               {errors.address && <p className="text-xs text-red-500">{errors.address.message}</p>}
@@ -328,6 +346,86 @@ export default function SettingsPage() {
           </Button>
         </div>
       </form>
+
+      {/* Sécurité / Suppression de compte */}
+      <Card className="border-red-100">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-base flex items-center gap-2 text-red-700">
+            <ShieldAlert className="h-4 w-4" />
+            Zone de danger
+          </CardTitle>
+          <CardDescription>
+            Actions irréversibles concernant votre compte
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {!showDeleteConfirm ? (
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-foreground">Supprimer mon compte</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Toutes vos données (clients, commandes, paiements, portfolio) seront supprimées définitivement après 30 jours.
+                </p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="shrink-0 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                Supprimer
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 rounded-lg bg-red-50 border border-red-200 p-3">
+                <AlertTriangle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
+                <div className="text-sm text-red-700">
+                  <p className="font-semibold">Cette action est irréversible.</p>
+                  <p className="mt-0.5 text-xs text-red-600">
+                    Votre compte sera désactivé immédiatement. Vos données seront supprimées définitivement après 30 jours.
+                    Pour confirmer, tapez <strong>SUPPRIMER</strong> ci-dessous.
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Input
+                  value={deleteConfirmText}
+                  onChange={(e) => setDeleteConfirmText(e.target.value)}
+                  placeholder="Tapez SUPPRIMER pour confirmer"
+                  className="border-red-200 focus-visible:ring-red-400"
+                />
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText('') }}
+                    disabled={deleting}
+                  >
+                    Annuler
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                    onClick={handleDeleteAccount}
+                    disabled={deleteConfirmText !== 'SUPPRIMER' || deleting}
+                  >
+                    {deleting ? (
+                      <><Loader2 className="h-3.5 w-3.5 mr-2 animate-spin" />Suppression...</>
+                    ) : (
+                      'Confirmer la suppression'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

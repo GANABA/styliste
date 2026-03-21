@@ -86,7 +86,7 @@ export async function POST(
         orderNumber: order.orderNumber,
       })
     } else if (type === 'PAYMENT_REMINDER') {
-      subject = `Rappel de paiement — ${order.garmentType}`
+      subject = `Rappel de paiement : ${order.garmentType}`
       emailElement = React.createElement(PaymentReminderEmail, {
         clientName: order.client.name,
         garmentType: order.garmentType,
@@ -98,7 +98,7 @@ export async function POST(
         stylistPhone: stylist.phone ?? '',
       })
     } else {
-      subject = `Rappel de retrait — ${order.garmentType} vous attend`
+      subject = `Rappel de retrait : ${order.garmentType} vous attend`
       emailElement = React.createElement(PickupReminderEmail, {
         clientName: order.client.name,
         garmentType: order.garmentType,

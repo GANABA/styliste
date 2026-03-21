@@ -2,16 +2,23 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, User, Mail, MapPin, Calendar } from 'lucide-react'
+import { ArrowLeft, MapPin, Calendar, Users, ShoppingBag, ImageIcon, Store, Mail, CheckCircle2, Ban } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { cn } from '@/lib/utils'
 
 async function getStylist(id: string) {
   const baseUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
   const res = await fetch(`${baseUrl}/api/admin/stylists/${id}`, { cache: 'no-store' })
   if (!res.ok) return null
   return res.json()
+}
+
+const PLAN_BADGE: Record<string, string> = {
+  'Découverte': 'bg-stone-100 text-stone-600 border-stone-200',
+  'Standard':   'bg-amber-50 text-amber-700 border-amber-200',
+  'Pro':        'bg-amber-100 text-amber-800 border-amber-300',
+  'Premium':    'bg-amber-400 text-stone-950 border-amber-500',
 }
 
 export default async function AdminStylistDetailPage({ params }: { params: { id: string } }) {
@@ -21,63 +28,116 @@ export default async function AdminStylistDetailPage({ params }: { params: { id:
   const stylist = await getStylist(params.id)
   if (!stylist) notFound()
 
+  const initials = stylist.name
+    ?.split(' ')
+    .map((n: string) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() ?? 'S'
+
   return (
-    <div className="p-4 md:p-6 max-w-3xl mx-auto space-y-6">
-      <Link href="/admin/stylists" className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700">
+    <div className="max-w-2xl mx-auto space-y-4">
+      {/* Retour */}
+      <Link
+        href="/admin/stylists"
+        className="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-900 transition-colors"
+      >
         <ArrowLeft className="h-4 w-4" />
         Retour à la liste
       </Link>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <h1 className="text-lg font-bold text-gray-900">{stylist.name}</h1>
-            <p className="text-sm text-gray-500">{stylist.email}</p>
-          </div>
-          <Badge variant={stylist.suspended ? 'destructive' : 'secondary'}>
-            {stylist.suspended ? 'Suspendu' : 'Actif'}
-          </Badge>
+      {/* ── Carte profil ── */}
+      <div className="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+        {/* Header coloré */}
+        <div className="h-16 bg-gradient-to-r from-stone-900 to-stone-700 relative">
+          <div className="absolute inset-0 opacity-10"
+            style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}
+          />
         </div>
 
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div className="flex items-center gap-2 text-gray-600">
-            <User className="h-4 w-4" />
-            Plan : <span className="font-medium text-gray-900">{stylist.plan}</span>
-          </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <Calendar className="h-4 w-4" />
-            Inscrit le : <span className="font-medium text-gray-900">
-              {format(new Date(stylist.createdAt), 'd MMM yyyy', { locale: fr })}
+        {/* Avatar + infos */}
+        <div className="px-5 pb-5">
+          <div className="flex items-end justify-between -mt-7 mb-4">
+            {/* Avatar */}
+            <div className="h-14 w-14 rounded-xl bg-amber-400 border-2 border-white shadow-sm flex items-center justify-center shrink-0">
+              <span className="text-xl font-black text-stone-950" style={{ fontFamily: 'var(--font-playfair)' }}>
+                {initials}
+              </span>
+            </div>
+            {/* Status */}
+            <span className={cn(
+              'inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border',
+              stylist.suspended
+                ? 'bg-red-50 text-red-600 border-red-200'
+                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+            )}>
+              {stylist.suspended
+                ? <><Ban className="h-3 w-3" /> Suspendu</>
+                : <><CheckCircle2 className="h-3 w-3" /> Actif</>
+              }
             </span>
           </div>
-          {stylist.stylist?.city && (
-            <div className="flex items-center gap-2 text-gray-600">
-              <MapPin className="h-4 w-4" />
-              {stylist.stylist.city}
-            </div>
-          )}
-          {stylist.stylist?.businessName && (
-            <div className="flex items-center gap-2 text-gray-600">
-              <Mail className="h-4 w-4" />
-              {stylist.stylist.businessName}
-            </div>
-          )}
+
+          <h1 className="text-lg font-black text-stone-900" style={{ fontFamily: 'var(--font-playfair)' }}>
+            {stylist.name}
+          </h1>
+          <p className="text-sm text-stone-400 mt-0.5">{stylist.email}</p>
         </div>
 
+        {/* Méta infos */}
+        <div className="border-t border-stone-100 px-5 py-4 grid grid-cols-2 gap-3">
+          {[
+            {
+              icon: Store,
+              label: 'Plan',
+              value: (
+                <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full border', PLAN_BADGE[stylist.plan] ?? 'bg-stone-100 text-stone-600 border-stone-200')}>
+                  {stylist.plan}
+                </span>
+              ),
+            },
+            {
+              icon: Calendar,
+              label: 'Inscrit le',
+              value: format(new Date(stylist.createdAt), 'd MMM yyyy', { locale: fr }),
+            },
+            ...(stylist.stylist?.city ? [{
+              icon: MapPin,
+              label: 'Ville',
+              value: stylist.stylist.city,
+            }] : []),
+            ...(stylist.stylist?.businessName ? [{
+              icon: Mail,
+              label: 'Atelier',
+              value: stylist.stylist.businessName,
+            }] : []),
+          ].map(({ icon: Icon, label, value }) => (
+            <div key={label} className="flex items-start gap-2.5">
+              <div className="h-7 w-7 rounded-lg bg-stone-50 border border-stone-100 flex items-center justify-center shrink-0 mt-0.5">
+                <Icon className="h-3.5 w-3.5 text-stone-400" />
+              </div>
+              <div>
+                <p className="text-[10px] text-stone-400 uppercase tracking-wide font-semibold">{label}</p>
+                <div className="text-sm font-medium text-stone-800 mt-0.5">{value}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Stats */}
         {stylist.stylist?._count && (
-          <div className="mt-4 grid grid-cols-3 gap-3 pt-4 border-t border-gray-100">
-            <div className="text-center">
-              <p className="text-xl font-bold text-gray-900">{stylist.stylist._count.clients}</p>
-              <p className="text-xs text-gray-500">Clients</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xl font-bold text-gray-900">{stylist.stylist._count.orders}</p>
-              <p className="text-xs text-gray-500">Commandes</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xl font-bold text-gray-900">{stylist.stylist._count.portfolioItems}</p>
-              <p className="text-xs text-gray-500">Portfolio</p>
-            </div>
+          <div className="border-t border-stone-100 grid grid-cols-3 divide-x divide-stone-100">
+            {[
+              { icon: Users,       label: 'Clients',    value: stylist.stylist._count.clients },
+              { icon: ShoppingBag, label: 'Commandes',  value: stylist.stylist._count.orders },
+              { icon: ImageIcon,   label: 'Portfolio',  value: stylist.stylist._count.portfolioItems },
+            ].map(({ icon: Icon, label, value }) => (
+              <div key={label} className="flex flex-col items-center py-4 gap-1">
+                <Icon className="h-4 w-4 text-stone-300 mb-1" />
+                <p className="text-2xl font-black text-stone-900 tabular-nums">{value}</p>
+                <p className="text-[10px] text-stone-400 uppercase tracking-wide font-semibold">{label}</p>
+              </div>
+            ))}
           </div>
         )}
       </div>

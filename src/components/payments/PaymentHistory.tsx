@@ -46,7 +46,7 @@ const METHOD_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  ADVANCE: 'bg-blue-100 text-blue-700',
+  ADVANCE: 'bg-violet-100 text-violet-700',
   PARTIAL: 'bg-orange-100 text-orange-700',
   FINAL: 'bg-green-100 text-green-700',
   REFUND: 'bg-red-100 text-red-700',

@@ -17,7 +17,7 @@ export default function DashboardLayout({
       {/* h-screen + overflow-hidden : sidebar fixe, seul le main scroll */}
       <div className="flex h-screen overflow-hidden bg-background">
         <Sidebar />
-        <div className="flex flex-1 flex-col min-h-0">
+        <div className="flex flex-1 flex-col min-h-0 min-w-0">
           <Header onMenuClick={toggle} />
           <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
         </div>

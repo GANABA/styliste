@@ -95,8 +95,8 @@ export default function DashboardPage() {
           className="flex items-center gap-1.5 bg-stone-900 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:opacity-90 transition-opacity shrink-0"
         >
           <Plus className="h-4 w-4" />
-          <span className="hidden sm:inline">Nouvelle commande</span>
-          <span className="sm:hidden">Nouveau</span>
+          <span className="hidden md:inline">Nouvelle commande</span>
+          <span className="md:hidden">Nouveau</span>
         </Link>
       </div>
 
@@ -115,55 +115,55 @@ export default function DashboardPage() {
       )}
 
       {/* ── KPIs ── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
         {/* Commandes actives */}
         <Link href="/dashboard/orders?status=IN_PROGRESS">
-          <div className="group rounded-2xl border border-border bg-card hover:border-amber-300 hover:shadow-md transition-all duration-200 p-5 cursor-pointer">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Commandes actives</p>
-              <div className="h-8 w-8 rounded-xl bg-amber-50 flex items-center justify-center">
-                <ShoppingBag className="h-4 w-4 text-amber-500" />
+          <div className="group rounded-2xl border border-border bg-card hover:border-amber-300 hover:shadow-md transition-all duration-200 p-4 md:p-5 cursor-pointer">
+            <div className="flex items-center justify-between mb-2 md:mb-3">
+              <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-muted-foreground leading-tight">Actives</p>
+              <div className="h-7 w-7 md:h-8 md:w-8 rounded-xl bg-amber-50 flex items-center justify-center">
+                <ShoppingBag className="h-3.5 w-3.5 md:h-4 md:w-4 text-amber-500" />
               </div>
             </div>
-            {loading ? <Skeleton className="h-9 w-16" /> : (
-              <p className="text-4xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
+            {loading ? <Skeleton className="h-8 w-12 md:h-9 md:w-16" /> : (
+              <p className="text-3xl md:text-4xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
                 {stats?.activeOrders ?? 0}
               </p>
             )}
-            <p className="text-xs text-muted-foreground mt-1">En cours + prêtes</p>
+            <p className="text-[10px] md:text-xs text-muted-foreground mt-1 hidden md:block">En cours + prêtes</p>
           </div>
         </Link>
 
         {/* Prêtes à livrer */}
         <Link href="/dashboard/orders?status=READY">
-          <div className="group rounded-2xl border border-border bg-card hover:border-emerald-300 hover:shadow-md transition-all duration-200 p-5 cursor-pointer">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Prêtes à livrer</p>
-              <div className="h-8 w-8 rounded-xl bg-emerald-50 flex items-center justify-center">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+          <div className="group rounded-2xl border border-border bg-card hover:border-emerald-300 hover:shadow-md transition-all duration-200 p-4 md:p-5 cursor-pointer">
+            <div className="flex items-center justify-between mb-2 md:mb-3">
+              <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-muted-foreground leading-tight">Prêtes</p>
+              <div className="h-7 w-7 md:h-8 md:w-8 rounded-xl bg-emerald-50 flex items-center justify-center">
+                <CheckCircle2 className="h-3.5 w-3.5 md:h-4 md:w-4 text-emerald-500" />
               </div>
             </div>
-            {loading ? <Skeleton className="h-9 w-16" /> : (
-              <p className="text-4xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
+            {loading ? <Skeleton className="h-8 w-12 md:h-9 md:w-16" /> : (
+              <p className="text-3xl md:text-4xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
                 {stats?.readyOrders ?? 0}
               </p>
             )}
-            <p className="text-xs text-muted-foreground mt-1">À remettre au client</p>
+            <p className="text-[10px] md:text-xs text-muted-foreground mt-1 hidden md:block">À remettre au client</p>
           </div>
         </Link>
 
         {/* CA */}
-        <div className="relative">
+        <div className="relative col-span-2 md:col-span-1">
           <Link href="/dashboard/payments">
-            <div className="group rounded-2xl border border-border bg-card hover:border-stone-300 hover:shadow-md transition-all duration-200 p-5 cursor-pointer h-full">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Chiffre d&apos;affaires</p>
-                <div className="h-8 w-8 rounded-xl bg-stone-100 flex items-center justify-center">
-                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <div className="group rounded-2xl border border-border bg-card hover:border-stone-300 hover:shadow-md transition-all duration-200 p-4 md:p-5 cursor-pointer h-full">
+              <div className="flex items-center justify-between mb-2 md:mb-3">
+                <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-muted-foreground">Chiffre d&apos;affaires</p>
+                <div className="h-7 w-7 md:h-8 md:w-8 rounded-xl bg-stone-100 flex items-center justify-center">
+                  <TrendingUp className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
                 </div>
               </div>
-              {loading ? <Skeleton className="h-7 w-32" /> : (
-                <p className="text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
+              {loading ? <Skeleton className="h-6 w-28 md:h-7 md:w-32" /> : (
+                <p className="text-xl md:text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-playfair)' }}>
                   {formatFCFA(stats?.revenue ?? 0)}
                 </p>
               )}
@@ -309,7 +309,7 @@ export default function DashboardPage() {
         <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Accès rapide</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { href: '/dashboard/clients/new',   icon: Users,       label: 'Nouveau client',   color: 'text-blue-500   bg-blue-50' },
+            { href: '/dashboard/clients/new',   icon: Users,       label: 'Nouveau client',   color: 'text-violet-500  bg-violet-50' },
             { href: '/dashboard/orders/new',    icon: ShoppingBag, label: 'Nouvelle commande', color: 'text-amber-500  bg-amber-50' },
             { href: '/dashboard/payments',      icon: Banknote,    label: 'Paiements',         color: 'text-emerald-500 bg-emerald-50' },
             { href: '/dashboard/calendar',      icon: CalendarDays,label: 'Planning',          color: 'text-rose-500   bg-rose-50' },

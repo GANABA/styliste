@@ -135,13 +135,12 @@ const FOOTER_LINKS = {
     { label: 'Connexion', href: '/login' },
   ],
   Ressources: [
-    { label: 'Aide et FAQ', href: '/dashboard/help' },
+    { label: 'Aide et FAQ', href: '/help' },
     { label: 'Annuaire stylistes', href: '/stylistes' },
   ],
   Légal: [
     { label: 'Conditions d\'utilisation', href: '/cgu' },
     { label: 'Politique de confidentialité', href: '/confidentialite' },
-    { label: 'Gestion des données', href: '/donnees' },
     { label: 'Mentions légales', href: '/mentions-legales' },
   ],
 }
@@ -163,7 +162,7 @@ export default function LandingPage() {
             <Link href="/stylistes" className="hover:text-stone-900 transition-colors">Annuaire</Link>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="hidden sm:inline text-sm text-stone-600 hover:text-stone-900 px-3 py-2 transition-colors">
+            <Link href="/login" className="hidden md:inline text-sm text-stone-600 hover:text-stone-900 px-3 py-2 transition-colors">
               Connexion
             </Link>
             <Link
@@ -186,7 +185,7 @@ export default function LandingPage() {
         {/* Glow ambiant */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-amber-500/10 blur-[120px] pointer-events-none" />
 
-        <div className="relative max-w-6xl mx-auto px-4 py-20 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative max-w-6xl mx-auto px-4 py-10 md:py-20 grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Texte */}
           <div className="space-y-7">
             <div className="inline-flex items-center gap-2 text-xs font-medium text-amber-400 bg-amber-400/10 border border-amber-400/20 px-3 py-1.5 rounded-full">
@@ -195,7 +194,7 @@ export default function LandingPage() {
             </div>
 
             <h1
-              className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.1]"
+              className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1]"
               style={{ fontFamily: 'var(--font-playfair)' }}
             >
               Votre atelier de couture,{' '}
@@ -207,7 +206,7 @@ export default function LandingPage() {
               Fini les cahiers perdus et les oublis.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col md:flex-row gap-3">
               <Link
                 href="/register"
                 className="inline-flex items-center justify-center bg-amber-400 text-stone-950 font-bold px-6 py-3.5 rounded-xl hover:bg-amber-300 transition-colors text-sm"
@@ -478,10 +477,6 @@ export default function LandingPage() {
               <p className="text-sm text-stone-500 leading-relaxed max-w-xs">
                 La plateforme de gestion pour stylistes et tailleurs africains. Clients, commandes, paiements et portfolio en un seul endroit.
               </p>
-              <div className="flex items-center gap-1.5">
-                <span className="text-lg">🇧🇯</span>
-                <span className="text-xs text-stone-600">Conçu pour le Bénin et l&apos;Afrique de l&apos;Ouest</span>
-              </div>
             </div>
 
             {/* Colonnes liens */}
@@ -504,7 +499,7 @@ export default function LandingPage() {
 
         {/* Bas de footer */}
         <div className="border-t border-stone-800">
-          <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-stone-600">
+          <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-stone-600">
             <p>© {new Date().getFullYear()} Styliste.com. Tous droits réservés.</p>
             <div className="flex items-center gap-4">
               <Link href="/confidentialite" className="hover:text-stone-400 transition-colors">Confidentialité</Link>
