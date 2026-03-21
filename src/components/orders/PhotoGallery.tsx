@@ -21,7 +21,7 @@ const PHOTO_TYPE_LABELS: Record<PhotoType, string> = {
 const PHOTO_TYPE_COLORS: Record<PhotoType, string> = {
   REFERENCE: 'bg-gray-100 text-gray-600',
   FABRIC:    'bg-amber-100 text-amber-700',
-  FITTING:   'bg-blue-100 text-blue-700',
+  FITTING:   'bg-sky-100 text-sky-700',
   FINISHED:  'bg-green-100 text-green-700',
 }
 
@@ -60,7 +60,7 @@ export function PhotoGallery({ photos, onDelete, readonly = false }: PhotoGaller
             <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
               {PHOTO_TYPE_LABELS[type]}
             </h4>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {(grouped[type] ?? []).map((photo) => (
                 <div key={photo.id} className="relative group aspect-square rounded-lg overflow-hidden bg-gray-100">
                   {/* eslint-disable-next-line @next/next/no-img-element */}

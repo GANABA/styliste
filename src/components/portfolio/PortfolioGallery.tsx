@@ -26,7 +26,7 @@ export function PortfolioGallery({ items }: PortfolioGalleryProps) {
           <button
             key={item.id}
             onClick={() => setLightboxIndex(i)}
-            className="group aspect-square bg-gray-100 rounded-xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="group aspect-square bg-gray-100 rounded-xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-amber-400"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

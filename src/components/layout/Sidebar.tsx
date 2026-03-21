@@ -1,87 +1,78 @@
-'use client';
+'use client'
 
-import { useEffect, memo } from 'react';
-import { usePathname } from 'next/navigation';
-import { X } from 'lucide-react';
-import { Navigation } from './Navigation';
-import { useSidebarStore } from '@/store/useSidebarStore';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { useEffect, memo } from 'react'
+import { usePathname } from 'next/navigation'
+import { X } from 'lucide-react'
+import { Navigation } from './Navigation'
+import { useSidebarStore } from '@/store/useSidebarStore'
+import { cn } from '@/lib/utils'
 
 function SidebarComponent() {
-  const { isOpen, close } = useSidebarStore();
-  const pathname = usePathname();
+  const { isOpen, close } = useSidebarStore()
+  const pathname = usePathname()
 
-  // Close sidebar on route change (mobile)
+  useEffect(() => { close() }, [pathname, close])
+
   useEffect(() => {
-    close();
-  }, [pathname, close]);
-
-  // Prevent body scroll when sidebar is open on mobile
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
+    document.body.style.overflow = isOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [isOpen])
 
   return (
     <>
-      {/* Overlay - Mobile only */}
+      {/* Overlay mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
           onClick={close}
           aria-hidden="true"
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar — light, bord droit stone-200 */}
       <aside
         className={cn(
           'fixed md:static inset-y-0 left-0 z-50',
-          'w-[280px] border-r bg-white h-full flex flex-col',
-          'transform transition-transform duration-300 ease-in-out',
-          'md:translate-x-0',
+          'w-[256px] h-full flex flex-col bg-white border-r border-border',
+          'transform transition-transform duration-300 ease-in-out md:translate-x-0',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        {/* Brand / Logo */}
-        <div className="px-6 py-6 border-b flex items-center justify-between">
+        {/* Logo — h-14 pour aligner avec le header */}
+        <div className="flex items-center justify-between px-5 h-14 border-b border-border shrink-0">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Styliste.com</h2>
-            <p className="text-sm text-gray-500 mt-1">Gestion Atelier</p>
+            <h2
+              className="text-xl font-black leading-none text-stone-900"
+              style={{ fontFamily: 'var(--font-playfair)' }}
+            >
+              Styliste<span className="text-amber-500">.com</span>
+            </h2>
+            <p className="text-[11px] mt-0.5 font-medium tracking-widest uppercase text-stone-400">
+              Gestion atelier
+            </p>
           </div>
 
-          {/* Close button - Mobile only */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden h-9 w-9"
+          <button
+            className="md:hidden flex items-center justify-center h-8 w-8 rounded-lg text-stone-400 hover:bg-stone-100 hover:text-stone-700 transition-colors"
             onClick={close}
             aria-label="Fermer le menu"
           >
-            <X className="h-5 w-5" />
-          </Button>
+            <X className="h-4 w-4" />
+          </button>
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 px-3 py-6 overflow-y-auto">
+        <div className="flex-1 min-h-0 px-3 py-4 overflow-y-auto">
           <Navigation />
         </div>
 
-        {/* Footer - Version info */}
-        <div className="px-6 py-4 border-t text-xs text-gray-400">
-          <p>Version 0.1.0 (MVP)</p>
+        {/* Footer */}
+        <div className="shrink-0 px-5 py-3 border-t border-border">
+          <p className="text-[11px] text-stone-400 font-medium">v0.1 MVP</p>
         </div>
       </aside>
     </>
-  );
+  )
 }
 
-export const Sidebar = memo(SidebarComponent);
+export const Sidebar = memo(SidebarComponent)

@@ -166,11 +166,11 @@ export function MeasurementRecordForm({
           <CardHeader>
             <div className="flex items-center gap-2">
               <Ruler className="h-4 w-4 text-gray-500" />
-              <CardTitle className="text-base">Mesures — {selectedTemplate?.name}</CardTitle>
+              <CardTitle className="text-base">Mesures · {selectedTemplate?.name}</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               {templateFields.map((field) => (
                 <div key={field.name} className="space-y-1.5">
                   <Label>
@@ -210,7 +210,7 @@ export function MeasurementRecordForm({
           <CardContent className="space-y-4">
             {/* Champs déjà ajoutés */}
             {customFields.length > 0 && (
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3 md:grid-cols-2">
                 {customFields.map((cf, i) => (
                   <div key={i} className="space-y-1.5">
                     <Label className="flex items-center justify-between">
@@ -258,7 +258,7 @@ export function MeasurementRecordForm({
                 <select
                   value={newFieldUnit}
                   onChange={(e) => setNewFieldUnit(e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-2 py-2 text-sm bg-white"
+                  className="w-full border border-input rounded-md px-2 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/50"
                 >
                   <option value="cm">cm</option>
                   <option value="mm">mm</option>
@@ -287,7 +287,7 @@ export function MeasurementRecordForm({
 
       {/* État vide */}
       {!selectedTemplateId && (
-        <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200 border-dashed">
+        <div className="text-center py-12 bg-stone-50 rounded-lg border border-input border-dashed">
           <Ruler className="h-12 w-12 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-500 text-sm">Sélectionnez un modèle pour commencer</p>
           <p className="text-xs text-gray-400 mt-1">Vous pourrez ensuite ajouter des mesures libres</p>

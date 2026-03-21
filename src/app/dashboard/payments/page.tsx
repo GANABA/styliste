@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { CreditCard, ArrowRight, Download } from 'lucide-react';
+import { CreditCard, ExternalLink, Download } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 interface Payment {
@@ -51,7 +50,7 @@ const METHOD_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  ADVANCE: 'bg-blue-100 text-blue-700 border-blue-200',
+  ADVANCE: 'bg-violet-100 text-violet-700 border-violet-200',
   PARTIAL: 'bg-orange-100 text-orange-700 border-orange-200',
   FINAL: 'bg-green-100 text-green-700 border-green-200',
   REFUND: 'bg-red-100 text-red-700 border-red-200',
@@ -88,7 +87,7 @@ export default function PaymentsPage() {
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Paiements</h1>
+        <h1 className="page-title">Paiements</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Historique de tous vos encaissements
         </p>
@@ -128,9 +127,9 @@ export default function PaymentsPage() {
               {/* Infos paiement */}
               <div className="flex-1 min-w-0 space-y-1.5">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <Badge className={cn('text-xs border', TYPE_COLORS[payment.paymentType])}>
+                  <span className={cn('inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold', TYPE_COLORS[payment.paymentType])}>
                     {TYPE_LABELS[payment.paymentType] || payment.paymentType}
-                  </Badge>
+                  </span>
                   <span className="text-xs text-gray-500">
                     {METHOD_LABELS[payment.paymentMethod] || payment.paymentMethod}
                     {payment.mobileMoneyProvider && ` · ${payment.mobileMoneyProvider}`}
@@ -145,14 +144,14 @@ export default function PaymentsPage() {
                 {/* Lien commande */}
                 <Link
                   href={`/dashboard/orders/${payment.order.id}`}
-                  className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700"
+                  className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700"
                 >
                   <span className="font-mono">{payment.order.orderNumber}</span>
                   <span className="text-gray-400">·</span>
                   <span>{payment.order.client.name}</span>
                   <span className="text-gray-400">·</span>
                   <span className="text-gray-500">{payment.order.garmentType}</span>
-                  <ArrowRight className="h-3 w-3 ml-0.5" />
+                  <ExternalLink className="h-3 w-3 ml-0.5" />
                 </Link>
               </div>
 
@@ -160,7 +159,7 @@ export default function PaymentsPage() {
               <button
                 onClick={() => handleDownload(payment.id)}
                 title="Télécharger le reçu PDF"
-                className="h-9 w-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:text-gray-600 hover:bg-gray-50 shrink-0"
+                className="h-9 w-9 flex items-center justify-center rounded-lg border border-input text-muted-foreground hover:text-foreground hover:bg-stone-50 shrink-0"
               >
                 <Download className="h-4 w-4" />
               </button>

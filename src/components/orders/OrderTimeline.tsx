@@ -68,12 +68,12 @@ export function OrderTimeline({ history }: OrderTimelineProps) {
               <div className={cn(
                 'relative z-10 w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0',
                 entry.changeType === 'STATUS_CHANGE'
-                  ? 'bg-blue-50 border-blue-200'
+                  ? 'bg-amber-50 border-amber-200'
                   : 'bg-gray-50 border-gray-200'
               )}>
                 <Icon className={cn(
                   'h-3.5 w-3.5',
-                  entry.changeType === 'STATUS_CHANGE' ? 'text-blue-600' : 'text-gray-500'
+                  entry.changeType === 'STATUS_CHANGE' ? 'text-amber-600' : 'text-gray-500'
                 )} />
               </div>
 

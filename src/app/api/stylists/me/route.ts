@@ -19,6 +19,7 @@ export async function GET() {
       phone: true,
       city: true,
       address: true,
+      logoUrl: true,
       onboardingCompleted: true,
       user: { select: { name: true, email: true } },
     },

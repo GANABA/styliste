@@ -2,77 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
+    /* Palette amber/stone — mode clair (seul mode supporté) */
+    --background:         44 9% 98%;
+    --foreground:         20 6% 10%;
+    --card:               0 0% 100%;
+    --card-foreground:    20 6% 10%;
+    --popover:            0 0% 100%;
+    --popover-foreground: 20 6% 10%;
+    --primary:            20 6% 10%;
+    --primary-foreground: 0 0% 100%;
+    --secondary:          60 5% 96%;
+    --secondary-foreground: 20 6% 10%;
+    --muted:              60 5% 96%;
+    --muted-foreground:   25 5% 45%;
+    --accent:             43 96% 94%;
+    --accent-foreground:  32 81% 29%;
+    --destructive:        0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border:             20 6% 90%;
+    --input:              20 6% 90%;
+    --ring:               43 96% 56%;
+    --radius:             0.75rem;
+
+    /* Brand sidebar (toujours clair, cohérent avec le reste) */
+    --sidebar-bg:         0 0% 100%;
+    --sidebar-fg:         20 6% 10%;
+    --sidebar-muted:      25 5% 52%;
+    --sidebar-active-bg:  43 96% 94%;
+    --sidebar-active:     32 81% 35%;
+    --sidebar-border:     20 6% 92%;
+    --sidebar-hover:      60 5% 95%;
   }
 }
-
-
 
 @layer base {
   * {
     @apply border-border;
   }
-  body {
+  html, body {
     @apply bg-background text-foreground;
+    font-family: var(--font-dm, ui-sans-serif, system-ui, sans-serif);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Corrections globales — classes Tailwind gray → stone/foreground */
+  .text-gray-900  { color: hsl(var(--foreground)); }
+  .text-gray-800  { color: hsl(20 6% 18%); }
+  .text-gray-700  { color: hsl(var(--muted-foreground)); }
+  .text-gray-600  { color: hsl(var(--muted-foreground)); }
+  .text-gray-500  { color: hsl(var(--muted-foreground)); }
+  .text-gray-400  { color: hsl(24 5% 60%); }
+  .bg-gray-50     { background-color: hsl(var(--background)); }
+  .bg-gray-100    { background-color: hsl(var(--muted)); }
+  .border-gray-200 { border-color: hsl(var(--border)); }
+  .border-gray-100 { border-color: hsl(var(--border)); }
+
+  /* Scrollbar fine */
+  ::-webkit-scrollbar        { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track  { background: transparent; }
+  ::-webkit-scrollbar-thumb  { background: hsl(20 6% 82%); border-radius: 9999px; }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-playfair, ui-serif, Georgia, serif);
+  }
+  /* Titres de pages dans le dashboard */
+  .page-title {
+    font-family: var(--font-playfair, ui-serif, Georgia, serif);
+    font-weight: 900;
+    color: hsl(var(--foreground));
+    font-size: 1.5rem;
+    line-height: 1.2;
   }
 }

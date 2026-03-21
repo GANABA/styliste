@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ImageIcon, Plus, ExternalLink, Info } from 'lucide-react'
+import { ImageIcon, Plus, ExternalLink, Info, Eye } from 'lucide-react'
 import { PortfolioItem } from '@prisma/client'
 import { PortfolioItemCard } from '@/components/portfolio/PortfolioItemCard'
 import { PortfolioUploadForm } from '@/components/portfolio/PortfolioUploadForm'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import { toast } from 'sonner'
 import { useSession } from 'next-auth/react'
 
@@ -59,24 +60,25 @@ export default function PortfolioPage() {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
+
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Portfolio</h1>
+          <h1 className="page-title">Portfolio</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {publishedCount} photo{publishedCount !== 1 ? 's' : ''} publiée{publishedCount !== 1 ? 's' : ''} sur {items.length}
+            {loading ? '…' : `${publishedCount} photo${publishedCount !== 1 ? 's' : ''} publiée${publishedCount !== 1 ? 's' : ''} sur ${items.length}`}
           </p>
         </div>
         <div className="flex gap-2 shrink-0">
-          {session?.user && stylistSlug && (
+          {stylistSlug && (
             <Link
               href={`/${stylistSlug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm border rounded-lg text-gray-600 hover:bg-gray-50"
+              className="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm border border-border rounded-xl text-stone-600 hover:bg-stone-50 hover:text-amber-600 hover:border-amber-300 transition-all"
             >
-              <ExternalLink className="h-4 w-4" />
-              Voir mon portfolio
+              <Eye className="h-4 w-4" />
+              Mon portfolio public
             </Link>
           )}
           {items.length < 50 && (
@@ -88,10 +90,23 @@ export default function PortfolioPage() {
         </div>
       </div>
 
+      {/* Lien mobile */}
+      {stylistSlug && (
+        <Link
+          href={`/${stylistSlug}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="md:hidden flex items-center gap-2 px-4 py-3 text-sm border border-border rounded-xl text-stone-600 hover:bg-stone-50 bg-white"
+        >
+          <ExternalLink className="h-4 w-4 shrink-0 text-amber-500" />
+          Voir mon portfolio public
+        </Link>
+      )}
+
       {/* Formulaire upload */}
       {showUpload && (
-        <div className="bg-white rounded-xl border p-5">
-          <h2 className="font-semibold text-gray-900 mb-4">Nouvelle photo</h2>
+        <div className="bg-white rounded-2xl border border-border p-5">
+          <h2 className="font-semibold text-foreground mb-4">Nouvelle photo</h2>
           <PortfolioUploadForm
             onSuccess={() => { setShowUpload(false); fetchItems() }}
             onCancel={() => setShowUpload(false)}
@@ -99,41 +114,36 @@ export default function PortfolioPage() {
         </div>
       )}
 
-      {/* Lien vers portfolio public (mobile) */}
-      {stylistSlug && (
-        <Link
-          href={`/${stylistSlug}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="md:hidden flex items-center gap-2 px-3 py-2.5 text-sm border rounded-lg text-gray-600 hover:bg-gray-50 bg-white"
-        >
-          <ExternalLink className="h-4 w-4 shrink-0" />
-          <span>Voir mon portfolio public</span>
-        </Link>
-      )}
-
-      {/* Avertissement : photos non publiées */}
+      {/* Avertissement photos en brouillon */}
       {items.length > 0 && publishedCount === 0 && (
-        <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
+        <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
           <Info className="h-4 w-4 mt-0.5 shrink-0 text-amber-600" />
           <span>
-            Vos photos sont en <strong>Brouillon</strong> et ne sont pas visibles sur votre portfolio public.
-            Survolez une photo et cliquez sur l&apos;icône <strong>œil</strong> pour la publier.
+            Vos photos sont en <strong>Brouillon</strong>, non visibles publiquement.
+            Survolez une photo et cliquez sur l&apos;icône <strong>œil</strong> pour publier.
           </span>
         </div>
       )}
 
       {/* Contenu */}
       {loading ? (
-        <div className="text-center py-16 text-sm text-gray-400">Chargement...</div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="aspect-square rounded-2xl" />
+          ))}
+        </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 space-y-3">
-          <ImageIcon className="h-14 w-14 mx-auto text-gray-200" />
-          <p className="text-gray-500 font-medium">Aucune photo dans votre portfolio</p>
-          <p className="text-sm text-gray-400">
-            Ajoutez des photos de vos créations pour attirer de nouveaux clients.
-          </p>
-          <Button onClick={() => setShowUpload(true)} size="sm" className="mt-2">
+        <div className="flex flex-col items-center justify-center py-20 space-y-4 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-stone-100 flex items-center justify-center">
+            <ImageIcon className="h-8 w-8 text-stone-300" />
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Aucune photo dans votre portfolio</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Ajoutez vos créations pour attirer de nouveaux clients.
+            </p>
+          </div>
+          <Button onClick={() => setShowUpload(true)} size="sm">
             <Plus className="h-4 w-4 mr-1" />
             Ajouter une photo
           </Button>

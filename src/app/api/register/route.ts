@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'Inscription impossible. Vérifiez vos informations.' },
+        { error: 'Cette adresse email est déjà associée à un compte. Connectez-vous ou utilisez une autre adresse.' },
         { status: 400 }
       );
     }

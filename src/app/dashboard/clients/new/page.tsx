@@ -51,7 +51,7 @@ export default function NewClientPage() {
           <ArrowLeft className="h-4 w-4" />
           Retour aux clients
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Nouveau client</h1>
+        <h1 className="page-title">Nouveau client</h1>
         <p className="text-sm text-gray-500 mt-1">Ajoutez un nouveau client à votre liste</p>
       </div>
 

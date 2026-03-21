@@ -141,6 +141,45 @@ export async function uploadOrderPhoto(
   }
 }
 
+export async function uploadLogoImage(
+  buffer: Buffer,
+  stylistId: string
+): Promise<{ logoUrl: string; key: string }> {
+  sanitizeFolderSegment(stylistId)
+
+  const processed = await sharp(buffer)
+    .resize(300, 300, { fit: 'cover', position: 'center' })
+    .webp({ quality: 90 })
+    .toBuffer()
+
+  const key = `logos/${stylistId}.webp`
+
+  if (isR2Configured()) {
+    const client = getR2Client()
+    const bucket = process.env.R2_BUCKET_NAME!
+    const publicUrl = process.env.R2_PUBLIC_URL!
+
+    await client.send(new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: processed,
+      ContentType: 'image/webp',
+    }))
+
+    return { logoUrl: `${publicUrl}/${key}`, key }
+  } else {
+    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+      throw new Error('STORAGE_NOT_CONFIGURED')
+    }
+
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'logos')
+    await fs.mkdir(uploadDir, { recursive: true })
+    await fs.writeFile(path.join(uploadDir, `${stylistId}.webp`), processed)
+
+    return { logoUrl: `/uploads/logos/${stylistId}.webp`, key }
+  }
+}
+
 export async function deleteOrderPhoto(key: string, thumbnailKey: string): Promise<void> {
   if (isR2Configured()) {
     const client = getR2Client()

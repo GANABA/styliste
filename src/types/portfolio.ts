@@ -22,6 +22,7 @@ export interface StylistPublicProfile {
   businessName: string | null
   phone: string | null
   city: string | null
+  logoUrl: string | null
   portfolioItems: PortfolioItemPublic[]
 }
 

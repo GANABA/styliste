@@ -37,7 +37,7 @@ export function OrdersList({ orders, activeCount, activeLimit }: OrdersListProps
         <span>{activeCount}/{activeLimit} commandes actives</span>
         <div className="w-32 h-1.5 bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-blue-500 rounded-full transition-all"
+            className="h-full bg-amber-400 rounded-full transition-all"
             style={{ width: `${Math.min((activeCount / activeLimit) * 100, 100)}%` }}
           />
         </div>

@@ -37,9 +37,9 @@ export default function EditOrderPage() {
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Modifier la commande</h1>
+        <h1 className="page-title">Modifier la commande</h1>
         {order && (
-          <p className="text-sm text-gray-500 mt-1">{order.orderNumber} — {order.garmentType}</p>
+          <p className="text-sm text-gray-500 mt-1">{order.orderNumber} · {order.garmentType}</p>
         )}
       </div>
 

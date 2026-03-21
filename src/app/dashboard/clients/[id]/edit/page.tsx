@@ -109,7 +109,7 @@ export default function EditClientPage({ params }: { params: { id: string } }) {
           </Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Modifier le client</h1>
+          <h1 className="page-title">Modifier le client</h1>
           <p className="text-sm text-gray-500 mt-1">{client.name}</p>
         </div>
       </div>

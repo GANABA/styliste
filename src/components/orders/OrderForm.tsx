@@ -156,7 +156,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
           </label>
           <div className="relative">
             {selectedClient ? (
-              <div className="flex items-center justify-between border border-gray-300 rounded-lg px-3 py-2.5 min-h-[44px] bg-white">
+              <div className="flex items-center justify-between border border-input rounded-lg px-3 py-2.5 min-h-[44px] bg-white">
                 <div>
                   <span className="text-sm font-medium text-gray-900">{selectedClient.name}</span>
                   <span className="text-xs text-gray-500 ml-2">{selectedClient.phone}</span>
@@ -179,11 +179,11 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
                     value={clientSearch}
                     onChange={(e) => { setClientSearch(e.target.value); setShowClientDropdown(true); }}
                     onFocus={() => setShowClientDropdown(true)}
-                    className="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 min-h-[44px]"
+                    className="w-full border border-input rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 min-h-[44px]"
                   />
                 </div>
                 {showClientDropdown && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-input rounded-lg shadow-lg max-h-48 overflow-y-auto">
                     {filteredClients.length === 0 ? (
                       <p className="px-3 py-2.5 text-sm text-gray-500">
                         {clients.length === 0 ? 'Aucun client. Créez-en un d\'abord.' : 'Aucun résultat'}
@@ -231,7 +231,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
                   setGarmentType(e.target.value)
                 }
               }}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 min-h-[44px] bg-white"
+              className="w-full border border-input rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 min-h-[44px] bg-white"
             >
               <option value="">Sélectionner un type</option>
               {GARMENT_TYPES.filter(t => t !== 'Autre').map((t) => (
@@ -247,7 +247,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
               value={garmentType}
               onChange={(e) => setGarmentType(e.target.value)}
               placeholder="Ex : Djellaba, Complet pagne..."
-              className="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 min-h-[44px]"
+              className="flex-1 border border-input rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 min-h-[44px]"
             />
             <button
               type="button"
@@ -272,7 +272,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
             value={form.promisedDate}
             onChange={set('promisedDate')}
             min={new Date().toISOString().split('T')[0]}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 min-h-[44px]"
+            className="w-full border border-input rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 min-h-[44px]"
           />
         </div>
         <div>
@@ -280,7 +280,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
           <select
             value={form.urgencyLevel}
             onChange={set('urgencyLevel')}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 min-h-[44px] bg-white"
+            className="w-full border border-input rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 min-h-[44px] bg-white"
           >
             <option value="NORMAL">Normal</option>
             <option value="HIGH">Élevée</option>
@@ -319,7 +319,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
             type="date"
             value={form.fabricReceivedDate}
             onChange={set('fabricReceivedDate')}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 min-h-[44px]"
+            className="w-full border border-input rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 min-h-[44px]"
           />
         </div>
       )}
@@ -338,7 +338,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
               value={form.totalPrice}
               onChange={set('totalPrice')}
               placeholder="Ex : 25000"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 min-h-[44px]"
+              className="w-full border border-input rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 min-h-[44px]"
             />
           </div>
           <div>
@@ -350,7 +350,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
               value={form.advanceAmount}
               onChange={set('advanceAmount')}
               placeholder="0"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 min-h-[44px]"
+              className="w-full border border-input rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 min-h-[44px]"
             />
           </div>
         </div>
@@ -376,7 +376,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
           onChange={set('description')}
           placeholder="Détails du modèle, coupes, couleurs, motifs..."
           rows={3}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="w-full border border-input rounded-lg px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-amber-400/50"
         />
       </div>
 
@@ -390,7 +390,7 @@ export function OrderForm({ mode, initialData, onSubmit }: OrderFormProps) {
           onChange={set('notes')}
           placeholder="Notes personnelles, rappels... (non visibles par le client)"
           rows={2}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="w-full border border-input rounded-lg px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-amber-400/50"
         />
       </div>
 

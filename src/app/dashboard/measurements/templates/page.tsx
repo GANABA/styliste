@@ -80,15 +80,15 @@ export default function MeasurementTemplatesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Templates de mesures</h1>
+          <h1 className="page-title">Templates de mesures</h1>
           <p className="text-sm text-gray-500 mt-1">
             Gérez vos modèles de prises de mesures
           </p>
         </div>
         <Link href="/dashboard/measurements/templates/new">
-          <Button className="w-full sm:w-auto">
+          <Button className="w-full md:w-auto">
             <Plus className="h-4 w-4 mr-2" />
             Nouveau template
           </Button>
@@ -96,8 +96,8 @@ export default function MeasurementTemplatesPage() {
       </div>
 
       {/* Info Banner */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-900">
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+        <p className="text-sm text-stone-800">
           <strong>3 templates par défaut</strong> sont automatiquement créés (Homme, Femme,
           Enfant). Vous pouvez les modifier ou créer vos propres templates personnalisés.
         </p>
@@ -105,13 +105,13 @@ export default function MeasurementTemplatesPage() {
 
       {/* Templates List */}
       {isLoading ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-48" />
           ))}
         </div>
       ) : templates && templates.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {templates.map((template) => (
             <Card key={template.id} className="relative">
               <CardHeader>

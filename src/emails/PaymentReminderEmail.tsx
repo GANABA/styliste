@@ -39,7 +39,7 @@ export function PaymentReminderEmail({
   return (
     <Html>
       <Head />
-      <Preview>Rappel de paiement — {garmentType} ({orderNumber})</Preview>
+      <Preview>Rappel de paiement : {garmentType} ({orderNumber})</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={h1}>Rappel de paiement</Heading>
@@ -63,7 +63,7 @@ export function PaymentReminderEmail({
           </Text>
 
           <Text style={contactText}>
-            <strong>{stylistName}</strong> — {stylistPhone}
+            <strong>{stylistName}</strong> · {stylistPhone}
           </Text>
 
           <Hr style={hr} />

@@ -46,7 +46,7 @@ export function OrderReadyEmail({
             <Text style={infoLabel}>Pour récupérer votre commande :</Text>
             <Text style={infoText}>
               <strong>{stylistName}</strong>
-              {stylistCity && ` — ${stylistCity}`}
+              {stylistCity && ` · ${stylistCity}`}
             </Text>
             <Text style={infoText}>Téléphone : {stylistPhone}</Text>
           </Section>

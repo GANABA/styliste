@@ -14,7 +14,7 @@ export function OrdersPageClient() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Commandes</h1>
+          <h1 className="page-title">Commandes</h1>
           <p className="text-sm text-gray-500 mt-0.5">
             Gérez vos commandes et leur avancement
           </p>

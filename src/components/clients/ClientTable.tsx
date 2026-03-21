@@ -54,7 +54,7 @@ export function ClientTable({ clients, onRestore }: ClientTableProps) {
               <TableCell>
                 <Link
                   href={`/dashboard/clients/${client.id}`}
-                  className="font-medium text-gray-900 hover:text-blue-600"
+                  className="font-medium text-gray-900 hover:text-amber-600"
                 >
                   {client.name}
                 </Link>

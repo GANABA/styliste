@@ -37,7 +37,7 @@ export function OnboardingWizard({ data }: OnboardingWizardProps) {
       id: 2,
       label: 'Ajouter votre premier client',
       description: 'Créez votre carnet de clients',
-      detail: 'Nom, contact, mesures — tout centralisé. Votre premier client est toujours le plus important.',
+      detail: 'Nom, contact, mesures : tout centralisé. Votre premier client est toujours le plus important.',
       href: '/dashboard/clients/new',
       done: data.hasClient,
       cta: 'Ajouter un client',

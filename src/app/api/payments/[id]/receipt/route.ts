@@ -87,7 +87,7 @@ export async function GET(
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(100);
-  doc.text(`Styliste.com — Recu #${payment.id.slice(0, 8).toUpperCase()}`, 105, y, { align: 'center' });
+  doc.text(`Styliste.com · Recu #${payment.id.slice(0, 8).toUpperCase()}`, 105, y, { align: 'center' });
   y += 15;
 
   // Ligne de séparation
